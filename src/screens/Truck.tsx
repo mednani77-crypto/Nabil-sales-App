@@ -6,6 +6,7 @@ import { fmtMoney } from '../domain/money';
 import { decompose, stockValue } from '../domain/units';
 import type { Operation } from '../domain/types';
 import { fmtDate } from '../lib/dates';
+import { opLabel } from '../lib/describe';
 import { Icon } from '../ui/Icon';
 import { SearchField, TopBar } from '../ui/kit';
 import { NewItemSheet } from '../ui/pickers';
@@ -36,6 +37,8 @@ export function TruckScreen() {
       </div>
       <div className="hs">
         <Link className="chip on" to="/receive"><Icon name="plus" small />استلام بضاعة</Link>
+        <Link className="chip" to="/count">جرد وتصحيح</Link>
+        <Link className="chip" to="/returns?tab=co">مرتجع للشركة</Link>
         <button className="chip" onClick={() => setNewItem(true)}>صنف جديد</button>
       </div>
       <SearchField value={q} onChange={setQ} placeholder="ابحث عن صنف" label="بحث في الأصناف" />
@@ -84,10 +87,7 @@ function Stat({ n, l }: { n: number; l: string }) {
 }
 
 function moveLabel(op: Operation | undefined): string {
-  if (!op) return '';
-  if (op.type === 'sale') return `بيع – فاتورة #${op.docNo}`;
-  if (op.type === 'receive') return `استلام ${op.docNo}`;
-  return 'رصيد افتتاحي';
+  return op ? opLabel(op) : '';
 }
 
 export function ItemScreen() {
@@ -125,7 +125,7 @@ export function ItemScreen() {
         <div className="sec">سجل الحركات</div>
         <div className="card list">
           {moves.map((m, i) => (
-            <div key={m.opId + i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '1px solid #eef1f5' }}>
+            <Link key={m.opId + i} to={`/op/${m.opId}`} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '1px solid #eef1f5', color: 'var(--ink)', textDecoration: 'none' }}>
               <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontSize: 14 }}>{moveLabel(byId.get(m.opId))}</span>
                 <span className="num sub" style={{ fontSize: 12 }}>{fmtDate(m.date)}</span>
@@ -133,7 +133,7 @@ export function ItemScreen() {
               <b className="num" style={{ fontSize: 13.5, color: m.qty < 0 ? 'var(--red)' : 'var(--teal-ink)' }}>
                 {m.qty < 0 ? '− ' : '+ '}{decompose(item, Math.abs(m.qty)).label}
               </b>
-            </div>
+            </Link>
           ))}
           {moves.length === 0 && <div style={{ padding: 20, textAlign: 'center' }} className="sub">لا توجد حركات بعد</div>}
         </div>

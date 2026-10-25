@@ -29,11 +29,19 @@ export function noticeStatuses(ops: Operation[]): Map<string, NoticeStatus> {
   return new Map([...m].map(([k, v]) => [k, v.status]));
 }
 
+/** Ids of operations that were cancelled by a void operation. */
+export function voidedIds(ops: Operation[]): Set<string> {
+  const s = new Set<string>();
+  for (const op of ops) if (op.type === 'void') s.add(op.targetOpId);
+  return s;
+}
+
 export function allPostings(ops: Operation[]): Posting[] {
   const status = noticeStatuses(ops);
+  const voided = voidedIds(ops);
   return sortOps(uniqueOps(ops))
     .flatMap(postingsOf)
-    .map((p) => (p.unconfirmed && status.get(p.opId) === 'confirmed' ? { ...p, unconfirmed: false } : p));
+    .map((p) => (p.unconfirmed && (status.get(p.opId) === 'confirmed' || voided.has(p.opId)) ? { ...p, unconfirmed: false } : p));
 }
 
 export function balances(ops: Operation[]): Map<AccountKey, Santim> {

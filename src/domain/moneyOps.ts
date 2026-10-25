@@ -96,7 +96,9 @@ export interface CompanyTransfer {
 
 export function companyTransfers(ops: Operation[]): CompanyTransfer[] {
   const out: CompanyTransfer[] = [];
+  const voided = new Set(ops.filter((o) => o.type === 'void').map((o) => (o as { targetOpId: string }).targetOpId));
   for (const op of ops) {
+    if (voided.has(op.id)) continue;
     if (op.type === 'companyPayment') out.push({ op, bank: op.bank, amount: op.amount, ref: op.ref, date: op.date });
     else if (op.type === 'collection' && op.destination.kind === 'company')
       out.push({ op, bank: op.destination.bank, amount: op.amount, ref: op.ref, date: op.date });

@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../db/db';
 import { getDevice, resetAll } from '../db/repo';
 import { loadDemo } from '../db/seed';
@@ -58,6 +58,7 @@ export function SettingsScreen() {
             رمز الجهاز: {device?.code ?? '…'} · عمليات: {counts?.ops ?? 0} · أصناف: {counts?.items ?? 0} · عملاء: {counts?.customers ?? 0}
           </span>
         </div>
+        <Link className="btn btn-g" to="/opening">الأرصدة الافتتاحية</Link>
         <div className="sec">للتجربة</div>
         <button className="btn btn-d" disabled={busy} onClick={demo}>تحميل بيانات تجريبية</button>
         <button className="btn btn-g" style={{ color: 'var(--red)' }} onClick={wipe}>حذف كل البيانات من هذا الجهاز</button>

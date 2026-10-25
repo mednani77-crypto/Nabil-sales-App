@@ -133,7 +133,74 @@ export interface NoticeStatusOp extends OpBase {
   status: NoticeStatus;
 }
 
-export type Operation = ReceiveOp | SaleOp | OpeningOp | CollectionOp | TransferOp | CompanyPaymentOp | NoticeStatusOp;
+/** Goods returned by a customer. Good goods go back to the truck; damaged ones do not. */
+export interface CustomerReturnOp extends OpBase {
+  type: 'customerReturn';
+  customerId: string | null;
+  lines: OpLine[];
+  condition: 'good' | 'damaged';
+  /** 'balance' = reduce the customer's debt (or give him credit); 'cash' = hand back cash. */
+  settle: 'balance' | 'cash';
+  invoiceOpId?: string;
+}
+
+/** Goods sent back to the company warehouse. Leaves the truck now; debt drops only when accepted. */
+export interface CompanyReturnOp extends OpBase {
+  type: 'companyReturn';
+  docNo: string;
+  lines: OpLine[];
+  reason: string;
+}
+
+/** The company's answer to a return. Carries a copy of the lines so it is self-contained. */
+export interface CompanyReturnDecisionOp extends OpBase {
+  type: 'companyReturnDecision';
+  targetOpId: string;
+  decision: 'accepted' | 'rejected';
+  lines: OpLine[];
+}
+
+export interface StockAdjustment {
+  itemId: string;
+  itemName: string;
+  /** Base units recorded by the app before the count. */
+  recorded: number;
+  /** Base units actually counted. */
+  actual: number;
+  reason: string;
+}
+
+/** Physical truck count. Changes stock only — never money. */
+export interface StockCountOp extends OpBase {
+  type: 'stockCount';
+  adjustments: StockAdjustment[];
+}
+
+/** Cancels a mistaken operation by reversing it. The original stays in history. */
+export interface VoidOp extends OpBase {
+  type: 'void';
+  targetOpId: string;
+  reason: string;
+  /** Copy of the cancelled operation, so the reversal is self-contained. */
+  target: VoidableOp;
+}
+
+export type VoidableOp =
+  | ReceiveOp
+  | SaleOp
+  | OpeningOp
+  | CollectionOp
+  | TransferOp
+  | CompanyPaymentOp
+  | CustomerReturnOp
+  | CompanyReturnOp
+  | StockCountOp;
+
+export type Operation =
+  | VoidableOp
+  | NoticeStatusOp
+  | CompanyReturnDecisionOp
+  | VoidOp;
 export type OperationType = Operation['type'];
 
 export interface Posting {

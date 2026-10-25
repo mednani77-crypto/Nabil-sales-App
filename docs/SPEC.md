@@ -60,12 +60,12 @@ Stock is tracked separately as `StockMove { itemId, qty (base units, signed) }`.
 | `transfer` | — | wallet A Cr, wallet B Dr |
 | `companyPayment` | — | wallet Cr amount, company Cr amount (unconfirmed) + notice |
 | `noticeStatus` (phase 3) | — | none; moves notice `recorded → sent → confirmed` |
-| `customerReturn` (phase 4) | + if good, 0 if damaged | customer Cr value; if refunded in cash also customer Dr value + wallet:cash Cr value |
-| `companyReturn` (phase 4) | − lines | none until accepted |
-| `companyReturnDecision` (phase 4) | + lines back if rejected | if accepted: company Cr value |
-| `stockCount` (phase 4) | ± differences | **none** (never touches money) |
-| `opening` (phase 4) | + opening stock | company / customers / wallets opening balances; no company debit for stock |
-| `void` | reverses the referenced op | reverses the referenced op's postings |
+| `customerReturn` | + if good, 0 if damaged | customer Cr value; if refunded in cash also customer Dr value + wallet:cash Cr value |
+| `companyReturn` | − lines | none until accepted |
+| `companyReturnDecision` | + lines back if rejected | if accepted: company Cr value |
+| `stockCount` | ± differences | **none** (never touches money) |
+| `opening` | + opening stock | company / customers / wallets opening balances; no company debit for stock |
+| `void` | reverses the cancelled op (carries a copy of it) | exact mirror of its postings, dated on the cancel day; blocked if stock or a wallet would go negative |
 
 Sale without a customer and with an unpaid remainder creates a **temporary customer**
 (`temp: true`, code `D-0001`, `D-0002`, …) in the same transaction, so anonymous debts never mix.
@@ -123,8 +123,8 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 | 1 | App shell, PWA, local DB, items & units, truck stock, receive goods, sale invoice (cash/credit/partial, temp debt, payment destination), invoices list/detail, customers list/create, home dashboard, demo data | **done** |
 | 2 | Customer detail & ledger, late customers, collections (4 methods, optional invoice link), wallets & transfers, company account & payments, duplicate-transfer warning | **done** |
 | 3 | Bank notices: photo (compressed, stored as attachment), WhatsApp share sheet, recorded → sent → confirmed via append-only `noticeStatus` ops, counts and alerts | **done** |
-| 4 | Returns (customer & company), stock count, opening balances wizard, void | next |
-| 5 | Supabase auth, sync, multi-device, backup/restore | |
+| 4 | Customer returns (good/damaged, balance/cash, from invoice), company returns with accept/reject, stock count, opening balances form, safe cancel (`void`) with operation page | **done** |
+| 5 | Supabase auth, sync, multi-device, backup/restore | next |
 | 6 | Statements PDF in 5 languages, reports, Excel export | |
 | 7 | Two-week parallel run with Nabil's paper notebook | |
 

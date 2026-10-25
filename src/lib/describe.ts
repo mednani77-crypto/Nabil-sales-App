@@ -35,5 +35,47 @@ export function describePosting(p: Posting, op: Operation | undefined, customers
       return `سداد من ${WALLET_LABEL[op.source]} · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
     case 'noticeStatus':
       return '';
+    case 'customerReturn':
+      if (onWallet) return `رد مبلغ مرتجع · ${cname(op.customerId)}`;
+      if (p.debit > 0) return 'رد المبلغ نقدًا';
+      return `مرتجع بضاعة${op.condition === 'damaged' ? ' (تالف)' : ''} · ${op.lines.map((l) => l.itemName).join('، ')}`;
+    case 'companyReturn':
+      return `مرتجع للشركة ${op.docNo}`;
+    case 'companyReturnDecision':
+      return `مرتجع مقبول من الشركة · ${op.lines.map((l) => l.itemName).join('، ')}`;
+    case 'stockCount':
+      return 'تسوية جرد';
+    case 'void':
+      return `إلغاء: ${describePosting({ ...p, debit: p.credit, credit: p.debit }, op.target, customers)}`;
+  }
+}
+
+/** Short Arabic title of any operation (history lists, operation page). */
+export function opLabel(op: Operation): string {
+  switch (op.type) {
+    case 'opening':
+      return 'أرصدة افتتاحية';
+    case 'receive':
+      return `استلام ${op.docNo}`;
+    case 'sale':
+      return `بيع – فاتورة ${op.docNo}`;
+    case 'collection':
+      return 'تحصيل من عميل';
+    case 'transfer':
+      return `تحويل من ${WALLET_LABEL[op.from]} إلى ${WALLET_LABEL[op.to]}`;
+    case 'companyPayment':
+      return `سداد للشركة · ${BANK_LABEL[op.bank]}`;
+    case 'noticeStatus':
+      return 'تحديث حالة إشعار';
+    case 'customerReturn':
+      return `مرتجع من عميل${op.condition === 'damaged' ? ' (تالف — خارج المتاح)' : ''}`;
+    case 'companyReturn':
+      return `مرتجع للشركة ${op.docNo}`;
+    case 'companyReturnDecision':
+      return op.decision === 'accepted' ? 'قبلت الشركة المرتجع' : 'رُفض المرتجع — أُعيد للشاحنة';
+    case 'stockCount':
+      return `تسوية جرد${op.adjustments.length === 1 ? ' – ' + op.adjustments[0].reason : ''}`;
+    case 'void':
+      return `إلغاء: ${opLabel(op.target)}`;
   }
 }

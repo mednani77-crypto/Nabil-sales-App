@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useData } from '../hooks/useData';
-import { salesOn } from '../domain/balances';
+import { salesOn, voidedIds } from '../domain/balances';
 import { customerActivity } from '../domain/moneyOps';
 import { noticeCounts } from '../domain/notices';
+import { companyReturnStates, pendingCompanyReturnsValue } from '../domain/stockOps';
 import { fmtMoney } from '../domain/money';
 import { linesTotal } from '../domain/postings';
 import { stockValue } from '../domain/units';
@@ -25,7 +26,8 @@ export function HomeScreen() {
   }
   const money = WALLETS.reduce((t, w) => t + (data.balances.get(walletAccount(w)) ?? 0), 0);
   const truckValue = data.items.reduce((t, it) => t + stockValue(it, data.stock.get(it.id) ?? 0), 0);
-  const covered = truckValue + recv - credit + money;
+  const pendRet = pendingCompanyReturnsValue(data.ops);
+  const covered = truckValue + recv - credit + money + pendRet;
   const diff = data.company.balance - covered;
 
   const days = Array.from({ length: 7 }, (_, i) => addDaysISO(today, i - 6));
@@ -40,6 +42,8 @@ export function HomeScreen() {
   if (nc.sent) alerts.push({ n: nc.sent, title: 'سدادات بانتظار تأكيد الشركة', sub: `${fmtMoney(data.company.unconfirmed)} بر غير مؤكد بعد`, to: '/notices?f=sent', tone: 'blue' });
   const late = data.customers.filter((c) => customerActivity(data.ops, c.id, today).late);
   if (late.length) alerts.push({ n: late.length, title: 'عملاء متأخرون في السداد', sub: late.map((c) => c.name).join('، '), to: '/customers?f=late', tone: 'red' });
+  const pendCount = companyReturnStates(data.ops).filter((r) => r.state === 'pending').length;
+  if (pendCount) alerts.push({ n: pendCount, title: 'مرتجعات بانتظار قبول الشركة', sub: `${fmtMoney(pendRet)} بر`, to: '/returns?tab=co', tone: 'grey' });
   if (low.length) alerts.push({ n: low.length, title: 'مخزون منخفض في الشاحنة', sub: low.map((i) => i.name).join('، '), to: '/truck', tone: 'grey' });
   if (temps.length) alerts.push({ n: temps.length, title: 'ديون مؤقتة بلا اسم', sub: 'سمِّ أصحابها حتى لا تختلط الديون', to: '/customers?f=temp', tone: 'amber' });
 
@@ -140,8 +144,8 @@ export function HomeScreen() {
         <QA to="/collect" icon="down" label="تحصيل" bg="var(--teal-soft)" fg="var(--teal-ink)" />
         <QA to="/pay" icon="up" label="سداد للشركة" bg="var(--amber-soft)" fg="var(--amber-ink)" />
         <QA to="/transfer" icon="swap" label="تحويل" bg="var(--ground)" fg="#33414f" />
-        <QA to="/invoices" icon="receipt" label="الفواتير" bg="var(--amber-soft)" fg="var(--amber-ink)" />
-        <QA icon="count" label="جرد الشاحنة" bg="var(--ground)" fg="#33414f" soon="المرحلة 4" />
+        <QA to="/returns" icon="ret" label="مرتجع" bg="var(--red-soft)" fg="var(--red)" />
+        <QA to="/count" icon="count" label="جرد الشاحنة" bg="var(--ground)" fg="#33414f" />
       </div>
 
       <div className="card pad" style={{ gap: 12 }}>
@@ -149,7 +153,7 @@ export function HomeScreen() {
           <span style={{ fontWeight: 600, fontSize: 15, flex: 1 }}>هل يغطي ما لديّ دين الشركة؟</span>
           <span className="num sub">{fmtMoney(covered)}</span>
         </div>
-        <CoverageBar parts={[[truckValue, 'var(--blue)', 'بضاعة الشاحنة'], [recv - credit, 'var(--amber)', 'ديون العملاء'], [money, 'var(--teal)', 'أموال العمل']]} />
+        <CoverageBar parts={[[truckValue, 'var(--blue)', 'بضاعة الشاحنة'], [recv - credit, 'var(--amber)', 'ديون العملاء'], [money, 'var(--teal)', 'أموال العمل'], ...(pendRet ? [[pendRet, '#8593a3', 'مرتجعات معلّقة'] as [number, string, string]] : [])]} />
         <div style={{ fontSize: 12.5, fontWeight: 600, color: Math.abs(diff) <= 100000 ? 'var(--teal-ink)' : 'var(--red)' }}>
           {Math.abs(diff) < 100
             ? 'مطابق تمامًا لدين الشركة'
@@ -167,7 +171,7 @@ export function HomeScreen() {
           </div>
           <div className="card list">
             {recent.map((s) => {
-              const st = invoiceStatus(s);
+              const st = invoiceStatus(s, voidedIds(data.ops));
               return (
                 <Link key={s.id} to={`/invoices/${s.id}`} className="lrow">
                   <span className="grow">

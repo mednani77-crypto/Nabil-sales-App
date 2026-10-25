@@ -154,3 +154,4 @@ input[type='number'] { -moz-appearance: textfield; }
 .bars .bar { width: 100%; max-width: 30px; border-radius: 8px; }
 
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+.pill.grey { background: #eef1f5; color: var(--ink2); }
