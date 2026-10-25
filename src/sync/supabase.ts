@@ -68,6 +68,19 @@ export function supabaseTransport(sb: SupabaseClient, userId: string): Transport
       return data.map((r) => ({ seq: r.server_seq as number, id: r.id as string, opId: r.op_id as string, path: r.path as string, mime: r.mime as string, createdAt: r.created_at as string }));
     },
 
+    async getEpoch() {
+      const r = await sb.from('account_state').select('epoch').maybeSingle();
+      if (r.error) throw new Error(r.error.message);
+      return (r.data?.epoch as number | undefined) ?? 0;
+    },
+    async resetAccount() {
+      const r = await sb.rpc('reset_my_data');
+      if (r.error) throw new Error(r.error.message);
+      const out = r.data as { epoch: number; paths: string[] };
+      // Photos: best effort — a leftover file is harmless (nothing points to it any more).
+      for (let i = 0; i < out.paths.length; i += 100) await sb.storage.from('attachments').remove(out.paths.slice(i, i + 100));
+      return out.epoch;
+    },
     async downloadAttachment(path) {
       const r = await sb.storage.from('attachments').download(path);
       if (r.error || !r.data) throw new Error(r.error?.message ?? 'download failed');
