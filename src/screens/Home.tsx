@@ -146,6 +146,9 @@ export function HomeScreen() {
         <QA to="/transfer" icon="swap" label="تحويل" bg="var(--ground)" fg="#33414f" />
         <QA to="/returns" icon="ret" label="مرتجع" bg="var(--red-soft)" fg="var(--red)" />
         <QA to="/count" icon="count" label="جرد الشاحنة" bg="var(--ground)" fg="#33414f" />
+        <QA to="/reports" icon="file" label="كشف حساب" bg="var(--blue-soft)" fg="var(--blue)" />
+        <QA to="/reports?tab=reports" icon="menu" label="التقارير و Excel" bg="var(--ground)" fg="#33414f" />
+        <QA to="/notices" icon="chat" label="الإشعارات" bg="var(--ground)" fg="#33414f" />
       </div>
 
       <div className="card pad" style={{ gap: 12 }}>

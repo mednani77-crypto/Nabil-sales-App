@@ -9,6 +9,8 @@ import '@fontsource/ibm-plex-sans-arabic/700.css';
 import '@fontsource/alexandria/400.css';
 import '@fontsource/alexandria/600.css';
 import '@fontsource/alexandria/700.css';
+import '@fontsource/noto-sans-ethiopic/400.css';
+import '@fontsource/noto-sans-ethiopic/700.css';
 import './styles.css';
 
 // Ask the browser to keep IndexedDB even under storage pressure (important for offline data).

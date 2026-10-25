@@ -187,10 +187,9 @@ export function CustomerScreen() {
           <Link className="qa" to={`/returns?customer=${c.id}`} style={{ minHeight: 84 }}>
             <span className="b" style={{ background: 'var(--red-soft)', color: 'var(--red)' }}><Icon name="ret" /></span>مرتجع
           </Link>
-          <div className="qa soon" style={{ minHeight: 84 }} aria-disabled="true">
+          <Link className="qa" to={`/reports?acct=${c.id}`} style={{ minHeight: 84 }}>
             <span className="b" style={{ background: 'var(--blue-soft)', color: 'var(--blue)' }}><Icon name="file" /></span>كشف حساب
-            <span style={{ fontSize: 10.5, color: 'var(--ink2)', fontWeight: 500 }}>المرحلة 6</span>
-          </div>
+          </Link>
         </div>
         <div className="sec">الحساب الجاري</div>
         <LedgerTable data={data} account={customerAccount(c.id)} />
@@ -310,6 +309,7 @@ export function CompanyScreen() {
           <Link className="btn btn-g" to="/receive">استلام بضاعة</Link>
         </div>
         <Link className="btn btn-g" to="/notices"><Icon name="chat" small />الإشعارات: الإرسال إلى واتساب وتأكيد الشركة</Link>
+        <Link className="btn btn-g" to="/reports?acct=company"><Icon name="file" small />كشف حساب PDF للشركة</Link>
         <div className="sec">الحساب الجاري</div>
         <LedgerTable data={data} account="company" showUnconfirmed />
       </div>
