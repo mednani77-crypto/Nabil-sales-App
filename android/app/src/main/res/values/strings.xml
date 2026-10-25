@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">مساعد نبيل</string>
+    <string name="title_activity_main">مساعد نبيل</string>
+    <string name="package_name">com.syscoadaweh.nabil</string>
+    <string name="custom_url_scheme">com.syscoadaweh.nabil</string>
+</resources>

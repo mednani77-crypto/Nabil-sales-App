@@ -1,0 +1,81 @@
+# Builds an installable Android APK (the same web app wrapped with Capacitor, works offline)
+# and publishes it as a GitHub Release that can be downloaded straight to the phone.
+#
+# Signing: if the repo has the secrets ANDROID_KEYSTORE_B64 (the keystore as base64) and
+# ANDROID_SIGNING_PASSWORD (key alias: nabil), a release APK signed with that fixed key is built,
+# so each new version installs over the old one and keeps the phone's data.
+# Without them, a debug APK is built (fine for testing; updating it may require uninstalling first).
+name: Android APK
+
+on:
+  push:
+    branches: [main, android-apk]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    # Pinned: this image ships the Android SDK and JDK 17.
+    runs-on: ubuntu-24.04
+    env:
+      VERSION_CODE: ${{ github.run_number }}
+      HAS_KEY: ${{ secrets.ANDROID_KEYSTORE_B64 != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: npx cap sync android
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Decode signing key
+        if: env.HAS_KEY == 'true'
+        run: |
+          echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+      - name: Build APK
+        working-directory: android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+          ANDROID_KEY_ALIAS: nabil
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+        run: |
+          chmod +x gradlew
+          echo "ANDROID_HOME=$ANDROID_HOME  SDK_ROOT=$ANDROID_SDK_ROOT"
+          set -o pipefail
+          if [ "$HAS_KEY" = "true" ]; then
+            ./gradlew --no-daemon assembleRelease 2>&1 | tee build.log
+            cp app/build/outputs/apk/release/app-release.apk "$GITHUB_WORKSPACE/nabil-$VERSION_CODE.apk"
+          else
+            ./gradlew --no-daemon assembleDebug 2>&1 | tee build.log
+            cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/nabil-$VERSION_CODE-test.apk"
+          fi
+      - name: Report build error
+        if: failure()
+        working-directory: android
+        run: |
+          msg=$( (grep -E "What went wrong|rror|FAIL|SDK" -A6 build.log || tail -40 build.log) | head -80 | sed ':a;N;$!ba;s/%/%25/g;s/\n/%0A/g')
+          echo "::error title=Gradle::$msg"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nabil-apk
+          path: nabil-*.apk
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          name: تطبيق نبيل — نسخة ${{ github.run_number }}
+          target_commitish: ${{ github.sha }}
+          prerelease: true
+          files: nabil-*.apk
+          body: |
+            ملف التثبيت على أندرويد. افتح هذه الصفحة من الهاتف، ونزّل ملف apk من الأسفل، ثم افتحه للتثبيت.
+            الفرع: ${{ github.ref_name }} · ${{ github.sha }}
