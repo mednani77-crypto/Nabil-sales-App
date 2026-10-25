@@ -12,9 +12,24 @@ import '@fontsource/alexandria/700.css';
 import '@fontsource/noto-sans-ethiopic/400.css';
 import '@fontsource/noto-sans-ethiopic/700.css';
 import './styles.css';
+import { Capacitor } from '@capacitor/core';
+import { App as CapApp } from '@capacitor/app';
+import { createBackController, installBackButton } from './ui/back';
 
 // Ask the browser to keep IndexedDB even under storage pressure (important for offline data).
 if (navigator.storage?.persist) navigator.storage.persist().catch(() => {});
+
+// Phone back button: close sheet → previous screen → on home, press twice to exit.
+// Must be installed before the first render so screens can register with it.
+if (Capacitor.isNativePlatform()) {
+  const back = createBackController({
+    exit: () => void CapApp.exitApp(),
+    hint: () => window.dispatchEvent(new Event('back-exit-hint')),
+    now: () => Date.now(),
+  });
+  installBackButton(back);
+  void CapApp.addListener('backButton', () => back.press());
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

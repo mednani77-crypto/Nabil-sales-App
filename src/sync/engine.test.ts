@@ -125,8 +125,8 @@ describe('sync between two devices', () => {
     const cust = await addCustomer(a, { name: 'دين مؤقت' });
     await syncOnce(a, server.transport());
     await syncOnce(bb, server.transport());
-    await a.customers.update(cust.id, { name: 'اسم قديم', updatedAt: '2026-10-25T08:00:00.000Z' });
-    await bb.customers.update(cust.id, { name: 'سوبرماركت النور', updatedAt: '2026-10-25T09:00:00.000Z' });
+    await a.customers.update(cust.id, { name: 'اسم قديم', updatedAt: '2099-01-01T08:00:00.000Z' });
+    await bb.customers.update(cust.id, { name: 'سوبرماركت النور', updatedAt: '2099-01-01T09:00:00.000Z' });
     await syncOnce(bb, server.transport());
     await syncOnce(a, server.transport());
     await syncOnce(bb, server.transport());
