@@ -130,8 +130,8 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 | 2 | Customer detail & ledger, late customers, collections (4 methods, optional invoice link), wallets & transfers, company account & payments, duplicate-transfer warning | **done** |
 | 3 | Bank notices: photo (compressed, stored as attachment), WhatsApp share sheet, recorded → sent → confirmed via append-only `noticeStatus` ops, counts and alerts | **done** |
 | 4 | Customer returns (good/damaged, balance/cash, from invoice), company returns with accept/reject, stock count, opening balances form, safe cancel (`void`) with operation page | **done** |
-| 5 | Email/password account, background sync engine (ops union, master LWW, photos), device codes, PIN app lock, JSON backup/restore. Cloud schema in `supabase/migrations/`. Project `nabil-sales` (ap-south-1) created, schema applied, public settings in `.env.production` | in review |
-| 6 | Statements PDF in 5 languages, reports, Excel export | |
+| 5 | Email/password account, background sync engine (ops union, master LWW, photos), device codes, PIN app lock, JSON backup/restore. Cloud schema in `supabase/migrations/`. Project `nabil-sales` (ap-south-1) created, schema applied, public settings in `.env.production` | done |
+| 6 | Statements PDF in 5 languages (ar/en/so/am/om; browser renders the pages, `html-to-image` → `jspdf`, so Arabic and Ethiopic shape correctly), `/reports` screen with period picker, 7 report tables and one-file Excel export (`xlsx`, lazy-loaded). Share sheet on Android via Capacitor Filesystem+Share. so/am/om wording needs a native-speaker review | done |
 | 7 | Two-week parallel run with Nabil's paper notebook | |
 
 ## 10. Definition of done for every phase

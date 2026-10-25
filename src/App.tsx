@@ -14,10 +14,11 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from './db/db';
 import { noticeCounts } from './domain/notices';
 import { useEffect } from 'react';
+import { ReportsScreen } from './screens/Reports';
 import { LockGate } from './ui/Lock';
 import { startSyncLoop } from './sync/service';
 
-const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay', '/returns', '/count', '/opening'];
+const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay', '/returns', '/count', '/opening', '/reports'];
 
 function Shell() {
   const { pathname, search } = useLocation();
@@ -46,6 +47,7 @@ function Shell() {
           <Route path="/count" element={<CountScreen />} />
           <Route path="/opening" element={<OpeningScreen />} />
           <Route path="/op/:id" element={<OperationScreen />} />
+          <Route path="/reports" element={<ReportsScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<HomeScreen />} />
         </Routes>
