@@ -1,0 +1,20 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-10-25T02:40:00Z"},
+  "title": "تطبيق نبيل عادل — مساعد المندوب",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 390, "h": 844, "title": "الهاتف — النموذج التفاعلي الكامل", "is_interactive": true, "radius": 36},
+    "Onboarding.dc.html": {"x": 470, "y": 0, "w": 390, "h": 844, "title": "الدخول والإعداد والأرصدة الافتتاحية", "is_interactive": true, "radius": 36},
+    "States.dc.html": {"x": 940, "y": 0, "w": 1512, "h": 1180, "title": "حالات النظام: الاتصال والمزامنة والتنبيهات"},
+    "Desktop.dc.html": {"x": 0, "y": 1540, "w": 1440, "h": 1120, "title": "الكمبيوتر — النسخة المتجاوبة", "expand": "fill"},
+    "Statement.dc.html": {"x": 1520, "y": 1540, "w": 794, "h": 1123, "title": "كشف حساب PDF — خمس لغات", "paper": "a4"}
+  },
+  "order": ["Main.dc.html", "Onboarding.dc.html", "States.dc.html", "Desktop.dc.html", "Statement.dc.html"],
+  "notes": {
+    "t1": {"x": 0, "y": -300, "text": "تطبيق نبيل عادل — الهاتف أولًا", "kind": "title1", "maxW": 2452},
+    "t2": {"x": 0, "y": 1260, "text": "الكمبيوتر وكشوف الحساب", "kind": "title1", "maxW": 2314}
+  },
+  "designSystems": []
+}

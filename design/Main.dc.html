@@ -1,0 +1,1610 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>نبيل — مساعد المندوب</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=Noto+Sans+Ethiopic:wght@400;600;700&amp;family=IBM+Plex+Sans:wght@400;600;700&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#1E5BD8}a:hover{color:#143F99}
+.app{font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;color:#0D1B2A;-webkit-font-smoothing:antialiased}
+.h,.num{font-family:'Alexandria','IBM Plex Sans Arabic',sans-serif}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ic.s{width:18px;height:18px}
+.card{background:#fff;border-radius:20px;border:1px solid #DCE2EA}
+.btn{font:inherit;border:0;cursor:pointer;min-height:52px;border-radius:16px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;text-decoration:none}
+.btn-p{background:#F4A100;color:#0D1B2A}
+.btn-p:active{background:#DB9000}
+.btn-d{background:#0D1B2A;color:#fff}
+.btn-g{background:#fff;color:#0D1B2A;border:1px solid #CBD3DD}
+.chip{font:inherit;border:1px solid #CBD3DD;background:#fff;color:#0D1B2A;border-radius:999px;min-height:44px;padding:0 15px;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;flex:none}
+.chip.on{background:#0D1B2A;color:#fff;border-color:#0D1B2A}
+.lbl{font-size:13px;color:#46566A;font-weight:500}
+.inp{font:inherit;font-size:16px;min-height:52px;border:1px solid #CBD3DD;border-radius:14px;padding:0 14px;background:#fff;color:#0D1B2A;width:100%}
+.inp:focus{outline:2px solid #F4A100;outline-offset:1px;border-color:#F4A100}
+.field{display:flex;flex-direction:column;gap:6px}
+.scroll{overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+.hs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.hs::-webkit-scrollbar{display:none}
+.icbtn{width:44px;height:44px;border-radius:14px;border:1px solid #DCE2EA;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#0D1B2A;flex:none;position:relative}
+.pill{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.lrow{font:inherit;text-align:right;width:100%;background:#fff;border:0;border-bottom:1px solid #EEF1F5;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#0D1B2A;min-height:64px}
+.lrow:last-child{border-bottom:0}
+.sec{font-size:13px;font-weight:600;color:#46566A;margin:6px 4px 0}
+.opt{font:inherit;text-align:right;cursor:pointer;border:1px solid #CBD3DD;background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;min-height:60px;color:#0D1B2A}
+.opt.on{border:2px solid #0D1B2A;background:#F6F8FB;padding:11px 13px}
+.qa{font:inherit;cursor:pointer;border:0;background:#fff;border-radius:18px;padding:14px 6px 12px;display:flex;flex-direction:column;align-items:center;gap:8px;color:#0D1B2A;font-size:13px;font-weight:600;min-height:92px;border:1px solid #DCE2EA}
+.qa span.b{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.foot{position:sticky;bottom:0;z-index:6;padding:12px 16px 16px;background:linear-gradient(to top,#EDF0F4 75%,rgba(237,240,244,0))}
+@keyframes up{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.anim{animation:up .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes sheet{from{transform:translateY(100%)}to{transform:none}}
+.sheet{animation:sheet .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.fade{animation:fade .25s ease-out}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin 1s linear infinite}
+@keyframes pop{0%{transform:scale(.4);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+.pop{animation:pop .5s cubic-bezier(.2,.8,.2,1)}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+input[type=number]{-moz-appearance:textfield}
+</style>
+</helmet>
+<div class="app" dir="rtl" style="width:390px;height:844px;background:#EDF0F4;position:relative;overflow:hidden;display:flex;flex-direction:column">
+
+<sc-if value="{{offline}}" hint-placeholder-val="{{false}}">
+<div class="fade" style="background:#0D1B2A;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:13px;flex:none">
+<svg class="ic s" viewBox="0 0 24 24" aria-hidden="true" style="color:#F4C35A"><path d="M3 3l18 18"></path><path d="M8.5 16.5a5 5 0 0 1 7 0"></path><path d="M5 12.5a10 10 0 0 1 5-2.6"></path><path d="M14.5 10a10 10 0 0 1 4.5 2.5"></path><path d="M12 20h.01"></path></svg>
+<span style="flex:1">دون اتصال — كل عملية تُحفظ على الهاتف</span>
+<span class="pill num" style="background:#F4A100;color:#0D1B2A">{{pendingLabel}}</span>
+</div>
+</sc-if>
+<sc-if value="{{syncing}}" hint-placeholder-val="{{false}}">
+<div class="fade" style="background:#1E5BD8;color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px;font-size:13px;flex:none">
+<svg class="ic s spin" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 4v5h-5"></path></svg>
+<span style="flex:1">جارٍ مزامنة العمليات المحفوظة…</span>
+</div>
+</sc-if>
+
+<div class="scroll" ref="{{scrollRef}}" style="flex:1;min-height:0;position:relative">
+
+<!-- ============ HOME ============ -->
+<sc-if value="{{is.home}}" hint-placeholder-val="{{true}}">
+<div class="anim" style="padding:16px 16px 28px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;gap:12px">
+<div class="h" style="width:46px;height:46px;border-radius:15px;background:#0D1B2A;color:#F4A100;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;flex:none">ن</div>
+<div style="flex:1;min-width:0">
+<div style="font-size:13px;color:#46566A">الأحد 25 أكتوبر 2026</div>
+<div class="h" style="font-size:19px;font-weight:700">صباح الخير يا نبيل</div>
+</div>
+<button class="icbtn" aria-label="{{syncText}}" onClick="{{nav.settings}}">
+<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5 4.5 4.5 0 0 1 17.5 18z"></path></svg>
+<span style="position:absolute;top:9px;left:9px;width:10px;height:10px;border-radius:50%;border:2px solid #fff;background:{{syncDot}}"></span>
+</button>
+<button class="icbtn" aria-label="المزيد" onClick="{{nav.more}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg></button>
+</div>
+
+<button onClick="{{nav.company}}" style="font:inherit;text-align:right;border:0;cursor:pointer;background:#0D1B2A;color:#fff;border-radius:26px;padding:20px 20px 18px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden">
+<svg viewBox="0 0 360 60" aria-hidden="true" style="position:absolute;left:0;bottom:0;width:100%;height:60px;opacity:.5"><path d="M0 52 L360 52" stroke="#F4A100" stroke-width="3" stroke-dasharray="18 14" fill="none"></path></svg>
+<div style="display:flex;justify-content:space-between;align-items:center;position:relative"><span style="font-size:14px;color:#B9C4D2">مديونيتي لشركة SYSCO</span><span class="pill" style="background:rgba(244,161,0,.18);color:#F7C65C">حساب جارٍ</span></div>
+<div class="num" style="font-size:38px;font-weight:700;letter-spacing:-.5px;line-height:1.1;position:relative">{{k.debt}} <span style="font-size:15px;font-weight:500;color:#B9C4D2">بر</span></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;position:relative;margin-bottom:10px">
+<span style="background:rgba(255,255,255,.09);border-radius:10px;padding:6px 10px;font-size:12.5px;color:#E3E8EF">غير مؤكد لدى الشركة <b class="num" style="color:#F7C65C">{{k.unconf}}</b></span>
+<span style="background:rgba(255,255,255,.09);border-radius:10px;padding:6px 10px;font-size:12.5px;color:#E3E8EF">آخر سداد <b class="num">{{k.lastPay}}</b></span>
+</div>
+</button>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<button class="card" onClick="{{nav.customers}}" style="font:inherit;text-align:right;cursor:pointer;padding:14px;display:flex;flex-direction:column;gap:6px;color:#0D1B2A">
+<span style="font-size:13px;color:#46566A">ديون العملاء</span>
+<span class="num" style="font-size:22px;font-weight:700">{{k.recv}}</span>
+<span style="font-size:12px;color:#A32A20;font-weight:600">{{k.lateLbl}}</span>
+</button>
+<button class="card" onClick="{{nav.money}}" style="font:inherit;text-align:right;cursor:pointer;padding:14px;display:flex;flex-direction:column;gap:6px;color:#0D1B2A">
+<span style="font-size:13px;color:#46566A">أموال العمل لديّ</span>
+<span class="num" style="font-size:22px;font-weight:700">{{k.money}}</span>
+<span style="font-size:12px;color:#0A6B5F;font-weight:600">نقد · CBE · Ebirr</span>
+</button>
+</div>
+
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:flex-start;gap:12px">
+<div style="flex:1">
+<div style="font-size:13px;color:#46566A">مبيعات اليوم</div>
+<div class="num" style="font-size:26px;font-weight:700">{{k.todaySales}} <span style="font-size:13px;color:#46566A;font-weight:500">بر</span></div>
+<div style="font-size:12.5px;color:#46566A">{{k.todayMeta}}</div>
+</div>
+<button class="chip" onClick="{{nav.invoices}}" style="min-height:40px">الفواتير</button>
+</div>
+<div style="display:flex;align-items:flex-end;gap:8px;height:96px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="7">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;justify-content:flex-end;height:100%">
+<span class="num" style="font-size:10px;color:#46566A">{{b.v}}</span>
+<div style="width:100%;max-width:30px;border-radius:8px;height:{{b.h}}px;background:{{b.c}}"></div>
+<span style="font-size:11px;color:#46566A;font-weight:{{b.w}}">{{b.l}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+
+<sc-if value="{{hasAlerts}}" hint-placeholder-val="{{true}}">
+<div class="sec">تحتاج انتباهك</div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{alerts}}" as="a" hint-placeholder-count="3">
+<button class="lrow" onClick="{{a.go}}">
+<span class="num" style="width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;flex:none;background:{{a.bg}};color:{{a.fg}}">{{a.n}}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14.5px">{{a.title}}</span><span style="font-size:12.5px;color:#46566A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{a.sub}}</span></span>
+<svg class="ic s" viewBox="0 0 24 24" aria-hidden="true" style="color:#8593A3"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<div class="sec">اختصارات</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+<button class="qa" onClick="{{nav.receive}}"><span class="b" style="background:#E3ECFD;color:#1E4FB8"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h11v10H2z"></path><path d="M13 9h4l4 4v3h-8z"></path><circle cx="6" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg></span>استلام بضاعة</button>
+<button class="qa" onClick="{{nav.collect}}"><span class="b" style="background:#DDF3EF;color:#0A6B5F"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12"></path><path d="M7 11l5 5 5-5"></path><path d="M4 20h16"></path></svg></span>تحصيل</button>
+<button class="qa" onClick="{{nav.pay}}"><span class="b" style="background:#FFF1D6;color:#8A5A00"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V8"></path><path d="M7 13l5-5 5 5"></path><path d="M4 4h16"></path></svg></span>سداد للشركة</button>
+<button class="qa" onClick="{{nav.transfer}}"><span class="b" style="background:#EEF1F5;color:#33414F"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4L3 8l4 4"></path><path d="M3 8h14"></path><path d="M17 20l4-4-4-4"></path><path d="M21 16H7"></path></svg></span>تحويل</button>
+<button class="qa" onClick="{{nav.returns}}"><span class="b" style="background:#FCE8E6;color:#A32A20"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg></span>مرتجع</button>
+<button class="qa" onClick="{{nav.count}}"><span class="b" style="background:#EEF1F5;color:#33414F"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6v3H9z"></path><path d="M7 5H5v16h14V5h-2"></path><path d="M9 13l2 2 4-4"></path></svg></span>جرد الشاحنة</button>
+</div>
+
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:8px"><span style="font-weight:600;font-size:15px;flex:1">هل يغطي ما لديّ دين الشركة؟</span><span class="num" style="font-size:12px;color:#46566A">{{cov.covered}}</span></div>
+<div style="display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;background:#EEF1F5">
+<div style="width:{{cov.invW}};background:#1E5BD8"></div>
+<div style="width:{{cov.recW}};background:#F4A100"></div>
+<div style="width:{{cov.monW}};background:#0A7C6E"></div>
+<div style="width:{{cov.retW}};background:#8593A3"></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;font-size:12px;color:#46566A">
+<div style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:5px"><i style="width:8px;height:8px;border-radius:2px;background:#1E5BD8"></i>بضاعة الشاحنة</span><b class="num" style="color:#0D1B2A;font-size:13px">{{cov.inv}}</b></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:5px"><i style="width:8px;height:8px;border-radius:2px;background:#F4A100"></i>ديون العملاء</span><b class="num" style="color:#0D1B2A;font-size:13px">{{cov.rec}}</b></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:5px"><i style="width:8px;height:8px;border-radius:2px;background:#0A7C6E"></i>أموال العمل</span><b class="num" style="color:#0D1B2A;font-size:13px">{{cov.mon}}</b></div>
+</div>
+<div style="font-size:12.5px;font-weight:600;color:{{cov.diffC}}">{{cov.diffLbl}}</div>
+</div>
+
+<div style="display:flex;align-items:center"><div class="sec" style="flex:1">آخر الفواتير</div><button class="chip" style="min-height:36px;border:0;background:transparent;color:#1E5BD8" onClick="{{nav.invoices}}">عرض الكل</button></div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{recentInv}}" as="v" hint-placeholder-count="3">
+<button class="lrow" onClick="{{v.open}}">
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14.5px">{{v.cust}}</span><span class="num" style="font-size:12px;color:#46566A">{{v.no}} · {{v.meta}}</span></span>
+<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><b class="num" style="font-size:15px">{{v.total}}</b><span class="pill" style="background:{{v.pbg}};color:{{v.pfg}}">{{v.pill}}</span></span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ SALE / RECEIVE ============ -->
+<sc-if value="{{is.lf}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">{{lf.title}}</h1>
+<sc-if value="{{lf.isSale}}" hint-placeholder-val="{{true}}"><span class="pill num" style="background:#fff;border:1px solid #DCE2EA;color:#46566A;font-size:13px;padding:6px 12px">{{lf.no}}</span></sc-if>
+</div>
+<div style="padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px">
+
+<sc-if value="{{lf.isSale}}" hint-placeholder-val="{{true}}">
+<button class="opt" onClick="{{sc2.open}}" style="background:#fff">
+<span style="width:42px;height:42px;border-radius:14px;background:#EEF1F5;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"></path></svg></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{sc2.name}}</span><span style="font-size:12.5px;color:#46566A">{{sc2.sub}}</span></span>
+<span style="font-size:13px;color:#1E5BD8;font-weight:600">{{sc2.action}}</span>
+</button>
+</sc-if>
+<sc-if value="{{lf.isRcv}}" hint-placeholder-val="{{false}}">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">
+<label class="field"><span class="lbl">تاريخ الاستلام</span><input class="inp num" type="date" value="{{rcvDate}}" onChange="{{setRcvDate}}"></label>
+<div style="font-size:12.5px;color:#1E4FB8;background:#E3ECFD;border-radius:12px;padding:10px 12px">تزيد كمية الشاحنة، وتزيد مديونيتك للشركة بقيمة الاستلام نفسها.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{lf.empty}}" hint-placeholder-val="{{true}}">
+<div style="border:2px dashed #CBD3DD;border-radius:20px;padding:22px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:34px;height:34px;color:#8593A3"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5l9 4.5 9-4.5"></path><path d="M12 12v9"></path></svg>
+<div style="font-weight:600">لم تُضف أصنافًا بعد</div>
+<div style="font-size:13px;color:#46566A">اختر من الأكثر استخدامًا بلمسة واحدة، أو ابحث عن أي صنف</div>
+</div>
+</sc-if>
+
+<div class="hs">
+<sc-for list="{{quick}}" as="qk" hint-placeholder-count="4"><button class="chip" onClick="{{qk.add}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>{{qk.name}}</button></sc-for>
+</div>
+
+<sc-for list="{{lines}}" as="ln" hint-placeholder-count="1">
+<div class="card anim" style="padding:14px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:flex-start;gap:10px">
+<div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15.5px">{{ln.name}}</div><div style="font-size:12.5px;color:{{ln.hintC}}">{{ln.hint}}</div></div>
+<button class="icbtn" style="width:44px;height:44px;border:0;background:#F3F5F8" aria-label="حذف السطر" onClick="{{ln.remove}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M9 7V4h6v3"></path><path d="M6 7l1 13h10l1-13"></path></svg></button>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ln.units}}" as="u" hint-placeholder-count="2"><button class="chip {{u.on}}" style="min-height:44px;padding:0 16px" onClick="{{u.pick}}">{{u.label}}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<div class="field"><span class="lbl">الكمية</span>
+<div style="display:flex;align-items:center;border:1px solid #CBD3DD;border-radius:14px;height:52px;overflow:hidden;background:#fff">
+<button aria-label="زيادة الكمية" onClick="{{ln.inc}}" style="font:inherit;width:46px;height:100%;border:0;background:#F3F5F8;cursor:pointer;font-size:22px;color:#0D1B2A">+</button>
+<input class="num" aria-label="الكمية" type="number" min="0" value="{{ln.qty}}" onChange="{{ln.setQty}}" style="flex:1;min-width:0;border:0;text-align:center;font-size:19px;font-weight:700;background:transparent;height:100%;color:#0D1B2A">
+<button aria-label="إنقاص الكمية" onClick="{{ln.dec}}" style="font:inherit;width:46px;height:100%;border:0;background:#F3F5F8;cursor:pointer;font-size:22px;color:#0D1B2A">−</button>
+</div>
+</div>
+<label class="field"><span class="lbl">سعر الوحدة (بر)</span><input class="inp num" type="number" min="0" value="{{ln.price}}" onChange="{{ln.setPrice}}" style="font-weight:600"></label>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12.5px;color:#46566A"><span>{{ln.conv}}</span><span>الإجمالي <b class="num" style="color:#0D1B2A;font-size:16px">{{ln.total}}</b></span></div>
+</div>
+</sc-for>
+
+<button onClick="{{lf.addItem}}" style="font:inherit;cursor:pointer;min-height:56px;border:2px dashed #0D1B2A;border-radius:18px;background:transparent;color:#0D1B2A;font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:center;gap:8px">
+<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>بحث وإضافة صنف</button>
+
+<sc-if value="{{lf.isSale}}" hint-placeholder-val="{{true}}">
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-weight:600">طريقة الدفع</span><span style="font-size:13px;color:#46566A">المجموع <b class="num" style="font-size:18px;color:#0D1B2A">{{lf.total}}</b></span></div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;background:#EEF1F5;border-radius:14px;padding:4px">
+<sc-for list="{{payOpts}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" style="font:inherit;cursor:pointer;border:0;min-height:44px;border-radius:11px;font-weight:600;font-size:14.5px;background:{{o.bg}};color:{{o.fg}};box-shadow:{{o.sh}}">{{o.label}}</button></sc-for>
+</div>
+<sc-if value="{{sp.isPartial}}" hint-placeholder-val="{{false}}">
+<label class="field"><span class="lbl">المبلغ المدفوع الآن</span><input class="inp num" type="number" min="0" value="{{sp.paidVal}}" onChange="{{sp.setPaid}}" placeholder="0"></label>
+</sc-if>
+<sc-if value="{{sp.showDest}}" hint-placeholder-val="{{true}}">
+<span class="lbl">أين وصل المبلغ المدفوع؟</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{destOpts}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<sc-if value="{{sp.isCo}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{bankOpts}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="min-height:40px;font-size:13px">{{o.label}}</button></sc-for></div>
+<div style="font-size:12.5px;color:#1E4FB8;background:#E3ECFD;border-radius:12px;padding:10px 12px">يُسجّل تلقائيًا كسداد للشركة، ويظهر في الإشعارات لمتابعة صورة الحوالة — مرة واحدة فقط.</div>
+</sc-if>
+</sc-if>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<div style="background:#DDF3EF;border-radius:14px;padding:10px 12px"><div style="font-size:12px;color:#0A6B5F">المدفوع</div><div class="num" style="font-weight:700;font-size:17px;color:#0A5E53">{{sp.paid}}</div></div>
+<div style="background:{{sp.remBg}};border-radius:14px;padding:10px 12px"><div style="font-size:12px;color:{{sp.remFg}}">المتبقي آجلًا</div><div class="num" style="font-weight:700;font-size:17px;color:{{sp.remFg}}">{{sp.rem}}</div></div>
+</div>
+<sc-if value="{{sp.tempNote}}" hint-placeholder-val="{{false}}">
+<div style="font-size:12.5px;color:#8A5A00;background:#FFF1D6;border-radius:12px;padding:10px 12px">بيع آجل دون اسم: سيُنشأ دين مؤقت مستقل برقم <b class="num">{{sp.tempName}}</b> يمكنك تسمية صاحبه لاحقًا.</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+<div class="foot">
+<button class="btn btn-p" style="width:100%;min-height:56px;font-size:16px" onClick="{{lf.save}}">
+<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>{{lf.saveLabel}} · <span class="num">{{lf.total}}</span> بر</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ SALE DONE ============ -->
+<sc-if value="{{is.saleDone}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:28px 16px 16px;display:flex;flex-direction:column;gap:14px;align-items:stretch">
+<div class="pop" style="width:76px;height:76px;border-radius:26px;background:#0A7C6E;color:#fff;display:flex;align-items:center;justify-content:center;align-self:center"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:40px;height:40px;stroke-width:2.4"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></div>
+<div style="text-align:center"><div class="h" style="font-size:21px;font-weight:700">تم حفظ الفاتورة <span class="num">{{done.no}}</span></div><div style="font-size:13.5px;color:#46566A;margin-top:4px">{{done.cust}} · خُصمت الكميات من الشاحنة</div></div>
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{done.lines}}" as="dl" hint-placeholder-count="2"><div style="display:flex;justify-content:space-between;gap:10px;font-size:14px"><span>{{dl.n}} <span class="num" style="color:#46566A;font-size:12.5px">{{dl.q}}</span></span><b class="num">{{dl.t}}</b></div></sc-for>
+<div style="border-top:1px dashed #CBD3DD;padding-top:10px;display:flex;justify-content:space-between"><span style="font-weight:600">الإجمالي</span><b class="num" style="font-size:18px">{{done.total}}</b></div>
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#46566A"><span>المدفوع <b class="num" style="color:#0A6B5F">{{done.paid}}</b></span><span>المتبقي <b class="num" style="color:#A32A20">{{done.rem}}</b></span></div>
+</div>
+<div style="font-size:13px;color:#46566A;text-align:center">PDF اختياري — شارك فقط إذا احتجت</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<button class="btn btn-g" style="flex-direction:column;gap:4px;min-height:72px;font-size:13px" onClick="{{done.wa}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:#0A7C6E"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg>واتساب</button>
+<button class="btn btn-g" style="flex-direction:column;gap:4px;min-height:72px;font-size:13px" onClick="{{done.pdf}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6v18h12V7z"></path><path d="M14 3v4h4"></path><path d="M9 13h6M9 17h6"></path></svg>PDF</button>
+<button class="btn btn-g" style="flex-direction:column;gap:4px;min-height:72px;font-size:13px" onClick="{{done.print}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6"></path><path d="M5 9h14v8H5z"></path><path d="M8 14h8v7H8z"></path></svg>طباعة</button>
+</div>
+<button class="btn btn-p" style="min-height:56px" onClick="{{nav.sale}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>فاتورة جديدة</button>
+<button class="btn btn-g" onClick="{{nav.home}}">العودة للرئيسية</button>
+</div>
+</sc-if>
+
+<!-- ============ INVOICES ============ -->
+<sc-if value="{{is.invoices}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">الفواتير</h1>
+<span class="num" style="font-size:13px;color:#46566A">{{invSum}}</span>
+</div>
+<label style="position:relative;display:block"><span style="position:absolute;right:14px;top:15px;color:#8593A3"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" aria-label="بحث في الفواتير" placeholder="ابحث برقم الفاتورة أو اسم العميل" value="{{q}}" onChange="{{setQ}}" style="padding-right:42px"></label>
+<div class="hs"><sc-for list="{{invFilters}}" as="f" hint-placeholder-count="4"><button class="chip {{f.on}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+</div>
+<div style="padding:4px 16px 24px">
+<div class="card" style="overflow:hidden">
+<sc-for list="{{invList}}" as="v" hint-placeholder-count="5">
+<button class="lrow" onClick="{{v.open}}">
+<span style="width:42px;height:42px;border-radius:13px;background:#EEF1F5;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14.5px">{{v.cust}}</span><span class="num" style="font-size:12px;color:#46566A">{{v.no}} · {{v.meta}}</span></span>
+<span style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><b class="num" style="font-size:15px">{{v.total}}</b><span class="pill" style="background:{{v.pbg}};color:{{v.pfg}}">{{v.pill}}</span></span>
+</button>
+</sc-for>
+<sc-if value="{{invEmpty}}" hint-placeholder-val="{{false}}"><div style="padding:28px 16px;text-align:center;color:#46566A;font-size:14px">لا توجد فواتير مطابقة</div></sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ INVOICE DETAIL ============ -->
+<sc-if value="{{is.invoice}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">فاتورة <span class="num">{{inv.no}}</span></h1>
+<span class="pill" style="background:{{inv.pbg}};color:{{inv.pfg}}">{{inv.pill}}</span>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;justify-content:space-between;font-size:13px;color:#46566A"><span>{{inv.cust}}</span><span class="num">{{inv.date}}</span></div>
+<div style="display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:8px 12px;font-size:13px;align-items:baseline">
+<span class="lbl">الصنف</span><span class="lbl">الكمية × السعر</span><span class="lbl" style="text-align:left">الإجمالي</span>
+<sc-for list="{{inv.lines}}" as="il" hint-placeholder-count="2"><span style="font-weight:600">{{il.n}}</span><span class="num" style="color:#46566A">{{il.q}}</span><b class="num" style="text-align:left">{{il.t}}</b></sc-for>
+</div>
+<div style="border-top:1px dashed #CBD3DD;padding-top:10px;display:flex;flex-direction:column;gap:6px;font-size:14px">
+<div style="display:flex;justify-content:space-between"><span>الإجمالي</span><b class="num" style="font-size:18px">{{inv.total}}</b></div>
+<div style="display:flex;justify-content:space-between;color:#0A6B5F"><span>المدفوع</span><b class="num">{{inv.paid}}</b></div>
+<div style="display:flex;justify-content:space-between;color:#A32A20"><span>المتبقي</span><b class="num">{{inv.rem}}</b></div>
+</div>
+<div style="font-size:12px;color:#46566A">الأسعار محفوظة كما كانت وقت البيع، ولا تتغير بتغيّر الأسعار لاحقًا.</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<button class="btn btn-g" onClick="{{done.wa}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true" style="color:#0A7C6E"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg>مشاركة واتساب</button>
+<button class="btn btn-g" onClick="{{done.pdf}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 20h16"></path></svg>تنزيل PDF</button>
+</div>
+<button class="btn btn-g" onClick="{{inv.ret}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg>تسجيل مرتجع من هذه الفاتورة</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ TRUCK ============ -->
+<sc-if value="{{is.truck}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div><h1 class="h" style="margin:0;font-size:22px;font-weight:700">الشاحنة</h1><div style="font-size:13px;color:#46566A">مخزن متنقل — يُرحّل تلقائيًا من يوم لآخر</div></div>
+<div style="background:#1E4FB8;color:#fff;border-radius:24px;padding:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+<div style="grid-column:1 / -1"><div style="font-size:13px;color:#D6E2FB">قيمة البضاعة في الشاحنة</div><div class="num" style="font-size:30px;font-weight:700">{{tk.value}} <span style="font-size:14px;font-weight:500;color:#D6E2FB">بر</span></div></div>
+<div><div class="num" style="font-size:18px;font-weight:700">{{tk.count}}</div><div style="font-size:12px;color:#D6E2FB">صنف</div></div>
+<div><div class="num" style="font-size:18px;font-weight:700">{{tk.open}}</div><div style="font-size:12px;color:#D6E2FB">عبوة مفتوحة</div></div>
+<div><div class="num" style="font-size:18px;font-weight:700">{{tk.low}}</div><div style="font-size:12px;color:#D6E2FB">منخفض</div></div>
+</div>
+<div class="hs">
+<button class="chip" onClick="{{nav.receive}}" style="background:#0D1B2A;color:#fff;border-color:#0D1B2A"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>استلام بضاعة</button>
+<button class="chip" onClick="{{nav.count}}">جرد وتصحيح</button>
+<button class="chip" onClick="{{tk.coRet}}">مرتجع للشركة</button>
+<button class="chip" onClick="{{tk.newItem}}">صنف جديد</button>
+</div>
+<label style="position:relative;display:block"><span style="position:absolute;right:14px;top:15px;color:#8593A3"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" aria-label="بحث في الأصناف" placeholder="ابحث عن صنف" value="{{q}}" onChange="{{setQ}}" style="padding-right:42px"></label>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{tkList}}" as="t" hint-placeholder-count="5">
+<button class="lrow" onClick="{{t.go}}" style="align-items:flex-start;padding-top:14px;padding-bottom:14px">
+<span style="width:44px;height:44px;border-radius:14px;background:#E3ECFD;color:#1E4FB8;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5l9 4.5 9-4.5"></path><path d="M12 12v9"></path></svg></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:4px">
+<span style="font-weight:600;font-size:15px">{{t.name}}</span>
+<span class="num" style="font-size:14px;font-weight:600;color:#1E4FB8">{{t.label}}</span>
+<span style="display:flex;gap:6px;flex-wrap:wrap">
+<sc-if value="{{t.open}}" hint-placeholder-val="{{false}}"><span class="pill" style="background:#FFF1D6;color:#8A5A00">عبوة مفتوحة</span></sc-if>
+<sc-if value="{{t.low}}" hint-placeholder-val="{{false}}"><span class="pill" style="background:#FCE8E6;color:#A32A20">منخفض</span></sc-if>
+</span>
+</span>
+<span class="num" style="font-size:13px;color:#46566A">{{t.value}}</span>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ ITEM DETAIL ============ -->
+<sc-if value="{{is.item}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">{{itemD.name}}</h1>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:6px">
+<span class="lbl">المتوفر الآن</span>
+<span class="num" style="font-size:28px;font-weight:700;color:#1E4FB8">{{itemD.label}}</span>
+<span style="font-size:13px;color:#46566A">{{itemD.sub}}</span>
+</div>
+<div class="sec">الوحدات والأسعار</div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{itemD.units}}" as="u" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #EEF1F5"><span style="font-weight:600;flex:1">{{u.u}}</span><span style="font-size:12.5px;color:#46566A">{{u.conv}}</span><b class="num">{{u.price}}</b></div>
+</sc-for>
+</div>
+<div class="sec">سجل الحركات</div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{itemD.moves}}" as="m" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #EEF1F5">
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px">{{m.t}}</span><span class="num" style="font-size:12px;color:#46566A">{{m.d}}</span></span>
+<b class="num" style="font-size:13.5px;color:{{m.c}}">{{m.q}}</b>
+</div>
+</sc-for>
+</div>
+<button class="btn btn-g" onClick="{{nav.count}}">جرد هذا الصنف</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ STOCK COUNT ============ -->
+<sc-if value="{{is.count}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">جرد الشاحنة</h1>
+</div>
+<div style="padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<div style="font-size:13px;color:#46566A;background:#fff;border:1px solid #DCE2EA;border-radius:14px;padding:12px">أدخل الكمية الفعلية التي عددتها. يظهر الفرق فورًا، وتُحفظ التسوية في سجل الحركات دون أن تغيّر حساب الشركة.</div>
+<sc-for list="{{cntList}}" as="c" hint-placeholder-count="4">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-weight:600">{{c.name}}</span><span class="num" style="font-size:12.5px;color:#46566A">المسجّل: {{c.rec}}</span></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<label class="field"><span class="lbl">{{c.u0}} كاملة</span><input class="inp num" type="number" min="0" value="{{c.full}}" onChange="{{c.setFull}}"></label>
+<sc-if value="{{c.multi}}" hint-placeholder-val="{{true}}"><label class="field"><span class="lbl">{{c.u1}} من عبوة مفتوحة</span><input class="inp num" type="number" min="0" value="{{c.loose}}" onChange="{{c.setLoose}}"></label></sc-if>
+</div>
+<sc-if value="{{c.hasDiff}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:{{c.diffC}}">الفرق: <span class="num">{{c.diff}}</span></div>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{c.reasons}}" as="r" hint-placeholder-count="4"><button class="chip {{r.on}}" style="min-height:40px;font-size:13px" onClick="{{r.pick}}">{{r.label}}</button></sc-for></div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div class="foot"><button class="btn btn-d" style="width:100%;min-height:56px" onClick="{{saveCount}}">حفظ التسويات <span class="num">({{cntN}})</span></button></div>
+</div>
+</sc-if>
+
+<!-- ============ CUSTOMERS ============ -->
+<sc-if value="{{is.customers}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><h1 class="h" style="margin:0;font-size:22px;font-weight:700;flex:1">العملاء</h1><button class="chip" onClick="{{cs.add}}" style="background:#0D1B2A;color:#fff;border-color:#0D1B2A"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>عميل</button></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<div style="background:#FFF1D6;border-radius:18px;padding:14px"><div style="font-size:12.5px;color:#8A5A00">مستحق على العملاء</div><div class="num" style="font-size:21px;font-weight:700;color:#5E3D00">{{cs.recv}}</div></div>
+<div style="background:#DDF3EF;border-radius:18px;padding:14px"><div style="font-size:12.5px;color:#0A6B5F">أرصدة لصالح العملاء</div><div class="num" style="font-size:21px;font-weight:700;color:#0A5E53">{{cs.credit}}</div></div>
+</div>
+<label style="position:relative;display:block"><span style="position:absolute;right:14px;top:15px;color:#8593A3"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" aria-label="بحث عن عميل" placeholder="ابحث بالاسم أو الهاتف" value="{{q}}" onChange="{{setQ}}" style="padding-right:42px"></label>
+<div class="hs"><sc-for list="{{custFilters}}" as="f" hint-placeholder-count="5"><button class="chip {{f.on}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{custList}}" as="c" hint-placeholder-count="5">
+<button class="lrow" onClick="{{c.go}}">
+<span class="h" style="width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none;background:{{c.avBg}};color:{{c.avFg}}">{{c.init}}</span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px">
+<span style="display:flex;align-items:center;gap:6px"><span style="font-weight:600;font-size:14.5px">{{c.name}}</span><sc-if value="{{c.late}}" hint-placeholder-val="{{false}}"><span class="pill" style="background:#FCE8E6;color:#A32A20;font-size:11px">متأخر</span></sc-if></span>
+<span class="num" style="font-size:12px;color:#46566A">{{c.sub}}</span>
+</span>
+<span style="display:flex;flex-direction:column;align-items:flex-end;gap:2px"><b class="num" style="font-size:15px;color:{{c.balC}}">{{c.bal}}</b><span style="font-size:11.5px;color:#46566A">{{c.balLbl}}</span></span>
+</button>
+</sc-for>
+<sc-if value="{{custEmpty}}" hint-placeholder-val="{{false}}"><div style="padding:28px 16px;text-align:center;color:#46566A;font-size:14px">لا يوجد عملاء مطابقون</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ CUSTOMER DETAIL ============ -->
+<sc-if value="{{is.customer}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">{{cd.name}}</h1>
+<sc-if value="{{cd.hasPhone}}" hint-placeholder-val="{{true}}"><a class="icbtn" aria-label="اتصال" href="{{cd.tel}}" style="color:#0A6B5F"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path></svg></a></sc-if>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<sc-if value="{{cd.temp}}" hint-placeholder-val="{{false}}">
+<div style="background:#FFF1D6;border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:10px">
+<div style="font-size:13px;color:#5E3D00;font-weight:600">دين مؤقت — سمِّ صاحبه حتى لا يختلط بغيره</div>
+<div style="display:flex;gap:8px"><input class="inp" aria-label="اسم صاحب الدين" placeholder="اسم العميل" value="{{tempName}}" onChange="{{cd.setTempName}}" style="flex:1"><button class="btn btn-d" onClick="{{cd.saveName}}">حفظ</button></div>
+</div>
+</sc-if>
+<div class="card" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+<span class="lbl">{{cd.balLbl}}</span>
+<span class="num" style="font-size:32px;font-weight:700;color:{{cd.balC}}">{{cd.bal}} <span style="font-size:14px;font-weight:500;color:#46566A">بر</span></span>
+<div class="num" style="display:flex;gap:14px;font-size:12.5px;color:#46566A;flex-wrap:wrap"><span>{{cd.phone}}</span><span>آخر بيع {{cd.lastSale}}</span><span>آخر تحصيل {{cd.lastPay}}</span></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<button class="qa" onClick="{{cd.sale}}" style="min-height:84px"><span class="b" style="background:#FFF1D6;color:#8A5A00"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg></span>بيع</button>
+<button class="qa" onClick="{{cd.collect}}" style="min-height:84px"><span class="b" style="background:#DDF3EF;color:#0A6B5F"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v12"></path><path d="M7 11l5 5 5-5"></path><path d="M4 20h16"></path></svg></span>تحصيل</button>
+<button class="qa" onClick="{{cd.ret}}" style="min-height:84px"><span class="b" style="background:#FCE8E6;color:#A32A20"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14L4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 0 10h-3"></path></svg></span>مرتجع</button>
+<button class="qa" onClick="{{cd.stmt}}" style="min-height:84px"><span class="b" style="background:#E3ECFD;color:#1E4FB8"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6v18h12V7z"></path><path d="M14 3v4h4"></path><path d="M9 13h6M9 17h6"></path></svg></span>كشف</button>
+</div>
+<div class="sec">الحساب الجاري</div>
+<div class="card" style="overflow:hidden">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 64px 64px 72px;gap:6px;padding:10px 14px;background:#F6F8FB;font-size:11.5px;color:#46566A;font-weight:600"><span>البيان</span><span style="text-align:left">مدين</span><span style="text-align:left">دائن</span><span style="text-align:left">الرصيد</span></div>
+<sc-for list="{{cd.rows}}" as="r" hint-placeholder-count="3">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 64px 64px 72px;gap:6px;padding:11px 14px;border-top:1px solid #EEF1F5;font-size:12.5px;align-items:center">
+<span style="display:flex;flex-direction:column;gap:1px;min-width:0"><span>{{r.t}}</span><span class="num" style="font-size:11px;color:#46566A">{{r.d}}</span></span>
+<span class="num" style="text-align:left;color:#A32A20">{{r.dr}}</span><span class="num" style="text-align:left;color:#0A6B5F">{{r.cr}}</span><b class="num" style="text-align:left">{{r.bal}}</b>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ COLLECT ============ -->
+<sc-if value="{{is.collect}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">تسجيل تحصيل من عميل</h1>
+</div>
+<div style="padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<button class="opt" onClick="{{co.pickCust}}" style="background:#fff">
+<span style="width:42px;height:42px;border-radius:14px;background:#EEF1F5;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"></path></svg></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{co.custName}}</span><span class="num" style="font-size:12.5px;color:#46566A">{{co.custBal}}</span></span>
+<span style="font-size:13px;color:#1E5BD8;font-weight:600">تغيير</span>
+</button>
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">
+<label class="field"><span class="lbl">المبلغ المستلم (بر)</span><input class="inp num" type="number" min="0" placeholder="0" value="{{co.amount}}" onChange="{{co.setAmount}}" style="font-size:24px;font-weight:700;min-height:60px"></label>
+<div class="hs"><sc-for list="{{co.quick}}" as="o" hint-placeholder-count="3"><button class="chip" style="min-height:40px;font-size:13px" onClick="{{o.pick}}"><span class="num">{{o.label}}</span></button></sc-for></div>
+</div>
+<span class="lbl" style="margin:0 4px">كيف وصل المبلغ؟</span>
+<sc-for list="{{co.methods}}" as="m" hint-placeholder-count="4">
+<button class="opt {{m.on}}" onClick="{{m.pick}}">
+<span style="width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:none;font-weight:700;font-size:12px;background:{{m.bg}};color:{{m.fg}}">{{m.tag}}</span>
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14.5px">{{m.label}}</span><span style="font-size:12px;color:#46566A">{{m.sub}}</span></span>
+<span style="width:22px;height:22px;border-radius:50%;border:2px solid #0D1B2A;display:flex;align-items:center;justify-content:center"><span style="width:10px;height:10px;border-radius:50%;background:{{m.dot}}"></span></span>
+</button>
+</sc-for>
+<sc-if value="{{co.isCo}}" hint-placeholder-val="{{false}}">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">
+<span class="lbl">حساب الشركة المستلم</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{co.banks}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="min-height:40px;font-size:13px">{{o.label}}</button></sc-for></div>
+<div style="font-size:12.5px;color:#1E4FB8;background:#E3ECFD;border-radius:12px;padding:10px 12px">ينخفض دين العميل، ويُسجّل نفس المبلغ كسداد للشركة في حسابك — سجل واحد يُتابع في الإشعارات، دون احتساب مرتين.</div>
+</div>
+</sc-if>
+<sc-if value="{{co.needRef}}" hint-placeholder-val="{{false}}">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:10px">
+<label class="field"><span class="lbl">الرقم المرجعي للحوالة</span><input class="inp num" placeholder="مثل FT26298…" value="{{co.ref}}" onChange="{{co.setRef}}" dir="ltr" style="text-align:right"></label>
+<button class="btn btn-g" onClick="{{co.togglePhoto}}" style="border-style:dashed"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>{{co.photoLbl}}</button>
+</div>
+</sc-if>
+<sc-if value="{{co.hasInvs}}" hint-placeholder-val="{{false}}">
+<span class="lbl" style="margin:0 4px">ربط بفاتورة (اختياري — الافتراضي من إجمالي الرصيد)</span>
+<div class="hs"><sc-for list="{{co.invs}}" as="o" hint-placeholder-count="2"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="font-size:13px"><span class="num">{{o.label}}</span></button></sc-for></div>
+</sc-if>
+<sc-if value="{{co.dup}}" hint-placeholder-val="{{false}}">
+<div style="background:#FCE8E6;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;color:#7A1F17">
+<div style="font-weight:700;display:flex;gap:8px;align-items:center"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path></svg>حوالة مشابهة مسجلة مسبقًا</div>
+<div style="font-size:13px">نفس الرقم المرجعي، أو نفس المبلغ والبنك اليوم. تأكد أنها ليست مكررة.</div>
+<button class="btn btn-g" onClick="{{co.force}}">ليست مكررة — احفظ</button>
+</div>
+</sc-if>
+</div>
+<div class="foot"><button class="btn btn-p" style="width:100%;min-height:56px" onClick="{{co.save}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>حفظ التحصيل</button></div>
+</div>
+</sc-if>
+
+<!-- ============ MONEY ============ -->
+<sc-if value="{{is.money}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div><h1 class="h" style="margin:0;font-size:22px;font-weight:700">المال</h1><div style="font-size:13px;color:#46566A">أموال العمل فقط — وليست كامل أرصدة حساباتك الشخصية</div></div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{wl}}" as="w" hint-placeholder-count="3">
+<button onClick="{{w.pick}}" style="font:inherit;text-align:right;cursor:pointer;border-radius:20px;padding:14px 16px;display:flex;align-items:center;gap:12px;border:{{w.border}};background:{{w.bg}};color:#0D1B2A">
+<span class="h" style="width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none;background:{{w.tagBg}};color:{{w.tagFg}}">{{w.tag}}</span>
+<span style="flex:1;display:flex;flex-direction:column"><span style="font-size:13px;color:#46566A">{{w.name}}</span><span class="num" style="font-size:22px;font-weight:700">{{w.bal}}</span></span>
+<span class="num" style="font-size:12px;color:#46566A">{{w.share}}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<button class="btn btn-g" onClick="{{nav.transfer}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4L3 8l4 4"></path><path d="M3 8h14"></path><path d="M17 20l4-4-4-4"></path><path d="M21 16H7"></path></svg>تحويل داخلي</button>
+<button class="btn btn-p" onClick="{{nav.pay}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V8"></path><path d="M7 13l5-5 5 5"></path><path d="M4 4h16"></path></svg>سداد للشركة</button>
+</div>
+<button onClick="{{nav.company}}" style="font:inherit;text-align:right;cursor:pointer;border:0;background:#0D1B2A;color:#fff;border-radius:22px;padding:16px;display:flex;align-items:center;gap:12px">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#B9C4D2">حسابي مع الشركة</span><span class="num" style="font-size:22px;font-weight:700">{{k.debt}}</span><span style="font-size:12px;color:#F7C65C">غير مؤكد <span class="num">{{k.unconf}}</span></span></span>
+<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<button class="card" onClick="{{nav.notices}}" style="font:inherit;text-align:right;cursor:pointer;padding:14px 16px;display:flex;align-items:center;gap:12px;color:#0D1B2A">
+<span style="width:44px;height:44px;border-radius:14px;background:#DDF3EF;color:#0A6B5F;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg></span>
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">الإشعارات البنكية وواتساب</span><span style="font-size:12.5px;color:#46566A">{{nc.line}}</span></span>
+<sc-if value="{{nc.hasNew}}" hint-placeholder-val="{{true}}"><span class="num pill" style="background:#F4A100;color:#0D1B2A;font-size:13px">{{nc.new}}</span></sc-if>
+</button>
+<div class="sec">حركة المحافظ</div>
+<div class="hs"><sc-for list="{{wFilters}}" as="f" hint-placeholder-count="4"><button class="chip {{f.on}}" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{wMoves}}" as="m" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #EEF1F5">
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px">{{m.t}}</span><span class="num" style="font-size:12px;color:#46566A">{{m.d}} · {{m.w}}</span></span>
+<b class="num" style="font-size:14px;color:{{m.c}}">{{m.a}}</b>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ TRANSFER ============ -->
+<sc-if value="{{is.transfer}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">تحويل بين المحافظ</h1>
+</div>
+<div style="padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px">
+<span class="lbl">من</span>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><sc-for list="{{tr.from}}" as="o" hint-placeholder-count="3"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="flex-direction:column;gap:0;min-height:58px;border-radius:14px;padding:6px"><span style="font-size:13px">{{o.label}}</span><span class="num" style="font-size:11.5px;opacity:.8">{{o.bal}}</span></button></sc-for></div>
+<button class="icbtn" aria-label="تبديل الاتجاه" onClick="{{tr.swap}}" style="align-self:center;border-radius:50%"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16"></path><path d="M3 16l4 4 4-4"></path><path d="M17 20V4"></path><path d="M13 8l4-4 4 4"></path></svg></button>
+<span class="lbl">إلى</span>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><sc-for list="{{tr.to}}" as="o" hint-placeholder-count="3"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="flex-direction:column;gap:0;min-height:58px;border-radius:14px;padding:6px"><span style="font-size:13px">{{o.label}}</span><span class="num" style="font-size:11.5px;opacity:.8">{{o.bal}}</span></button></sc-for></div>
+<label class="field"><span class="lbl">المبلغ (بر)</span><input class="inp num" type="number" min="0" placeholder="0" value="{{tr.amount}}" onChange="{{tr.setAmount}}" style="font-size:22px;font-weight:700;min-height:58px"></label>
+</div>
+<div style="font-size:13px;color:#46566A;background:#fff;border:1px solid #DCE2EA;border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:4px"><span class="num">{{tr.prev}}</span><span>التحويل الداخلي لا يغيّر مديونيتك للشركة.</span></div>
+</div>
+<div class="foot"><button class="btn btn-d" style="width:100%;min-height:56px" onClick="{{tr.save}}">تنفيذ التحويل</button></div>
+</div>
+</sc-if>
+
+<!-- ============ COMPANY ACCOUNT ============ -->
+<sc-if value="{{is.company}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">حسابي مع الشركة</h1>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div style="background:#0D1B2A;color:#fff;border-radius:24px;padding:18px;display:flex;flex-direction:column;gap:12px">
+<div><div style="font-size:13px;color:#B9C4D2">الرصيد المحسوب من عملياتك (مدين)</div><div class="num" style="font-size:32px;font-weight:700">{{k.debt}} <span style="font-size:14px;color:#B9C4D2;font-weight:500">بر</span></div></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<div style="background:rgba(255,255,255,.08);border-radius:14px;padding:10px 12px"><div style="font-size:12px;color:#B9C4D2">بعد احتساب المؤكد فقط</div><div class="num" style="font-weight:700">{{comp.confBal}}</div></div>
+<div style="background:rgba(244,161,0,.16);border-radius:14px;padding:10px 12px"><div style="font-size:12px;color:#F7C65C">سدادات غير مؤكدة</div><div class="num" style="font-weight:700;color:#F7C65C">{{k.unconf}}</div></div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<button class="btn btn-p" style="font-size:14px;padding:0 8px" onClick="{{nav.pay}}">سداد جديد</button>
+<button class="btn btn-g" style="font-size:14px;padding:0 8px" onClick="{{comp.stmt}}">كشف حساب</button>
+<button class="btn btn-g" style="font-size:14px;padding:0 8px" onClick="{{tk.coRet}}">مرتجع</button>
+</div>
+<sc-if value="{{comp.hasPend}}" hint-placeholder-val="{{false}}">
+<div class="sec">مرتجعات أُرسلت ولم تُقبل بعد</div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{comp.pend}}" as="p" hint-placeholder-count="1">
+<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #EEF1F5">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14px">{{p.name}}</span><span class="num" style="font-size:12px;color:#46566A">{{p.id}} · {{p.label}} · {{p.value}}</span></span>
+<button class="chip" style="min-height:40px;font-size:13px;background:#0A7C6E;color:#fff;border-color:#0A7C6E" onClick="{{p.accept}}">قُبل</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<div class="sec">الحساب الجاري</div>
+<div class="card" style="overflow:hidden">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 66px 66px 78px;gap:6px;padding:10px 14px;background:#F6F8FB;font-size:11.5px;color:#46566A;font-weight:600"><span>البيان</span><span style="text-align:left">مدين</span><span style="text-align:left">دائن</span><span style="text-align:left">الرصيد</span></div>
+<sc-for list="{{comp.rows}}" as="r" hint-placeholder-count="5">
+<div style="display:grid;grid-template-columns:minmax(0,1fr) 66px 66px 78px;gap:6px;padding:11px 14px;border-top:1px solid #EEF1F5;font-size:12.5px;align-items:center">
+<span style="display:flex;flex-direction:column;gap:2px;min-width:0"><span>{{r.t}}</span><span style="display:flex;gap:6px;align-items:center"><span class="num" style="font-size:11px;color:#46566A">{{r.d}}</span><sc-if value="{{r.pend}}" hint-placeholder-val="{{false}}"><span class="pill" style="background:#FFF1D6;color:#8A5A00;font-size:10.5px;padding:2px 7px">غير مؤكد</span></sc-if></span></span>
+<span class="num" style="text-align:left;color:#A32A20">{{r.dr}}</span><span class="num" style="text-align:left;color:#0A6B5F">{{r.cr}}</span><b class="num" style="text-align:left">{{r.bal}}</b>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ PAY COMPANY ============ -->
+<sc-if value="{{is.pay}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">سداد للشركة</h1>
+</div>
+<div style="padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px">
+<label class="field"><span class="lbl">مبلغ الحوالة (بر)</span><input class="inp num" type="number" min="0" placeholder="0" value="{{py.amount}}" onChange="{{py.setAmount}}" style="font-size:24px;font-weight:700;min-height:60px"></label>
+<span class="lbl">مصدر الأموال</span>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px"><sc-for list="{{py.src}}" as="o" hint-placeholder-count="3"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="flex-direction:column;gap:0;min-height:58px;border-radius:14px;padding:6px"><span style="font-size:13px">{{o.label}}</span><span class="num" style="font-size:11.5px;opacity:.8">{{o.bal}}</span></button></sc-for></div>
+<span class="lbl">بنك الشركة المستلم</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{py.banks}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="font-size:13.5px">{{o.label}}</button></sc-for></div>
+<label class="field"><span class="lbl">الرقم المرجعي</span><input class="inp num" placeholder="مثل FT26298…" value="{{py.ref}}" onChange="{{py.setRef}}" dir="ltr" style="text-align:right"></label>
+</div>
+<button onClick="{{py.togglePhoto}}" style="font:inherit;cursor:pointer;border:2px dashed {{py.phBorder}};background:{{py.phBg}};border-radius:20px;padding:16px;display:flex;align-items:center;gap:14px;text-align:right;color:#0D1B2A">
+<sc-if value="{{py.photo}}" hint-placeholder-val="{{false}}">
+<span style="width:58px;height:74px;border-radius:8px;background:#fff;border:1px solid #CBD3DD;display:flex;flex-direction:column;gap:5px;padding:8px 7px;flex:none"><span style="height:6px;border-radius:3px;background:#7A1F5C;width:70%"></span><span style="height:4px;border-radius:2px;background:#DCE2EA"></span><span style="height:4px;border-radius:2px;background:#DCE2EA;width:80%"></span><span style="height:8px;border-radius:2px;background:#0D1B2A;width:60%;margin-top:4px"></span><span style="height:4px;border-radius:2px;background:#DCE2EA"></span></span>
+</sc-if>
+<sc-if value="{{py.noPhoto}}" hint-placeholder-val="{{true}}"><span style="width:58px;height:58px;border-radius:16px;background:#EEF1F5;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg></span></sc-if>
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{py.phTitle}}</span><span style="font-size:12.5px;color:#46566A">{{py.phSub}}</span></span>
+</button>
+<sc-if value="{{py.dup}}" hint-placeholder-val="{{false}}">
+<div style="background:#FCE8E6;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;color:#7A1F17">
+<div style="font-weight:700;display:flex;gap:8px;align-items:center"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 16H3z"></path><path d="M12 10v4"></path><path d="M12 17h.01"></path></svg>يبدو أن هذه الحوالة مسجلة</div>
+<div style="font-size:13px">{{py.dupMsg}}</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><button class="btn btn-g" onClick="{{nav.notices}}">عرض الإشعارات</button><button class="btn btn-d" onClick="{{py.force}}">ليست مكررة</button></div>
+</div>
+</sc-if>
+<div style="font-size:12.5px;color:#46566A;padding:0 4px">الربط بتحصيلات معينة اختياري — يمكنك سداد عدة تحصيلات بحوالة واحدة.</div>
+</div>
+<div class="foot"><button class="btn btn-p" style="width:100%;min-height:56px" onClick="{{py.save}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>تسجيل السداد</button></div>
+</div>
+</sc-if>
+
+<!-- ============ PAY DONE ============ -->
+<sc-if value="{{is.payDone}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:28px 16px 16px;display:flex;flex-direction:column;gap:14px">
+<div class="pop" style="width:76px;height:76px;border-radius:26px;background:#0A7C6E;color:#fff;display:flex;align-items:center;justify-content:center;align-self:center"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:40px;height:40px;stroke-width:2.4"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></div>
+<div style="text-align:center"><div class="h" style="font-size:21px;font-weight:700">سُجّل السداد · <span class="num">{{pd.amt}}</span> بر</div><div style="font-size:13.5px;color:#46566A;margin-top:4px">انخفض دينك للشركة — بانتظار تأكيد احتسابه</div></div>
+<div class="card" style="padding:16px;display:flex;gap:14px;align-items:center">
+<span style="width:58px;height:74px;border-radius:8px;background:#F6F8FB;border:1px solid #CBD3DD;display:flex;flex-direction:column;gap:5px;padding:8px 7px;flex:none"><span style="height:6px;border-radius:3px;background:#7A1F5C;width:70%"></span><span style="height:4px;border-radius:2px;background:#DCE2EA"></span><span style="height:4px;border-radius:2px;background:#DCE2EA;width:80%"></span><span style="height:8px;border-radius:2px;background:#0D1B2A;width:60%;margin-top:4px"></span></span>
+<span style="flex:1;display:flex;flex-direction:column;gap:3px"><span style="font-weight:600">{{pd.bank}}</span><span class="num" style="font-size:12.5px;color:#46566A">{{pd.ref}}</span><span class="pill" style="background:#FFF1D6;color:#8A5A00;align-self:flex-start">لم يُرسل إلى واتساب</span></span>
+</div>
+<button class="btn btn-p" style="min-height:56px" onClick="{{pd.share}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg>شارك الإشعار في مجموعة واتساب</button>
+<button class="btn btn-g" onClick="{{nav.notices}}">لاحقًا — اذهب إلى الإشعارات</button>
+<button class="btn btn-g" style="border:0;background:transparent" onClick="{{nav.home}}">الرئيسية</button>
+</div>
+</sc-if>
+
+<!-- ============ NOTICES ============ -->
+<sc-if value="{{is.notices}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">الإشعارات البنكية</h1>
+<button class="icbtn" aria-label="سداد جديد" onClick="{{nav.pay}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+<sc-for list="{{nt.filters}}" as="f" hint-placeholder-count="4">
+<button onClick="{{f.pick}}" style="font:inherit;cursor:pointer;border-radius:14px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:58px;border:{{f.border}};background:{{f.bg}};color:{{f.fg}}"><b class="num" style="font-size:18px">{{f.n}}</b><span style="font-size:11px;line-height:1.2;text-align:center">{{f.label}}</span></button>
+</sc-for>
+</div>
+<div class="hs"><sc-for list="{{nt.dates}}" as="f" hint-placeholder-count="4"><button class="chip {{f.on}}" style="min-height:38px;font-size:13px" onClick="{{f.pick}}">{{f.label}}</button></sc-for></div>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{nt.list}}" as="n" hint-placeholder-count="3">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:12px;align-items:flex-start">
+<span style="width:54px;height:68px;border-radius:8px;background:#F6F8FB;border:1px solid #CBD3DD;display:flex;flex-direction:column;gap:5px;padding:7px 6px;flex:none"><span style="height:6px;border-radius:3px;width:70%;background:{{n.brand}}"></span><span style="height:4px;border-radius:2px;background:#DCE2EA"></span><span style="height:4px;border-radius:2px;background:#DCE2EA;width:80%"></span><span style="height:7px;border-radius:2px;background:#0D1B2A;width:60%;margin-top:3px"></span></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+<span style="display:flex;align-items:center;gap:6px"><b style="font-size:15px">{{n.bank}}</b><span class="pill" style="background:{{n.stBg}};color:{{n.stFg}};margin-right:auto">{{n.stLbl}}</span></span>
+<b class="num" style="font-size:20px">{{n.amt}} <span style="font-size:12px;font-weight:500;color:#46566A">بر</span></b>
+<span class="num" style="font-size:12px;color:#46566A">{{n.date}} · {{n.ref}}</span>
+<span style="font-size:12px;color:#46566A">{{n.src}}</span>
+</span>
+</div>
+<div style="display:flex;align-items:center;gap:4px">
+<span style="flex:1;height:4px;border-radius:2px;background:{{n.s1}}"></span><span style="flex:1;height:4px;border-radius:2px;background:{{n.s2}}"></span><span style="flex:1;height:4px;border-radius:2px;background:{{n.s3}}"></span>
+</div>
+<sc-if value="{{n.isNew}}" hint-placeholder-val="{{false}}">
+<div style="display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px">
+<button class="btn btn-p" style="min-height:48px;font-size:14px" onClick="{{n.share}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg>مشاركة عبر واتساب</button>
+<button class="btn btn-g" style="min-height:48px;font-size:14px" onClick="{{n.markSent}}">أرسلته يدويًا</button>
+</div>
+</sc-if>
+<sc-if value="{{n.isSent}}" hint-placeholder-val="{{false}}">
+<button onClick="{{n.confirm}}" style="font:inherit;cursor:pointer;display:flex;align-items:center;gap:12px;border:1px solid #CBD3DD;background:#F6F8FB;border-radius:14px;padding:10px 12px;min-height:52px;text-align:right;color:#0D1B2A">
+<span style="width:24px;height:24px;border-radius:7px;border:2px solid #0D1B2A;flex:none"></span>
+<span style="flex:1;font-size:14px;font-weight:600">أكدت الشركة احتساب هذا السداد</span>
+</button>
+</sc-if>
+<sc-if value="{{n.isOk}}" hint-placeholder-val="{{false}}">
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#0A6B5F;font-weight:600"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"></path></svg><span style="flex:1">محتسب لدى الشركة</span><button class="chip" style="min-height:36px;font-size:12.5px" onClick="{{n.undo}}">تراجع</button></div>
+</sc-if>
+</div>
+</sc-for>
+<sc-if value="{{nt.empty}}" hint-placeholder-val="{{false}}">
+<div style="padding:40px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center">
+<span style="width:64px;height:64px;border-radius:22px;background:#DDF3EF;color:#0A6B5F;display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:30px;height:30px"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span>
+<div style="font-weight:600">لا توجد إشعارات هنا</div>
+<div style="font-size:13px;color:#46566A">كل شيء مرتب في هذا التصنيف</div>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ RETURNS ============ -->
+<sc-if value="{{is.returns}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">المرتجعات</h1>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;background:#DCE2EA;border-radius:14px;padding:4px">
+<sc-for list="{{rt.tabs}}" as="o" hint-placeholder-count="2"><button onClick="{{o.pick}}" style="font:inherit;cursor:pointer;border:0;min-height:44px;border-radius:11px;font-weight:600;font-size:14px;background:{{o.bg}};color:#0D1B2A">{{o.label}}</button></sc-for>
+</div>
+</div>
+<div style="padding:4px 16px 16px;display:flex;flex-direction:column;gap:12px">
+<sc-if value="{{rt.isCust}}" hint-placeholder-val="{{true}}">
+<button class="opt" onClick="{{rt.pickCust}}" style="background:#fff">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span class="lbl">العميل</span><span style="font-weight:600">{{rt.custName}}</span></span><span style="font-size:13px;color:#1E5BD8;font-weight:600">اختيار</span>
+</button>
+</sc-if>
+<button class="opt" onClick="{{rt.pickItem}}" style="background:#fff">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span class="lbl">الصنف</span><span style="font-weight:600">{{rt.itemName}}</span></span><span style="font-size:13px;color:#1E5BD8;font-weight:600">اختيار</span>
+</button>
+<sc-if value="{{rt.hasItem}}" hint-placeholder-val="{{false}}">
+<div class="card" style="padding:14px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{rt.units}}" as="u" hint-placeholder-count="2"><button class="chip {{u.on}}" onClick="{{u.pick}}">{{u.label}}</button></sc-for></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px">
+<label class="field"><span class="lbl">الكمية</span><input class="inp num" type="number" min="1" value="{{rt.qty}}" onChange="{{rt.setQty}}"></label>
+<label class="field"><span class="lbl">السعر (من الفاتورة أو آخر سعر)</span><input class="inp num" type="number" min="0" value="{{rt.price}}" onChange="{{rt.setPrice}}"></label>
+</div>
+<sc-if value="{{rt.isCust}}" hint-placeholder-val="{{true}}">
+<span class="lbl">حالة البضاعة</span>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px"><sc-for list="{{rt.conds}}" as="o" hint-placeholder-count="2"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="border-radius:14px;font-size:13px;white-space:normal;min-height:52px">{{o.label}}</button></sc-for></div>
+<span class="lbl">التسوية مع العميل</span>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px"><sc-for list="{{rt.settles}}" as="o" hint-placeholder-count="2"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="border-radius:14px;font-size:13px;white-space:normal;min-height:52px">{{o.label}}</button></sc-for></div>
+</sc-if>
+<sc-if value="{{rt.isCo}}" hint-placeholder-val="{{false}}">
+<span class="lbl">السبب</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{rt.reasons}}" as="o" hint-placeholder-count="3"><button class="chip {{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<div style="font-size:12.5px;color:#1E4FB8;background:#E3ECFD;border-radius:12px;padding:10px 12px">تخرج البضاعة من الشاحنة الآن، لكن مديونيتك لا تنخفض إلا بعد تأكيد قبول الشركة للمرتجع.</div>
+</sc-if>
+<div style="display:flex;justify-content:space-between;font-size:14px"><span>قيمة المرتجع</span><b class="num" style="font-size:18px">{{rt.value}}</b></div>
+</div>
+</sc-if>
+<sc-if value="{{rt.isCo}}" hint-placeholder-val="{{false}}">
+<div class="sec">متابعة مرتجعات الشركة</div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{rt.list}}" as="p" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid #EEF1F5">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14px">{{p.name}}</span><span class="num" style="font-size:12px;color:#46566A">{{p.id}} · {{p.label}} · {{p.value}}</span></span>
+<sc-if value="{{p.isSent}}" hint-placeholder-val="{{false}}"><span style="display:flex;gap:6px"><button class="chip" style="min-height:40px;font-size:12.5px;padding:0 10px" onClick="{{p.reject}}">رُفض</button><button class="chip" style="min-height:40px;font-size:12.5px;padding:0 10px;background:#0A7C6E;color:#fff;border-color:#0A7C6E" onClick="{{p.accept}}">قُبل</button></span></sc-if>
+<sc-if value="{{p.done}}" hint-placeholder-val="{{true}}"><span class="pill" style="background:{{p.stBg}};color:{{p.stFg}}">{{p.stLbl}}</span></sc-if>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div class="foot"><button class="btn btn-d" style="width:100%;min-height:56px" onClick="{{rt.save}}">{{rt.saveLbl}}</button></div>
+</div>
+</sc-if>
+
+<!-- ============ REPORTS / STATEMENT ============ -->
+<sc-if value="{{is.reports}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">كشوف الحساب والتقارير</h1>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<span class="lbl" style="margin:0 4px">الحساب</span>
+<div class="hs"><sc-for list="{{rp.accts}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<span class="lbl" style="margin:0 4px">الفترة</span>
+<div class="hs"><sc-for list="{{rp.periods}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<sc-if value="{{rp.isCustom}}" hint-placeholder-val="{{false}}">
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<label class="field"><span class="lbl">من</span><input class="inp num" type="date" value="{{rp.from}}" onChange="{{rp.setFrom}}"></label>
+<label class="field"><span class="lbl">إلى</span><input class="inp num" type="date" value="{{rp.to}}" onChange="{{rp.setTo}}"></label>
+</div>
+</sc-if>
+<span class="lbl" style="margin:0 4px">لغة الكشف</span>
+<div class="hs"><sc-for list="{{rp.langs}}" as="o" hint-placeholder-count="5"><button class="chip {{o.on}}" onClick="{{o.pick}}" style="font-family:{{o.font}}">{{o.label}}</button></sc-for></div>
+
+<div dir="{{rp.dir}}" style="background:#fff;border-radius:6px;box-shadow:0 1px 2px rgba(13,27,42,.08),0 12px 32px rgba(13,27,42,.12);padding:18px 14px;display:flex;flex-direction:column;gap:10px;font-family:{{rp.font}};color:#0D1B2A">
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;border-bottom:2px solid #0D1B2A;padding-bottom:8px">
+<div><div style="font-size:15px;font-weight:700">{{rp.L.title}}</div><div style="font-size:9.5px;color:#46566A">SYSCO ADAWEH · Dire Dawa</div></div>
+<div style="font-size:9px;color:#46566A;text-align:end">{{rp.L.issued}}: <span class="num">25/10/2026</span><br>{{rp.L.prep}}: نبيل عادل</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;font-size:9.5px">
+<div><span style="color:#46566A">{{rp.L.holder}}: </span><b>{{rp.holder}}</b></div>
+<div><span style="color:#46566A">{{rp.L.cur}}: </span><b>{{rp.L.curv}}</b></div>
+<div style="grid-column:1 / -1"><span style="color:#46566A">{{rp.L.period}}: </span><b class="num">{{rp.periodTxt}}</b></div>
+</div>
+<div style="display:flex;justify-content:space-between;background:#F6F8FB;border-radius:4px;padding:6px 8px;font-size:9.5px;font-weight:600"><span>{{rp.L.carried}}</span><span class="num">{{rp.carried}}</span></div>
+<div style="display:grid;grid-template-columns:52px minmax(0,1fr) 50px 50px 56px;gap:4px;font-size:8.5px;font-weight:700;color:#46566A;border-bottom:1px solid #0D1B2A;padding-bottom:4px">
+<span>{{rp.L.date}}</span><span>{{rp.L.desc}}</span><span style="text-align:end">{{rp.L.dr}}</span><span style="text-align:end">{{rp.L.cr}}</span><span style="text-align:end">{{rp.L.bal}}</span>
+</div>
+<sc-for list="{{rp.rows}}" as="r" hint-placeholder-count="5">
+<div style="display:grid;grid-template-columns:52px minmax(0,1fr) 50px 50px 56px;gap:4px;font-size:8.5px;border-bottom:1px solid #EEF1F5;padding-bottom:4px;align-items:baseline">
+<span class="num">{{r.date}}</span><span>{{r.desc}}</span><span class="num" style="text-align:end">{{r.dr}}</span><span class="num" style="text-align:end">{{r.cr}}</span><b class="num" style="text-align:end">{{r.bal}}</b>
+</div>
+</sc-for>
+<sc-if value="{{rp.noRows}}" hint-placeholder-val="{{false}}"><div style="font-size:9.5px;color:#46566A;text-align:center;padding:10px">{{rp.L.empty}}</div></sc-if>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;font-size:9px">
+<div style="background:#F6F8FB;border-radius:4px;padding:6px"><div style="color:#46566A">{{rp.L.tdr}}</div><b class="num" style="font-size:10.5px">{{rp.tdr}}</b></div>
+<div style="background:#F6F8FB;border-radius:4px;padding:6px"><div style="color:#46566A">{{rp.L.tcr}}</div><b class="num" style="font-size:10.5px">{{rp.tcr}}</b></div>
+<div style="background:#0D1B2A;color:#fff;border-radius:4px;padding:6px"><div style="color:#B9C4D2">{{rp.L.close}}</div><b class="num" style="font-size:10.5px">{{rp.close}}</b></div>
+</div>
+<div style="font-size:8px;color:#46566A;display:flex;flex-direction:column;gap:2px"><sc-if value="{{rp.hasPend}}" hint-placeholder-val="{{false}}"><span>{{rp.L.pendNote}}</span></sc-if><span>{{rp.L.credNote}}</span></div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px">
+<button class="btn btn-d" style="font-size:13.5px;padding:0 6px" onClick="{{rp.download}}">تنزيل PDF</button>
+<button class="btn btn-g" style="font-size:13.5px;padding:0 6px" onClick="{{rp.share}}">واتساب</button>
+<button class="btn btn-g" style="font-size:13.5px;padding:0 6px" onClick="{{rp.print}}">طباعة</button>
+</div>
+<div class="sec">تقارير أخرى للفترة نفسها</div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<sc-for list="{{rp.others}}" as="o" hint-placeholder-count="6"><button class="card" onClick="{{o.go}}" style="font:inherit;cursor:pointer;text-align:right;padding:12px 14px;min-height:60px;color:#0D1B2A;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14px">{{o.label}}</span><span style="font-size:11.5px;color:#46566A">{{o.sub}}</span></button></sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ SETTINGS ============ -->
+<sc-if value="{{is.settings}}" hint-placeholder-val="{{false}}">
+<div class="anim">
+<div style="position:sticky;top:0;z-index:5;background:#EDF0F4;padding:12px 16px;display:flex;align-items:center;gap:12px">
+<button class="icbtn" aria-label="رجوع" onClick="{{nav.back}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<h1 class="h" style="margin:0;font-size:19px;font-weight:700;flex:1">الإعدادات والمزامنة</h1>
+</div>
+<div style="padding:4px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<div class="card" style="padding:16px;display:flex;align-items:center;gap:12px">
+<div class="h" style="width:52px;height:52px;border-radius:17px;background:#0D1B2A;color:#F4A100;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px">ن</div>
+<div style="flex:1"><div style="font-weight:700">نبيل عادل</div><div class="num" style="font-size:12.5px;color:#46566A">+251 91• ••• 482 · حساب شخصي واحد</div></div>
+<span class="pill" style="background:#DDF3EF;color:#0A6B5F">PIN + بصمة</span>
+</div>
+
+<div class="sec">المزامنة</div>
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px">
+<span style="width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex:none;background:{{set.stBg}};color:{{set.stFg}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-9A6 6 0 0 1 18 8.5 4.5 4.5 0 0 1 17.5 18z"></path></svg></span>
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{set.title}}</span><span class="num" style="font-size:12.5px;color:#46566A">{{set.sub}}</span></span>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;text-align:center">
+<div style="background:#F6F8FB;border-radius:12px;padding:10px 4px"><b class="num" style="font-size:18px">{{set.pending}}</b><div style="font-size:11.5px;color:#46566A">بانتظار المزامنة</div></div>
+<div style="background:#F6F8FB;border-radius:12px;padding:10px 4px"><b class="num" style="font-size:18px">0</b><div style="font-size:11.5px;color:#46566A">أخطاء</div></div>
+<div style="background:#F6F8FB;border-radius:12px;padding:10px 4px"><b class="num" style="font-size:18px">3</b><div style="font-size:11.5px;color:#46566A">أجهزة</div></div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;border-top:1px solid #EEF1F5;padding-top:12px">
+<span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600;font-size:14px">محاكاة انقطاع الإنترنت</span><span style="font-size:12px;color:#46566A">للتجربة: سجّل عمليات ثم أعد الاتصال</span></span>
+<button aria-label="محاكاة انقطاع الإنترنت" aria-pressed="{{set.pressed}}" onClick="{{set.toggle}}" style="width:56px;height:32px;border-radius:16px;border:0;cursor:pointer;padding:3px;display:flex;background:{{set.swBg}}"><span style="width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s;transform:translateX({{set.knob}})"></span></button>
+</div>
+<button class="btn btn-g" onClick="{{set.syncNow}}"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"></path><path d="M21 4v5h-5"></path></svg>مزامنة الآن</button>
+</div>
+
+<div class="sec">أجهزتي</div>
+<div class="card" style="overflow:hidden">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #EEF1F5"><span style="flex:1"><b style="font-size:14px">هاتف نبيل</b><div style="font-size:12px;color:#46566A">هذا الجهاز</div></span><span class="pill" style="background:#DDF3EF;color:#0A6B5F">نشط</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #EEF1F5"><span style="flex:1"><b style="font-size:14px">كمبيوتر المكتب</b><div class="num" style="font-size:12px;color:#46566A">آخر مزامنة 24/10 · 19:40</div></span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px"><span style="flex:1"><b style="font-size:14px">الهاتف الاحتياطي</b><div class="num" style="font-size:12px;color:#46566A">آخر مزامنة 20/10 · 08:15</div></span><button class="chip" style="min-height:36px;font-size:12.5px">إزالة</button></div>
+</div>
+
+<div class="sec">البيانات</div>
+<div class="card" style="overflow:hidden">
+<button class="lrow" onClick="{{set.backup}}"><span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">نسخة احتياطية الآن</span><span class="num" style="font-size:12px;color:#46566A">آخر نسخة تلقائية: اليوم 03:00 · تشمل صور الإشعارات</span></span></button>
+<button class="lrow" onClick="{{set.restore}}"><span style="flex:1;font-weight:600">استعادة من نسخة سابقة</span></button>
+<button class="lrow" onClick="{{set.excel}}"><span style="flex:1;font-weight:600">تصدير كل البيانات إلى Excel</span></button>
+<a class="lrow" href="Onboarding.dc.html" style="text-decoration:none"><span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">الأرصدة الافتتاحية</span><span class="num" style="font-size:12px;color:#46566A">تاريخ بداية النظام 01/10/2026</span></span></a>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ MORE ============ -->
+<sc-if value="{{is.more}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:16px 16px 24px;display:flex;flex-direction:column;gap:12px">
+<h1 class="h" style="margin:0;font-size:22px;font-weight:700">المزيد</h1>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{moreList}}" as="m" hint-placeholder-count="7">
+<button class="lrow" onClick="{{m.go}}"><span style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{m.label}}</span><span style="font-size:12px;color:#46566A">{{m.sub}}</span></span><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true" style="color:#8593A3"><path d="M15 5l-7 7 7 7"></path></svg></button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+</div>
+
+<!-- ============ BOTTOM NAV ============ -->
+<sc-if value="{{showNav}}" hint-placeholder-val="{{true}}">
+<nav aria-label="التنقل الرئيسي" style="flex:none;background:#fff;border-top:1px solid #DCE2EA;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:end;padding:6px 6px 14px;position:relative;z-index:10">
+<button onClick="{{nav.home}}" style="font:inherit;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;justify-content:center;font-size:11.5px;color:{{tb.home}};font-weight:{{tw.home}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>الرئيسية</button>
+<button onClick="{{nav.truck}}" style="font:inherit;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;justify-content:center;font-size:11.5px;color:{{tb.truck}};font-weight:{{tw.truck}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h11v10H2z"></path><path d="M13 9h4l4 4v3h-8z"></path><circle cx="6" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>الشاحنة</button>
+<button onClick="{{nav.sale}}" aria-label="بيع جديد" style="font:inherit;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:12px;font-weight:700;color:#0D1B2A;margin-top:-30px">
+<span style="width:66px;height:66px;border-radius:22px;background:#F4A100;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 20px rgba(244,161,0,.45),0 0 0 6px #fff"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:30px;height:30px;stroke-width:2.4;color:#0D1B2A"><path d="M12 5v14M5 12h14"></path></svg></span>بيع جديد</button>
+<button onClick="{{nav.customers}}" style="font:inherit;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;justify-content:center;font-size:11.5px;color:{{tb.customers}};font-weight:{{tw.customers}}"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M18 14.5c2 .6 3.2 2.6 3.5 5.5"></path></svg>العملاء</button>
+<button onClick="{{nav.money}}" style="font:inherit;border:0;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:52px;justify-content:center;font-size:11.5px;color:{{tb.money}};font-weight:{{tw.money}};position:relative"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"></path><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"></path><circle cx="16.5" cy="14.5" r="1.2"></circle></svg>المال<sc-if value="{{nc.hasNew}}" hint-placeholder-val="{{true}}"><span class="num" style="position:absolute;top:2px;left:50%;margin-left:-22px;min-width:18px;height:18px;border-radius:9px;background:#C0362C;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 4px">{{nc.new}}</span></sc-if></button>
+</nav>
+</sc-if>
+
+<!-- ============ TOAST ============ -->
+<sc-if value="{{toastOn}}" hint-placeholder-val="{{false}}">
+<div role="status" class="anim" style="position:absolute;left:16px;right:16px;bottom:110px;z-index:60;background:#0D1B2A;color:#fff;border-radius:16px;padding:14px 16px;font-size:14px;display:flex;gap:10px;align-items:center;box-shadow:0 12px 30px rgba(13,27,42,.3)"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true" style="color:#F4A100"><path d="M5 12.5l4.5 4.5L19 7"></path></svg><span style="flex:1">{{toast}}</span></div>
+</sc-if>
+
+<!-- ============ SHEETS ============ -->
+<sc-if value="{{sheetOn}}" hint-placeholder-val="{{false}}">
+<div style="position:absolute;inset:0;z-index:40;display:flex;flex-direction:column;justify-content:flex-end">
+<button aria-label="إغلاق" onClick="{{closeSheet}}" class="fade" style="position:absolute;inset:0;border:0;background:rgba(13,27,42,.5);cursor:pointer"></button>
+<div class="sheet" style="position:relative;background:#fff;border-radius:26px 26px 0 0;max-height:88%;display:flex;flex-direction:column">
+<div style="width:42px;height:5px;border-radius:3px;background:#CBD3DD;margin:10px auto 6px;flex:none"></div>
+
+<sc-if value="{{sh.item}}" hint-placeholder-val="{{false}}">
+<div style="padding:4px 16px 10px;display:flex;flex-direction:column;gap:10px;flex:none">
+<div style="display:flex;align-items:center;gap:8px"><h2 class="h" style="margin:0;font-size:18px;flex:1">اختر صنفًا</h2><button class="chip" onClick="{{openNewItem}}" style="background:#0D1B2A;color:#fff;border-color:#0D1B2A">+ صنف جديد</button></div>
+<label style="position:relative;display:block"><span style="position:absolute;right:14px;top:15px;color:#8593A3"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" aria-label="بحث عن صنف" placeholder="اكتب اسم الصنف" value="{{q}}" onChange="{{setQ}}" style="padding-right:42px"></label>
+</div>
+<div class="scroll" style="flex:1;min-height:0;padding-bottom:16px">
+<sc-for list="{{pickItems}}" as="p" hint-placeholder-count="5">
+<button class="lrow" onClick="{{p.pick}}">
+<span style="width:40px;height:40px;border-radius:13px;background:#E3ECFD;color:#1E4FB8;display:flex;align-items:center;justify-content:center;flex:none"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7.5L12 3l9 4.5v9L12 21l-9-4.5z"></path><path d="M3 7.5l9 4.5 9-4.5"></path></svg></span>
+<span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">{{p.name}}</span><span class="num" style="font-size:12px;color:#46566A">{{p.stock}}</span></span>
+<span class="num" style="font-size:13px;color:#46566A">{{p.price}}</span>
+</button>
+</sc-for>
+<sc-if value="{{pickEmpty}}" hint-placeholder-val="{{false}}"><div style="padding:22px 16px;text-align:center;font-size:14px;color:#46566A">لا يوجد صنف بهذا الاسم — أضفه كصنف جديد</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{sh.cust}}" hint-placeholder-val="{{false}}">
+<div style="padding:4px 16px 10px;display:flex;flex-direction:column;gap:10px;flex:none">
+<h2 class="h" style="margin:0;font-size:18px">اختر العميل</h2>
+<label style="position:relative;display:block"><span style="position:absolute;right:14px;top:15px;color:#8593A3"><svg class="ic s" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" aria-label="بحث عن عميل" placeholder="ابحث بالاسم" value="{{q}}" onChange="{{setQ}}" style="padding-right:42px"></label>
+</div>
+<div class="scroll" style="flex:1;min-height:0">
+<sc-if value="{{cp.allowNone}}" hint-placeholder-val="{{false}}"><button class="lrow" onClick="{{cp.none}}"><span style="flex:1;font-weight:600">بدون عميل — بيع نقدي</span></button></sc-if>
+<sc-for list="{{cp.list}}" as="c" hint-placeholder-count="5">
+<button class="lrow" onClick="{{c.pick}}"><span style="flex:1;font-weight:600">{{c.name}}</span><span class="num" style="font-size:13px;color:{{c.balC}}">{{c.bal}}</span></button>
+</sc-for>
+</div>
+<div style="padding:12px 16px 18px;border-top:1px solid #EEF1F5;display:flex;flex-direction:column;gap:8px;flex:none">
+<span class="lbl">عميل جديد</span>
+<div style="display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:8px"><input class="inp" aria-label="اسم العميل الجديد" placeholder="الاسم" value="{{cp.newName}}" onChange="{{cp.setName}}"><input class="inp num" aria-label="الهاتف (اختياري)" placeholder="الهاتف (اختياري)" value="{{cp.newPhone}}" onChange="{{cp.setPhone}}"></div>
+<button class="btn btn-d" onClick="{{cp.add}}">إضافة واختيار</button>
+</div>
+</sc-if>
+
+<sc-if value="{{sh.newItem}}" hint-placeholder-val="{{false}}">
+<div class="scroll" style="padding:4px 16px 18px;display:flex;flex-direction:column;gap:12px;flex:1;min-height:0">
+<h2 class="h" style="margin:0;font-size:18px">صنف جديد</h2>
+<label class="field"><span class="lbl">اسم الصنف</span><input class="inp" placeholder="مثل: عدس أحمر 25 كغ" value="{{ni.name}}" onChange="{{ni.setName}}"></label>
+<span class="lbl">الوحدة الأساسية للبيع</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ni.u1}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<span class="lbl">وحدة أصغر (اختياري)</span>
+<div style="display:flex;gap:6px;flex-wrap:wrap"><sc-for list="{{ni.u2}}" as="o" hint-placeholder-count="4"><button class="chip {{o.on}}" onClick="{{o.pick}}">{{o.label}}</button></sc-for></div>
+<sc-if value="{{ni.hasU2}}" hint-placeholder-val="{{true}}">
+<label class="field"><span class="lbl">{{ni.perLbl}}</span><input class="inp num" type="number" min="2" placeholder="مثل 24" value="{{ni.per}}" onChange="{{ni.setPer}}"></label>
+</sc-if>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<label class="field"><span class="lbl">{{ni.p1Lbl}}</span><input class="inp num" type="number" min="0" value="{{ni.p1}}" onChange="{{ni.setP1}}"></label>
+<sc-if value="{{ni.hasU2}}" hint-placeholder-val="{{true}}"><label class="field"><span class="lbl">{{ni.p2Lbl}}</span><input class="inp num" type="number" min="0" value="{{ni.p2}}" onChange="{{ni.setP2}}"></label></sc-if>
+</div>
+<button class="btn btn-p" onClick="{{ni.save}}">حفظ الصنف</button>
+</div>
+</sc-if>
+
+<sc-if value="{{sh.share}}" hint-placeholder-val="{{false}}">
+<div style="padding:4px 16px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;gap:12px"><span style="width:48px;height:48px;border-radius:16px;background:#DDF3EF;color:#0A6B5F;display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg></span><h2 class="h" style="margin:0;font-size:18px;flex:1">فُتح واتساب لمشاركة الصورة</h2></div>
+<div style="font-size:14px;color:#46566A">لا يمكن للتطبيق التأكد من وصول الرسالة. هل أرسلت إشعار <b class="num" style="color:#0D1B2A">{{shr.amt}}</b> بر إلى مجموعة «سيسكو – التحصيلات»؟</div>
+<button class="btn btn-p" onClick="{{shr.yes}}">نعم، أرسلته</button>
+<button class="btn btn-g" onClick="{{closeSheet}}">ليس بعد</button>
+</div>
+</sc-if>
+
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+var TODAY='2026-10-25';
+var WAL={cash:'النقد في اليد',cbe:'CBE الشخصي',ebirr:'Ebirr الشخصي'};
+var WSHORT={cash:'نقد',cbe:'CBE',ebirr:'Ebirr'};
+var BANKS={cbeC:'CBE',ebirrC:'Ebirr',boaC:'Abyssinia',awashC:'Awash'};
+var BRAND={cbeC:'#6A1B4D',ebirrC:'#1E5BD8',boaC:'#B8860B',awashC:'#0A5E9E'};
+var UNITS=['كنتال','كرتون','جونية','حبة'];
+var DAYS=['أحد','إثن','ثلا','أرب','خمي','جمع','سبت'];
+var KIND={opening:'رصيد افتتاحي',sale:'فاتورة بيع',collect:'تحصيل',ret:'مرتجع بضاعة',refund:'رد مبلغ نقدًا',receive:'استلام بضاعة',pay:'سداد للشركة',direct:'تحويل مباشر من عميل',creturn:'مرتجع مقبول من الشركة'};
+var I18N={
+ ar:{dir:'rtl',font:"'IBM Plex Sans Arabic',sans-serif",title:'كشف حساب',holder:'صاحب الحساب',cur:'العملة',curv:'بر إثيوبي (ETB)',period:'الفترة',carried:'الرصيد المرحّل من قبل الفترة',date:'التاريخ',desc:'البيان',dr:'مدين',cr:'دائن',bal:'الرصيد',tdr:'إجمالي المدين',tcr:'إجمالي الدائن',close:'الرصيد الختامي',pendNote:'* سداد لم يتأكد احتسابه لدى الشركة بعد',credNote:'الأرقام بين قوسين أرصدة دائنة.',issued:'تاريخ الإصدار',prep:'أعدّه',empty:'لا توجد حركات في هذه الفترة',
+  k:KIND,m:{cash:'نقدًا',cbe:'CBE',ebirr:'Ebirr',cbeC:'CBE (الشركة)',ebirrC:'Ebirr (الشركة)',boaC:'Abyssinia (الشركة)',awashC:'Awash (الشركة)'}},
+ en:{dir:'ltr',font:"'IBM Plex Sans',sans-serif",title:'Account Statement',holder:'Account holder',cur:'Currency',curv:'Ethiopian Birr (ETB)',period:'Period',carried:'Balance brought forward',date:'Date',desc:'Description',dr:'Debit',cr:'Credit',bal:'Balance',tdr:'Total debit',tcr:'Total credit',close:'Closing balance',pendNote:'* Payment not yet confirmed by the company',credNote:'Figures in brackets are credit balances.',issued:'Issued',prep:'Prepared by',empty:'No transactions in this period',
+  k:{opening:'Opening balance',sale:'Sales invoice',collect:'Payment received',ret:'Goods returned',refund:'Cash refund',receive:'Goods received',pay:'Payment to company',direct:'Direct transfer from customer',creturn:'Return accepted by company'},m:{cash:'Cash',cbe:'CBE',ebirr:'Ebirr',cbeC:'CBE (company)',ebirrC:'Ebirr (company)',boaC:'Abyssinia (company)',awashC:'Awash (company)'}},
+ so:{dir:'ltr',font:"'IBM Plex Sans',sans-serif",title:'Bayaanka Xisaabta',holder:'Milkiilaha xisaabta',cur:'Lacagta',curv:'Birta Itoobiya (ETB)',period:'Muddada',carried:'Haraaga hore ee la soo wareejiyay',date:'Taariikhda',desc:'Faahfaahin',dr:'Debit',cr:'Credit',bal:'Haraaga',tdr:'Wadarta debit',tcr:'Wadarta credit',close:'Haraaga ugu dambeeya',pendNote:'* Lacag-bixin aan weli shirkaddu xaqiijin',credNote:'Tirooyinka ku jira ( ) waa haraa credit ah.',issued:'Taariikhda la soo saaray',prep:'Waxaa diyaariyay',empty:'Muddadan wax dhaqdhaqaaq ah kuma jiraan',
+  k:{opening:'Haraaga furitaanka',sale:'Qaansheeg iib',collect:'Lacag la helay',ret:'Badeeco la soo celiyay',refund:'Lacag celin',receive:'Badeeco la helay',pay:'Lacag-bixin shirkadda',direct:'Xawilaad toos ah oo macmiil',creturn:'Celin ay shirkaddu aqbashay'},m:{cash:'Lacag caddaan',cbe:'CBE',ebirr:'Ebirr',cbeC:'CBE (shirkadda)',ebirrC:'Ebirr (shirkadda)',boaC:'Abyssinia (shirkadda)',awashC:'Awash (shirkadda)'}},
+ am:{dir:'ltr',font:"'Noto Sans Ethiopic',sans-serif",title:'የሂሳብ መግለጫ',holder:'የሂሳብ ባለቤት',cur:'የገንዘብ ዓይነት',curv:'የኢትዮጵያ ብር (ETB)',period:'የጊዜ ገደብ',carried:'ከቀደመው ጊዜ የተላለፈ ቀሪ ሂሳብ',date:'ቀን',desc:'ዝርዝር',dr:'ዴቢት',cr:'ክሬዲት',bal:'ቀሪ ሂሳብ',tdr:'ጠቅላላ ዴቢት',tcr:'ጠቅላላ ክሬዲት',close:'የመዝጊያ ቀሪ ሂሳብ',pendNote:'* በኩባንያው ገና ያልተረጋገጠ ክፍያ',credNote:'በቅንፍ ውስጥ ያሉት አሃዞች የክሬዲት ቀሪ ሂሳብ ናቸው።',issued:'የወጣበት ቀን',prep:'ያዘጋጀው',empty:'በዚህ ጊዜ ውስጥ ምንም እንቅስቃሴ የለም',
+  k:{opening:'የመክፈቻ ቀሪ ሂሳብ',sale:'የሽያጭ ደረሰኝ',collect:'የተቀበለ ክፍያ',ret:'የተመለሰ ዕቃ',refund:'የጥሬ ገንዘብ ተመላሽ',receive:'የተረከበ ዕቃ',pay:'ለኩባንያው የተከፈለ',direct:'ከደንበኛ በቀጥታ የተላለፈ',creturn:'በኩባንያው የተቀበለ ተመላሽ'},m:{cash:'በጥሬ ገንዘብ',cbe:'CBE',ebirr:'Ebirr',cbeC:'CBE (ኩባንያ)',ebirrC:'Ebirr (ኩባንያ)',boaC:'Abyssinia (ኩባንያ)',awashC:'Awash (ኩባንያ)'}},
+ om:{dir:'ltr',font:"'IBM Plex Sans',sans-serif",title:'Ibsa Herregaa',holder:'Abbaa herregaa',cur:'Maallaqa',curv:'Birrii Itoophiyaa (ETB)',period:'Yeroo',carried:'Haftee yeroo darbe irraa dabre',date:'Guyyaa',desc:'Ibsa',dr:'Debiitii',cr:'Kireeditii',bal:'Haftee',tdr:'Waliigala debiitii',tcr:'Waliigala kireeditii',close:'Haftee xumuraa',pendNote:'* Kaffaltii dhaabbatichi ammallee hin mirkaneessin',credNote:'Lakkoofsonni ( ) keessa jiran haftee kireeditii ti.',issued:'Guyyaa itti kenname',prep:'Kan qopheesse',empty:'Yeroo kana keessa sochiin hin jiru',
+  k:{opening:'Haftee jalqabaa',sale:'Nagahee gurgurtaa',collect:'Kaffaltii argame',ret:'Meeshaa deebi\'e',refund:'Maallaqa deebi\'e',receive:'Meeshaa fudhatame',pay:'Kaffaltii dhaabbataaf',direct:'Dabarsa kallattii maamilaa',creturn:'Deebii dhaabbatni fudhate'},m:{cash:'Maallaqa harkaa',cbe:'CBE',ebirr:'Ebirr',cbeC:'CBE (dhaabbata)',ebirrC:'Ebirr (dhaabbata)',boaC:'Abyssinia (dhaabbata)',awashC:'Awash (dhaabbata)'}}
+};
+var LANGS=[['ar','العربية'],['en','English'],['so','Soomaali'],['am','አማርኛ'],['om','Afaan Oromoo']];
+
+function fmt(n){n=Math.round(+n||0);return n.toLocaleString('en-US');}
+function fmtBal(n){return n<0?'('+fmt(-n)+')':fmt(n);}
+function dd(iso){var p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function ds(iso){var p=iso.split('-');return p[2]+'/'+p[1];}
+function sum(a,f){var t=0;for(var i=0;i<a.length;i++)t+=f(a[i]);return t;}
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function nowT(){var d=new Date();return ('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);}
+function daysBetween(a,b){return Math.round((Date.parse(b)-Date.parse(a))/86400000);}
+function addDays(iso,n){return new Date(Date.parse(iso)+n*86400000).toISOString().slice(0,10);}
+function parts(it,q){var u0=it.units[0],ul=it.units[it.units.length-1];
+ if(it.units.length===1)return {full:q,loose:0,label:fmt(q)+' '+u0.u,open:false};
+ var full=Math.floor(q/u0.per),loose=q-full*u0.per;
+ return {full:full,loose:loose,label:fmt(full)+' '+u0.u+(loose?' + '+loose+' '+ul.u:''),open:loose>0&&ul.u==='حبة'};}
+function qtyLabel(it,q){if(q===0)return '0';return (q<0?'− ':'+ ')+parts(it,Math.abs(q)).label;}
+function itemValue(it){return it.stock*it.units[0].price/it.units[0].per;}
+function bal(c){return sum(c.entries,function(e){return (e.dr||0)-(e.cr||0);});}
+function fmtB(b){return b>0?fmt(b)+' عليه':b<0?fmt(-b)+' له':'مسدد بالكامل';}
+function emptyDraft(){return {lines:[],cust:null,pay:'cash',paid:'',dest:'cash',bank:'cbeC'};}
+function emptyCol(){return {cust:null,amount:'',method:'cash',bank:'cbeC',ref:'',photo:false,inv:'',dup:false,dupOk:false};}
+function emptyPay(){return {amount:'',src:'cbe',bank:'cbeC',ref:'',photo:false,dup:false,dupOk:false};}
+function seed(){return {
+ scr:'home',back:[],online:true,syncing:false,pending:0,lastSync:'05:31',toast:'',sheet:'',q:'',
+ picker:'sale',cpFor:'sale',shareId:null,lastN:null,lastInv:null,
+ items:[
+  {id:'i1',name:'زيت طبخ 3 لتر',units:[{u:'كرتون',per:6,price:6300},{u:'حبة',per:1,price:1080}],stock:64,min:24,moves:[{d:'2026-10-24',t:'بيع – فاتورة #1041',q:-12},{d:'2026-10-24',t:'استلام GRN-0034',q:36},{d:'2026-10-21',t:'بيع – فاتورة #1035',q:-18}]},
+  {id:'i2',name:'أرز بسمتي 25 كغ',units:[{u:'كنتال',per:4,price:14000},{u:'جونية',per:1,price:3550}],stock:10,min:4,moves:[{d:'2026-10-24',t:'استلام GRN-0034',q:8},{d:'2026-10-20',t:'بيع – فاتورة #1038',q:-4}]},
+  {id:'i3',name:'سكر أبيض 50 كغ',units:[{u:'جونية',per:1,price:7400}],stock:4,min:6,moves:[{d:'2026-10-23',t:'بيع – فاتورة #1040',q:-1},{d:'2026-10-12',t:'استلام GRN-0031',q:10}]},
+  {id:'i4',name:'مكرونة 500غ',units:[{u:'كرتون',per:20,price:1500},{u:'حبة',per:1,price:80}],stock:300,min:100,moves:[{d:'2026-10-24',t:'بيع – فاتورة #1042',q:-43},{d:'2026-10-22',t:'بيع – فاتورة #1039',q:-20}]},
+  {id:'i5',name:'صلصة طماطم 400غ',units:[{u:'كرتون',per:24,price:2160},{u:'حبة',per:1,price:95}],stock:177,min:48,moves:[{d:'2026-10-25',t:'بيع – فاتورة #1043',q:-24},{d:'2026-10-22',t:'مرتجع للشركة RC-0004 (تالف)',q:-48},{d:'2026-10-19',t:'تسوية جرد – خطأ عدّ',q:-3}]},
+  {id:'i6',name:'دقيق قمح 50 كغ',units:[{u:'كنتال',per:2,price:9600},{u:'جونية',per:1,price:4850}],stock:8,min:4,moves:[{d:'2026-10-22',t:'بيع – فاتورة #1039',q:-1}]},
+  {id:'i7',name:'صابون غسيل 1 كغ',units:[{u:'كرتون',per:12,price:2900},{u:'حبة',per:1,price:250}],stock:60,min:24,moves:[{d:'2026-10-22',t:'بيع – فاتورة #1039',q:-12}]}
+ ],
+ customers:[
+  {id:'c1',name:'بقالة أبو بكر',phone:'0915 234 567',area:'سابيان',entries:[{d:'2026-10-01',k:'opening',dr:18500,cr:0},{d:'2026-10-24',k:'sale',ref:'#1041',dr:12600,cr:0},{d:'2026-10-24',k:'collect',m:'cash',dr:0,cr:5000}]},
+  {id:'c2',name:'سوبرماركت النور',phone:'0921 445 908',area:'كزيرا',entries:[{d:'2026-10-01',k:'opening',dr:42300,cr:0},{d:'2026-10-15',k:'collect',m:'cbeC',ref:'FT26288L2MPA',dr:0,cr:20000},{d:'2026-10-20',k:'sale',ref:'#1038',dr:14800,cr:0}]},
+  {id:'c3',name:'محل فاطمة عبدي',phone:'0913 778 120',area:'دجاتو',entries:[{d:'2026-10-23',k:'sale',ref:'#1040',dr:7400,cr:0},{d:'2026-10-23',k:'collect',m:'ebirr',ref:'#1040',dr:0,cr:3000}]},
+  {id:'c4',name:'متجر حسن إبراهيم',phone:'0930 112 334',area:'أشوا',entries:[{d:'2026-10-01',k:'opening',dr:0,cr:1200}]},
+  {id:'c5',name:'مطعم الأمل',phone:'0911 902 556',area:'المركز',lastPayOld:'2026-09-28',entries:[{d:'2026-10-01',k:'opening',dr:9800,cr:0}]},
+  {id:'c6',name:'دكان سعيد',phone:'0944 551 230',area:'لغهار',entries:[{d:'2026-10-22',k:'sale',ref:'#1039',dr:9250,cr:0},{d:'2026-10-22',k:'collect',m:'cash',ref:'#1039',dr:0,cr:9250}]},
+  {id:'t7',name:'دين مؤقت D-0007',phone:'',area:'',temp:true,entries:[{d:'2026-10-25',k:'sale',ref:'#1043',dr:2160,cr:0}]}
+ ],
+ wallets:{cash:31450,cbe:18200,ebirr:6750},
+ wmoves:[
+  {d:'2026-10-24',w:'cash',t:'فاتورة نقدية #1042',a:3240},
+  {d:'2026-10-24',w:'cash',t:'تحصيل – بقالة أبو بكر',a:5000},
+  {d:'2026-10-24',w:'cbe',t:'سداد للشركة – CBE',a:-60000},
+  {d:'2026-10-23',w:'ebirr',t:'تحصيل – محل فاطمة عبدي',a:3000},
+  {d:'2026-10-23',w:'ebirr',t:'سداد للشركة – Ebirr',a:-40000},
+  {d:'2026-10-23',w:'cash',t:'إيداع إلى CBE الشخصي',a:-30000},
+  {d:'2026-10-23',w:'cbe',t:'إيداع من النقد',a:30000},
+  {d:'2026-10-22',w:'cash',t:'فاتورة #1039 – دكان سعيد',a:9250}
+ ],
+ company:[
+  {d:'2026-10-01',k:'opening',dr:412000,cr:0,conf:true},
+  {d:'2026-10-05',k:'pay',m:'cbeC',ref:'FT26278K9QWZ',dr:0,cr:120000,conf:true,nid:'n1'},
+  {d:'2026-10-12',k:'receive',ref:'GRN-0031',dr:186400,cr:0,conf:true},
+  {d:'2026-10-15',k:'direct',m:'cbeC',ref:'FT26288L2MPA',who:'سوبرماركت النور',dr:0,cr:20000,conf:true,nid:'n2'},
+  {d:'2026-10-19',k:'pay',m:'boaC',ref:'BOA-1019-33871',dr:0,cr:95000,conf:true,nid:'n3'},
+  {d:'2026-10-22',k:'creturn',ref:'RC-0004',dr:0,cr:4320,conf:true},
+  {d:'2026-10-23',k:'pay',m:'ebirrC',ref:'EB7X44210',dr:0,cr:40000,conf:false,nid:'n4'},
+  {d:'2026-10-24',k:'receive',ref:'GRN-0034',dr:98700,cr:0,conf:true},
+  {d:'2026-10-24',k:'pay',m:'cbeC',ref:'FT26297R3HTB',dr:0,cr:60000,conf:false,nid:'n5'}
+ ],
+ notices:[
+  {id:'n5',d:'2026-10-24',t:'18:10',amt:60000,bank:'cbeC',ref:'FT26297R3HTB',src:'cbe',status:'new',photo:true},
+  {id:'n4',d:'2026-10-23',t:'16:25',amt:40000,bank:'ebirrC',ref:'EB7X44210',src:'ebirr',status:'sent',photo:true},
+  {id:'n3',d:'2026-10-19',t:'09:02',amt:95000,bank:'boaC',ref:'BOA-1019-33871',src:'cash',status:'ok',photo:true},
+  {id:'n2',d:'2026-10-15',t:'13:40',amt:20000,bank:'cbeC',ref:'FT26288L2MPA',src:'direct',who:'سوبرماركت النور',status:'ok',photo:true},
+  {id:'n1',d:'2026-10-05',t:'10:14',amt:120000,bank:'cbeC',ref:'FT26278K9QWZ',src:'cbe',status:'ok',photo:true}
+ ],
+ invoices:[
+  {no:1043,d:'2026-10-25',t:'08:12',cust:'دين مؤقت D-0007',cid:'t7',lines:[{n:'صلصة طماطم 400غ',u:'كرتون',q:1,p:2160}],total:2160,paid:0,pay:'credit'},
+  {no:1042,d:'2026-10-24',t:'17:30',cust:'نقدي – بدون عميل',cid:null,lines:[{n:'مكرونة 500غ',u:'كرتون',q:2,p:1500},{n:'مكرونة 500غ',u:'حبة',q:3,p:80}],total:3240,paid:3240,pay:'cash'},
+  {no:1041,d:'2026-10-24',t:'11:05',cust:'بقالة أبو بكر',cid:'c1',lines:[{n:'زيت طبخ 3 لتر',u:'كرتون',q:2,p:6300}],total:12600,paid:0,pay:'credit'},
+  {no:1040,d:'2026-10-23',t:'15:48',cust:'محل فاطمة عبدي',cid:'c3',lines:[{n:'سكر أبيض 50 كغ',u:'جونية',q:1,p:7400}],total:7400,paid:3000,pay:'partial'},
+  {no:1039,d:'2026-10-22',t:'10:20',cust:'دكان سعيد',cid:'c6',lines:[{n:'دقيق قمح 50 كغ',u:'جونية',q:1,p:4850},{n:'صابون غسيل 1 كغ',u:'كرتون',q:1,p:2900},{n:'مكرونة 500غ',u:'كرتون',q:1,p:1500}],total:9250,paid:9250,pay:'cash'},
+  {no:1038,d:'2026-10-20',t:'12:02',cust:'سوبرماركت النور',cid:'c2',lines:[{n:'أرز بسمتي 25 كغ',u:'كنتال',q:1,p:14000},{n:'مكرونة 500غ',u:'حبة',q:10,p:80}],total:14800,paid:0,pay:'credit'}
+ ],
+ creturns:[{id:'RC-0004',d:'2026-10-22',name:'صلصة طماطم 400غ',label:'2 كرتون · تالف',value:4320,status:'ok',iid:'i5',small:48}],
+ nextInv:1044,nextTemp:8,nextN:6,nextGrn:35,nextRc:5,
+ draft:emptyDraft(),rcv:{lines:[],date:TODAY},col:emptyCol(),pay:emptyPay(),trf:{from:'cash',to:'cbe',amount:''},
+ cnt:{},ret:{tab:'cust',cust:null,item:null,unit:0,qty:1,price:'',cond:'good',settle:'debt'},crt:{item:null,unit:0,qty:1,reason:'تالف'},
+ st:{acct:'company',period:'month',lang:'ar',from:'2026-10-10',to:TODAY},
+ custF:'all',invF:'all',nf:'all',ndf:'all',wf:'all',itemId:null,custId:null,invNo:null,
+ newItem:{name:'',u1:'كرتون',u2:'حبة',per:'',p1:'',p2:''},newCust:{name:'',phone:''},tempName:''
+};}
+
+class Component extends DCLogic {
+ constructor(...a){super(...a);this.state=seed();}
+ componentDidUpdate(pp,ps){if(ps&&ps.scr!==this.state.scr&&this.sc){this.sc.scrollTop=0;}}
+ componentWillUnmount(){clearTimeout(this.tt);clearTimeout(this.syncT);}
+ pend(){return this.state.pending+(this.state.online?0:1);}
+ toast(m){var self=this;this.setState({toast:m});clearTimeout(this.tt);this.tt=setTimeout(function(){self.setState({toast:''});},2800);}
+ go(scr,extra){var s=this.state;this.setState(Object.assign({scr:scr,back:s.back.concat([s.scr]),sheet:'',q:''},extra||{}));}
+ tab(t){this.setState({scr:t,back:[],sheet:'',q:''});}
+ goBack(){var b=this.state.back.slice();var p=b.pop()||'home';this.setState({scr:p,back:b,sheet:'',q:''});}
+ backPatch(){var b=this.state.back.slice();var p=b.pop()||'home';return {scr:p,back:b,sheet:'',q:''};}
+ upd(f,p){var o={};o[f]=Object.assign({},this.state[f],p);this.setState(o);}
+ item(id){return this.state.items.find(function(i){return i.id===id;});}
+ cust(id){return this.state.customers.find(function(c){return c.id===id;});}
+ isDup(ref,amt,bank){return this.state.notices.some(function(n){return (ref&&n.ref===ref)||(n.amt===amt&&n.bank===bank&&n.d===TODAY);});}
+
+ addLine(fk,iid){var it=this.item(iid);var f=this.state[fk];var lines=f.lines.slice();
+  var ex=lines.findIndex(function(l){return l.iid===iid&&l.ui===0;});
+  if(ex>=0)lines[ex]=Object.assign({},lines[ex],{qty:(+lines[ex].qty||0)+1});
+  else lines.push({iid:iid,ui:0,qty:1,price:it.units[0].price});
+  var o={sheet:'',q:''};o[fk]=Object.assign({},f,{lines:lines});this.setState(o);}
+ updLine(fk,idx,p){var f=this.state[fk];var lines=f.lines.slice();lines[idx]=Object.assign({},lines[idx],p);this.upd(fk,{lines:lines});}
+ delLine(fk,idx){var f=this.state[fk];this.upd(fk,{lines:f.lines.filter(function(l,i){return i!==idx;})});}
+
+ pickItem(id){var s=this.state;
+  if(s.picker==='sale')this.addLine('draft',id);
+  else if(s.picker==='receive')this.addLine('rcv',id);
+  else if(s.picker==='ret'){this.setState({ret:Object.assign({},s.ret,{item:id,unit:0,price:''}),sheet:'',q:''});}
+  else if(s.picker==='crt'){this.setState({crt:Object.assign({},s.crt,{item:id,unit:0}),sheet:'',q:''});}}
+ pickCust(id){var s=this.state;var o={sheet:'',q:''};
+  if(s.cpFor==='sale')o.draft=Object.assign({},s.draft,{cust:id});
+  else if(s.cpFor==='col')o.col=Object.assign({},s.col,{cust:id,inv:'',dup:false});
+  else if(s.cpFor==='ret')o.ret=Object.assign({},s.ret,{cust:id});
+  this.setState(o);}
+ addCust(){var s=this.state,n=s.newCust;if(!n.name.trim()){this.toast('اكتب اسم العميل');return;}
+  var id='c'+Date.now();var customers=s.customers.concat([{id:id,name:n.name.trim(),phone:n.phone,area:'',entries:[]}]);
+  this.setState({customers:customers,newCust:{name:'',phone:''}},()=>{this.pickCust(id);this.toast('أُضيف العميل '+n.name.trim());});}
+ saveNewItem(){var s=this.state,f=s.newItem;if(!f.name.trim()){this.toast('اكتب اسم الصنف');return;}
+  if(!(+f.p1>0)){this.toast('أدخل سعر '+f.u1);return;}
+  var per=parseInt(f.per,10)||0;var units;
+  if(f.u2&&per>1)units=[{u:f.u1,per:per,price:+f.p1},{u:f.u2,per:1,price:+f.p2||Math.round(+f.p1/per)}];
+  else units=[{u:f.u1,per:1,price:+f.p1}];
+  var id='i'+Date.now();var items=s.items.concat([{id:id,name:f.name.trim(),units:units,stock:0,min:0,moves:[]}]);
+  var self=this;this.setState({items:items,newItem:{name:'',u1:'كرتون',u2:'حبة',per:'',p1:'',p2:''},sheet:''},function(){
+   if(s.picker==='sale'||s.picker==='receive'||s.picker==='ret'||s.picker==='crt')self.pickItem(id);self.toast('أُضيف الصنف «'+f.name.trim()+'»');});}
+
+ saveSale(){var self=this,s=this.state,d=s.draft;
+  if(!d.lines.length){this.toast('أضف صنفًا واحدًا على الأقل');return;}
+  if(d.lines.some(function(l){return !(+l.qty>0);})){this.toast('أدخل كمية صحيحة لكل صنف');return;}
+  var bad=d.lines.find(function(l){var it=self.item(l.iid);return l.qty*it.units[l.ui].per>it.stock;});
+  if(bad){this.toast('الكمية أكبر من المتوفر في الشاحنة');return;}
+  var total=sum(d.lines,function(l){return l.qty*(+l.price||0);});
+  var paid=d.pay==='cash'?total:d.pay==='credit'?0:Math.max(0,Math.min(total,+d.paid||0));
+  var rem=total-paid,no=s.nextInv,t=nowT();
+  var items=clone(s.items),customers=clone(s.customers),wallets=Object.assign({},s.wallets),wmoves=s.wmoves.slice(),company=s.company.slice(),notices=s.notices.slice();
+  var cid=d.cust,nextTemp=s.nextTemp,nextN=s.nextN;
+  if(!cid&&rem>0){cid='t'+nextTemp;customers.push({id:cid,name:'دين مؤقت D-'+('000'+nextTemp).slice(-4),phone:'',area:'',temp:true,entries:[]});nextTemp++;}
+  var lines=d.lines.map(function(l){var it=items.find(function(i){return i.id===l.iid;});var u=it.units[l.ui];it.stock-=l.qty*u.per;u.price=+l.price;it.moves.unshift({d:TODAY,t:'بيع – فاتورة #'+no,q:-l.qty*u.per});return {n:it.name,u:u.u,q:+l.qty,p:+l.price};});
+  var c=cid?customers.find(function(x){return x.id===cid;}):null;
+  var mkey=d.dest==='co'?d.bank:d.dest;
+  if(c){c.entries.push({d:TODAY,k:'sale',ref:'#'+no,dr:total,cr:0});if(paid>0)c.entries.push({d:TODAY,k:'collect',m:mkey,ref:'#'+no,dr:0,cr:paid});}
+  if(paid>0){
+   if(d.dest==='co'){var nid='n'+nextN;nextN++;company.push({d:TODAY,k:'direct',m:d.bank,ref:'#'+no,who:c?c.name:'',dr:0,cr:paid,conf:false,nid:nid});notices.unshift({id:nid,d:TODAY,t:t,amt:paid,bank:d.bank,ref:'#'+no,src:'direct',who:c?c.name:'بيع نقدي #'+no,status:'new',photo:false});}
+   else{wallets[d.dest]+=paid;wmoves.unshift({d:TODAY,w:d.dest,t:'فاتورة #'+no+(c?' – '+c.name:' نقدية'),a:paid});}
+  }
+  var inv={no:no,d:TODAY,t:t,cust:c?c.name:'نقدي – بدون عميل',cid:cid||null,lines:lines,total:total,paid:paid,pay:d.pay};
+  this.setState({items:items,customers:customers,wallets:wallets,wmoves:wmoves,company:company,notices:notices,invoices:[inv].concat(s.invoices),nextInv:no+1,nextTemp:nextTemp,nextN:nextN,lastInv:no,draft:emptyDraft(),scr:'saleDone',back:[],sheet:'',pending:this.pend()});}
+
+ saveReceive(){var s=this.state,f=s.rcv;
+  if(!f.lines.length){this.toast('أضف الأصناف المستلمة');return;}
+  if(f.lines.some(function(l){return !(+l.qty>0);})){this.toast('أدخل كمية صحيحة لكل صنف');return;}
+  var total=sum(f.lines,function(l){return l.qty*(+l.price||0);});var grn='GRN-00'+s.nextGrn;var date=f.date||TODAY;
+  var items=clone(s.items);
+  f.lines.forEach(function(l){var it=items.find(function(i){return i.id===l.iid;});var u=it.units[l.ui];it.stock+=l.qty*u.per;u.price=+l.price;it.moves.unshift({d:date,t:'استلام '+grn,q:l.qty*u.per});});
+  var company=s.company.concat([{d:date,k:'receive',ref:grn,dr:total,cr:0,conf:true}]);
+  this.setState(Object.assign({items:items,company:company,rcv:{lines:[],date:TODAY},nextGrn:s.nextGrn+1,pending:this.pend()},this.backPatch()));
+  this.toast('تم الاستلام '+grn+': +'+fmt(total)+' بر على حسابك مع الشركة');}
+
+ saveCollect(){var s=this.state,f=s.col,amt=+f.amount||0;
+  if(!f.cust){this.toast('اختر العميل أولًا');return;}
+  if(amt<=0){this.toast('أدخل مبلغًا صحيحًا');return;}
+  if(f.method==='co'&&!f.dupOk&&this.isDup(f.ref,amt,f.bank)){this.upd('col',{dup:true});return;}
+  var customers=clone(s.customers),c=customers.find(function(x){return x.id===f.cust;});
+  var mkey=f.method==='co'?f.bank:f.method;
+  c.entries.push({d:TODAY,k:'collect',m:mkey,ref:f.ref||(f.inv?'#'+f.inv:''),dr:0,cr:amt});
+  var patch=Object.assign({customers:customers,col:emptyCol(),pending:this.pend()},this.backPatch());var msg;
+  if(f.method==='co'){var nid='n'+s.nextN;patch.company=s.company.concat([{d:TODAY,k:'direct',m:f.bank,ref:f.ref||'—',who:c.name,dr:0,cr:amt,conf:false,nid:nid}]);
+   patch.notices=[{id:nid,d:TODAY,t:nowT(),amt:amt,bank:f.bank,ref:f.ref||'—',src:'direct',who:c.name,status:'new',photo:f.photo}].concat(s.notices);patch.nextN=s.nextN+1;
+   msg='تم التحصيل وسُجّل كسداد للشركة مرة واحدة — أُضيف للإشعارات';}
+  else{var w=Object.assign({},s.wallets);w[f.method]+=amt;patch.wallets=w;patch.wmoves=[{d:TODAY,w:f.method,t:'تحصيل – '+c.name,a:amt}].concat(s.wmoves);msg='تم تسجيل التحصيل وأُضيف إلى '+WAL[f.method];}
+  this.setState(patch);this.toast(msg);}
+
+ savePay(){var s=this.state,f=s.pay,amt=+f.amount||0;
+  if(amt<=0){this.toast('أدخل مبلغ السداد');return;}
+  if(amt>s.wallets[f.src]){this.toast('المبلغ أكبر من أموال العمل في '+WAL[f.src]);return;}
+  if(!f.dupOk&&this.isDup(f.ref,amt,f.bank)){this.upd('pay',{dup:true});return;}
+  var nid='n'+s.nextN,w=Object.assign({},s.wallets);w[f.src]-=amt;
+  this.setState({wallets:w,wmoves:[{d:TODAY,w:f.src,t:'سداد للشركة – '+BANKS[f.bank],a:-amt}].concat(s.wmoves),
+   company:s.company.concat([{d:TODAY,k:'pay',m:f.bank,ref:f.ref||'—',dr:0,cr:amt,conf:false,nid:nid}]),
+   notices:[{id:nid,d:TODAY,t:nowT(),amt:amt,bank:f.bank,ref:f.ref||'—',src:f.src,status:'new',photo:f.photo}].concat(s.notices),
+   nextN:s.nextN+1,lastN:nid,pay:emptyPay(),scr:'payDone',back:[],pending:this.pend()});}
+
+ setNotice(id,status){var s=this.state;
+  this.setState({notices:s.notices.map(function(n){return n.id===id?Object.assign({},n,{status:status}):n;}),
+   company:s.company.map(function(e){return e.nid===id?Object.assign({},e,{conf:status==='ok'}):e;}),sheet:'',pending:this.pend()});
+  this.toast(status==='sent'?'سُجّل أنه أُرسل إلى مجموعة واتساب':status==='ok'?'تم تأكيد احتساب الشركة':'أُعيدت الحالة');}
+
+ saveTransfer(){var s=this.state,f=s.trf,amt=+f.amount||0;
+  if(f.from===f.to){this.toast('اختر محفظتين مختلفتين');return;}
+  if(amt<=0){this.toast('أدخل مبلغ التحويل');return;}
+  if(amt>s.wallets[f.from]){this.toast('المبلغ أكبر من رصيد '+WAL[f.from]);return;}
+  var w=Object.assign({},s.wallets);w[f.from]-=amt;w[f.to]+=amt;
+  this.setState(Object.assign({wallets:w,wmoves:[{d:TODAY,w:f.to,t:'تحويل من '+WAL[f.from],a:amt},{d:TODAY,w:f.from,t:'تحويل إلى '+WAL[f.to],a:-amt}].concat(s.wmoves),trf:{from:f.from,to:f.to,amount:''},pending:this.pend()},this.backPatch()));
+  this.toast('تم التحويل — مديونيتك للشركة لم تتغير');}
+
+ saveCount(){var s=this.state,items=clone(s.items),n=0;
+  Object.keys(s.cnt).forEach(function(id){var it=items.find(function(i){return i.id===id;});var c=s.cnt[id];var u0=it.units[0];
+   var nq=it.units.length>1?(+c.full||0)*u0.per+(+c.loose||0):(+c.full||0);var diff=nq-it.stock;
+   if(diff!==0){it.stock=nq;it.moves.unshift({d:TODAY,t:'تسوية جرد – '+(c.reason||'خطأ عدّ'),q:diff});n++;}});
+  if(!n){this.toast('لا توجد فروقات لحفظها');return;}
+  this.setState(Object.assign({items:items,cnt:{},pending:this.pend()},this.backPatch()));
+  this.toast('حُفظت '+n+' تسوية في سجل الحركات — حساب الشركة لم يتغير');}
+
+ saveRet(){var self=this,s=this.state;
+  if(s.ret.tab==='cust'){var f=s.ret;
+   if(!f.item){this.toast('اختر الصنف المرتجع');return;}
+   var it0=this.item(f.item),u0=it0.units[f.unit],qty=+f.qty||0,price=f.price===''?u0.price:+f.price;
+   if(qty<=0){this.toast('أدخل الكمية');return;}
+   if(f.settle==='debt'&&!f.cust){this.toast('اختر العميل لخصم المرتجع من رصيده');return;}
+   var value=qty*price,items=clone(s.items),it=items.find(function(i){return i.id===f.item;}),customers=clone(s.customers);
+   var c=f.cust?customers.find(function(x){return x.id===f.cust;}):null;
+   if(f.cond==='good'){it.stock+=qty*u0.per;it.moves.unshift({d:TODAY,t:'مرتجع صالح'+(c?' من '+c.name:''),q:qty*u0.per});}
+   else it.moves.unshift({d:TODAY,t:'مرتجع تالف ('+qty+' '+u0.u+') — خارج المتاح للبيع',q:0});
+   var patch={items:items,customers:customers,ret:{tab:'cust',cust:null,item:null,unit:0,qty:1,price:'',cond:'good',settle:'debt'},pending:this.pend()};
+   if(c)c.entries.push({d:TODAY,k:'ret',ref:it.name,dr:0,cr:value});
+   if(f.settle==='cash'){if(c)c.entries.push({d:TODAY,k:'refund',m:'cash',dr:value,cr:0});var w=Object.assign({},s.wallets);w.cash-=value;patch.wallets=w;patch.wmoves=[{d:TODAY,w:'cash',t:'رد مبلغ مرتجع'+(c?' – '+c.name:''),a:-value}].concat(s.wmoves);}
+   this.setState(Object.assign(patch,this.backPatch()));
+   this.toast(f.cond==='good'?'سُجّل المرتجع وعاد للشاحنة':'سُجّل المرتجع التالف دون إضافته للمخزون');
+  } else {var g=s.crt;
+   if(!g.item){this.toast('اختر الصنف');return;}
+   var it1=this.item(g.item),u1=it1.units[g.unit],q1=+g.qty||0;
+   if(q1<=0){this.toast('أدخل الكمية');return;}
+   if(q1*u1.per>it1.stock){this.toast('الكمية أكبر من المتوفر في الشاحنة');return;}
+   var id='RC-000'+s.nextRc,items2=clone(s.items),it2=items2.find(function(i){return i.id===g.item;});
+   it2.stock-=q1*u1.per;it2.moves.unshift({d:TODAY,t:'مرتجع للشركة '+id+' (بانتظار القبول)',q:-q1*u1.per});
+   this.setState({items:items2,creturns:[{id:id,d:TODAY,name:it2.name,label:q1+' '+u1.u+' · '+g.reason,value:q1*u1.price,status:'sent',iid:g.item,small:q1*u1.per}].concat(s.creturns),nextRc:s.nextRc+1,crt:{item:null,unit:0,qty:1,reason:'تالف'},pending:this.pend()});
+   this.toast('خرج المرتجع '+id+' من الشاحنة — بانتظار قبول الشركة');}}
+ acceptRet(id){var s=this.state,r=s.creturns.find(function(x){return x.id===id;});
+  this.setState({creturns:s.creturns.map(function(x){return x.id===id?Object.assign({},x,{status:'ok'}):x;}),company:s.company.concat([{d:TODAY,k:'creturn',ref:id,dr:0,cr:r.value,conf:true}]),pending:this.pend()});
+  this.toast('قُبل المرتجع: انخفض دينك '+fmt(r.value)+' بر');}
+ rejectRet(id){var s=this.state,r=s.creturns.find(function(x){return x.id===id;}),items=clone(s.items),it=items.find(function(i){return i.id===r.iid;});
+  if(it){it.stock+=r.small;it.moves.unshift({d:TODAY,t:'رُفض المرتجع '+id+' — أُعيد للشاحنة',q:r.small});}
+  this.setState({items:items,creturns:s.creturns.map(function(x){return x.id===id?Object.assign({},x,{status:'rej'}):x;}),pending:this.pend()});
+  this.toast('رُفض المرتجع وأُعيدت البضاعة للشاحنة');}
+
+ toggleNet(){var self=this,s=this.state;
+  if(s.online){this.setState({online:false});this.toast('دون اتصال: العمليات تُحفظ على الهاتف');return;}
+  if(s.pending>0){this.setState({online:true,syncing:true});clearTimeout(this.syncT);
+   this.syncT=setTimeout(function(){var n=self.state.pending;self.setState({syncing:false,pending:0,lastSync:nowT()});self.toast('تمت مزامنة '+n+' عملية مع السحابة دون تكرار');},1800);}
+  else{this.setState({online:true});this.toast('عاد الاتصال — كل شيء متزامن');}}
+
+ stmtRange(){var st=this.state.st;if(st.period==='today')return [TODAY,TODAY];if(st.period==='week')return [addDays(TODAY,-6),TODAY];if(st.period==='month')return ['2026-10-01','2026-10-31'];return [st.from||'2026-10-01',st.to||TODAY];}
+ desc(e,lang){var L=I18N[lang];var p=[L.k[e.k]||e.k];if(e.m)p.push(L.m[e.m]||e.m);if(e.ref&&e.ref!=='—')p.push(e.ref);if(e.who)p.push(e.who);return p.join(' · ');}
+
+ renderVals(){var self=this,s=this.state;
+  var G=function(scr,extra){return function(){self.go(scr,extra);};};
+  var sc=s.scr,is={};
+  ['home','sale','receive','saleDone','invoices','invoice','truck','item','count','customers','customer','collect','money','transfer','company','pay','payDone','notices','returns','reports','settings','more'].forEach(function(k){is[k]=sc===k;});
+  is.lf=is.sale||is.receive;
+  var forms=['sale','receive','collect','pay','transfer','count','returns','saleDone','payDone'];
+  var tabOf={truck:'truck',item:'truck',count:'truck',customers:'customers',customer:'customers',money:'money',company:'money',notices:'money'};
+  var curTab=tabOf[sc]||'home',tb={},tw={};
+  ['home','truck','customers','money'].forEach(function(t){tb[t]=curTab===t?'#0D1B2A':'#5B6878';tw[t]=curTab===t?'700':'500';});
+  var nav={back:function(){self.goBack();},home:function(){self.tab('home');},truck:function(){self.tab('truck');},customers:function(){self.tab('customers');},money:function(){self.tab('money');},
+   sale:function(){self.go('sale');},receive:G('receive'),collect:function(){self.go('collect',{col:emptyCol()});},pay:function(){self.go('pay',{pay:emptyPay()});},transfer:G('transfer'),
+   returns:G('returns'),count:G('count',{cnt:{}}),notices:G('notices'),invoices:G('invoices'),company:G('company'),reports:G('reports'),settings:G('settings'),more:G('more')};
+  var setQ=function(e){self.setState({q:e.target.value});};
+  var q=(s.q||'').trim();
+
+  // ---- core numbers
+  var debt=sum(s.company,function(e){return (e.dr||0)-(e.cr||0);});
+  var unconf=sum(s.company,function(e){return e.conf===false?(e.cr||0):0;});
+  var custB=s.customers.map(function(c){return {c:c,b:bal(c)};});
+  var recv=sum(custB,function(x){return x.b>0?x.b:0;}),credit=sum(custB,function(x){return x.b<0?-x.b:0;});
+  var lastPayOf=function(c){var l=null;c.entries.forEach(function(e){if(e.k==='collect')l=e.d;});return l||c.lastPayOld||null;};
+  var lastSaleOf=function(c){var l=null;c.entries.forEach(function(e){if(e.k==='sale')l=e.d;});return l;};
+  var isLate=function(c,b){if(b<=0)return false;var r=lastPayOf(c)||(c.entries[0]&&c.entries[0].d)||TODAY;return daysBetween(r,TODAY)>7;};
+  var lateList=custB.filter(function(x){return isLate(x.c,x.b);});
+  var W=s.wallets,money=W.cash+W.cbe+W.ebirr;
+  var invVal=sum(s.items,itemValue);
+  var pendRet=sum(s.creturns,function(r){return r.status==='sent'?r.value:0;});
+  var lastCoPay=null;s.company.forEach(function(e){if(e.k==='pay'||e.k==='direct'){if(!lastCoPay||e.d>=lastCoPay)lastCoPay=e.d;}});
+  var todayInv=s.invoices.filter(function(i){return i.d===TODAY;});
+  var todaySales=sum(todayInv,function(i){return i.total;}),todayPaid=sum(todayInv,function(i){return i.paid;});
+  var nNew=s.notices.filter(function(n){return n.status==='new';}).length,nSent=s.notices.filter(function(n){return n.status==='sent';}).length,nOk=s.notices.filter(function(n){return n.status==='ok';}).length;
+  var k={debt:fmt(debt),unconf:fmt(unconf),lastPay:lastCoPay?ds(lastCoPay):'—',recv:fmt(recv),lateLbl:lateList.length?lateList.length+' عملاء متأخرون':'لا متأخرين',money:fmt(money),
+   todaySales:fmt(todaySales),todayMeta:todayInv.length+' فاتورة · نقدًا '+fmt(todayPaid)+' · آجل '+fmt(todaySales-todayPaid)};
+
+  var days=[],maxB=1;for(var i=6;i>=0;i--){var dI=addDays(TODAY,-i);var tI=0;s.invoices.forEach(function(x){if(x.d===dI)tI+=x.total;});days.push({d:dI,t:tI});if(tI>maxB)maxB=tI;}
+  var bars=days.map(function(x){var today=x.d===TODAY;return {h:Math.max(6,Math.round(x.t/maxB*62)),c:today?'#F4A100':(x.t?'#0D1B2A':'#DCE2EA'),w:today?'700':'500',l:today?'اليوم':DAYS[new Date(Date.parse(x.d)).getUTCDay()],v:x.t?(x.t>=1000?(x.t/1000).toFixed(1)+'k':String(x.t)):'—'};});
+
+  var alerts=[];
+  if(nNew)alerts.push({n:nNew,title:'إشعارات لم تُرسل إلى واتساب',sub:'شاركها في مجموعة التحصيلات',bg:'#FFF1D6',fg:'#8A5A00',go:G('notices',{nf:'new'})});
+  if(nSent)alerts.push({n:nSent,title:'سدادات بانتظار تأكيد الشركة',sub:fmt(unconf)+' بر غير مؤكد بعد',bg:'#E3ECFD',fg:'#1E4FB8',go:G('notices',{nf:'sent'})});
+  if(lateList.length)alerts.push({n:lateList.length,title:'عملاء متأخرون في السداد',sub:lateList.map(function(x){return x.c.name;}).join('، '),bg:'#FCE8E6',fg:'#A32A20',go:G('customers',{custF:'late'})});
+  var low=s.items.filter(function(it){return it.stock<it.min;});
+  if(low.length)alerts.push({n:low.length,title:'مخزون منخفض في الشاحنة',sub:low.map(function(i){return i.name;}).join('، '),bg:'#EEF1F5',fg:'#33414F',go:function(){self.tab('truck');}});
+  var temps=custB.filter(function(x){return x.c.temp&&x.b>0;});
+  if(temps.length)alerts.push({n:temps.length,title:'ديون مؤقتة بلا اسم',sub:'سمِّ أصحابها حتى لا تختلط الديون',bg:'#FFF1D6',fg:'#8A5A00',go:G('customers',{custF:'temp'})});
+  var prs=s.creturns.filter(function(r){return r.status==='sent';});
+  if(prs.length)alerts.push({n:prs.length,title:'مرتجعات بانتظار قبول الشركة',sub:fmt(pendRet)+' بر',bg:'#EEF1F5',fg:'#33414F',go:G('returns',{ret:Object.assign({},s.ret,{tab:'co'})})});
+
+  var netRec=recv-credit,covered=invVal+netRec+money+pendRet,diff=debt-covered,tot=Math.max(1,invVal+Math.max(0,netRec)+money+pendRet);
+  var pc=function(v){return (Math.max(0,v)/tot*100).toFixed(1)+'%';};
+  var cov={inv:fmt(invVal),rec:fmt(netRec),mon:fmt(money),covered:'الإجمالي '+fmt(covered),invW:pc(invVal),recW:pc(netRec),monW:pc(money),retW:pc(pendRet),
+   diffLbl:Math.abs(diff)<1?'مطابق تمامًا لدين الشركة':diff>0?'ينقص '+fmt(diff)+' بر عن الدين — راجع الأسعار أو الإدخالات':'يزيد '+fmt(-diff)+' بر عن الدين — غالبًا فروق أسعار بيع',diffC:Math.abs(diff)<=1000?'#0A6B5F':'#A32A20'};
+
+  var invRow=function(v){var rem=v.total-v.paid;var st=rem<=0?['مدفوعة','#DDF3EF','#0A6B5F']:v.paid>0?['جزئي','#FFF1D6','#8A5A00']:['آجل','#FCE8E6','#A32A20'];
+   return {no:'#'+v.no,cust:v.cust,meta:ds(v.d)+' · '+v.t+' · '+v.lines.length+' سطر',total:fmt(v.total),pill:st[0],pbg:st[1],pfg:st[2],open:G('invoice',{invNo:v.no})};};
+  var recentInv=s.invoices.slice(0,3).map(invRow);
+
+  // ---- line form
+  var fk=is.receive?'rcv':'draft',F=s[fk];
+  var lines=F.lines.map(function(l,idx){var it=self.item(l.iid);var u=it.units[l.ui];var ul=it.units[it.units.length-1];var short=is.sale&&l.qty*u.per>it.stock;var p=parts(it,it.stock);
+   return {name:it.name,hint:short?'المتوفر '+p.label+' فقط':'في الشاحنة: '+p.label,hintC:short?'#B42318':'#46566A',
+    units:it.units.map(function(uu,ui){return {label:uu.u,on:ui===l.ui?'on':'',pick:function(){self.updLine(fk,idx,{ui:ui,price:uu.price});}};}),
+    qty:l.qty,price:l.price,total:fmt((+l.qty||0)*(+l.price||0)),conv:(u.per>1?'1 '+u.u+' = '+u.per+' '+ul.u+' · ':'')+'آخر سعر '+fmt(u.price),
+    inc:function(){self.updLine(fk,idx,{qty:(+l.qty||0)+1});},dec:function(){self.updLine(fk,idx,{qty:Math.max(1,(+l.qty||0)-1)});},
+    setQty:function(e){var v=e.target.value;self.updLine(fk,idx,{qty:v===''?'':Math.max(0,parseInt(v,10)||0)});},
+    setPrice:function(e){self.updLine(fk,idx,{price:e.target.value});},remove:function(){self.delLine(fk,idx);}};});
+  var total=sum(F.lines,function(l){return (+l.qty||0)*(+l.price||0);});
+  var quick=['i1','i5','i4','i3','i2'].map(function(id){var it=self.item(id);return it?{name:it.name,add:function(){self.addLine(fk,id);}}:null;}).filter(Boolean);
+  var lf={title:is.sale?'فاتورة بيع جديدة':'استلام بضاعة من الشركة',isSale:is.sale,isRcv:is.receive,no:'#'+s.nextInv,total:fmt(total),empty:!F.lines.length,
+   saveLabel:is.sale?'حفظ الفاتورة':'حفظ الاستلام',save:is.sale?function(){self.saveSale();}:function(){self.saveReceive();},addItem:function(){self.setState({sheet:'item',picker:is.sale?'sale':'receive',q:''});}};
+  var D=s.draft,dc=D.cust?self.cust(D.cust):null;
+  var sc2={name:dc?dc.name:'بدون عميل',sub:dc?'الرصيد الحالي: '+fmtB(bal(dc)):'بيع نقدي سريع — اختيار العميل اختياري',action:dc?'تغيير':'اختيار',open:function(){self.setState({sheet:'cust',cpFor:'sale',q:''});}};
+  var paidS=D.pay==='cash'?total:D.pay==='credit'?0:Math.min(total,+D.paid||0),remS=total-paidS;
+  var payOpts=[['cash','نقدي'],['credit','آجل'],['partial','جزئي']].map(function(o){var on=D.pay===o[0];return {label:o[1],bg:on?'#fff':'transparent',fg:on?'#0D1B2A':'#46566A',sh:on?'0 1px 3px rgba(13,27,42,.15)':'none',pick:function(){self.upd('draft',{pay:o[0]});}};});
+  var destOpts=[['cash','نقد في اليد'],['cbe','CBE الشخصي'],['ebirr','Ebirr الشخصي'],['co','حساب الشركة']].map(function(o){return {label:o[1],on:D.dest===o[0]?'on':'',pick:function(){self.upd('draft',{dest:o[0]});}};});
+  var bankOpts=Object.keys(BANKS).map(function(b){return {label:BANKS[b],on:D.bank===b?'on':'',pick:function(){self.upd('draft',{bank:b});}};});
+  var sp={isPartial:D.pay==='partial',paidVal:D.paid,setPaid:function(e){self.upd('draft',{paid:e.target.value});},showDest:paidS>0,isCo:D.dest==='co',paid:fmt(paidS),rem:fmt(remS),
+   remBg:remS>0?'#FCE8E6':'#F3F5F8',remFg:remS>0?'#A32A20':'#46566A',tempNote:!D.cust&&remS>0,tempName:'D-'+('000'+s.nextTemp).slice(-4)};
+
+  // ---- sale done & invoice detail
+  var lv=s.invoices.find(function(v){return v.no===s.lastInv;})||s.invoices[0];
+  var done={no:'#'+lv.no,cust:lv.cust,total:fmt(lv.total),paid:fmt(lv.paid),rem:fmt(lv.total-lv.paid),
+   lines:lv.lines.map(function(x){return {n:x.n,q:x.q+' '+x.u+' × '+fmt(x.p),t:fmt(x.q*x.p)};}),
+   wa:function(){self.toast('فُتح واتساب مع ملف الفاتورة PDF');},pdf:function(){self.toast('تم إنشاء PDF وحفظه على الهاتف');},print:function(){self.toast('أُرسلت للطابعة');}};
+  var iv=s.invoices.find(function(v){return v.no===s.invNo;})||s.invoices[0];var ivr=invRow(iv);
+  var inv={no:'#'+iv.no,date:dd(iv.d)+' · '+iv.t,cust:iv.cust,pill:ivr.pill,pbg:ivr.pbg,pfg:ivr.pfg,total:fmt(iv.total),paid:fmt(iv.paid),rem:fmt(iv.total-iv.paid),
+   lines:iv.lines.map(function(x){return {n:x.n+' ('+x.u+')',q:x.q+' × '+fmt(x.p),t:fmt(x.q*x.p)};}),
+   ret:function(){self.go('returns',{ret:{tab:'cust',cust:iv.cid,item:null,unit:0,qty:1,price:'',cond:'good',settle:'debt'}});}};
+  var invFiltered=s.invoices.filter(function(v){if(s.invF!=='all'&&v.pay!==s.invF)return false;if(q&&String(v.no).indexOf(q)<0&&v.cust.indexOf(q)<0)return false;return true;});
+  var invFilters=[['all','الكل'],['cash','نقدي'],['credit','آجل'],['partial','جزئي']].map(function(o){return {label:o[1],on:s.invF===o[0]?'on':'',pick:function(){self.setState({invF:o[0]});}};});
+
+  // ---- truck & items
+  var tkItems=s.items.filter(function(it){return !q||it.name.indexOf(q)>=0;});
+  var tk={value:fmt(invVal),count:s.items.length,open:s.items.filter(function(it){return parts(it,it.stock).open;}).length,low:low.length,
+   coRet:function(){self.go('returns',{ret:Object.assign({},s.ret,{tab:'co'})});},newItem:function(){self.setState({sheet:'newItem',picker:'none'});}};
+  var tkList=tkItems.map(function(it){var p=parts(it,it.stock);return {name:it.name,label:p.label,open:p.open,low:it.stock<it.min,value:fmt(itemValue(it)),go:G('item',{itemId:it.id})};});
+  var itm=self.item(s.itemId)||s.items[0];var ip=parts(itm,itm.stock);var iul=itm.units[itm.units.length-1];
+  var itemD={name:itm.name,label:ip.label,sub:(itm.units.length>1?'الإجمالي '+fmt(itm.stock)+' '+iul.u+' · ':'')+'القيمة '+fmt(itemValue(itm))+' بر',
+   units:itm.units.map(function(u){return {u:u.u,conv:u.per>1?'= '+u.per+' '+iul.u:'وحدة أساسية',price:fmt(u.price)};}),
+   moves:itm.moves.map(function(m){return {t:m.t,d:dd(m.d),q:qtyLabel(itm,m.q),c:m.q<0?'#A32A20':m.q>0?'#0A6B5F':'#46566A'};})};
+
+  // ---- count
+  var cntN=0;
+  var cntList=s.items.map(function(it){var p=parts(it,it.stock);var c=s.cnt[it.id]||{};var full=c.full!==undefined?c.full:p.full,loose=c.loose!==undefined?c.loose:p.loose;
+   var multi=it.units.length>1;var nq=multi?(+full||0)*it.units[0].per+(+loose||0):(+full||0);var df=nq-it.stock;if(df!==0)cntN++;
+   var setC=function(field){return function(e){var o=Object.assign({},s.cnt);o[it.id]=Object.assign({full:p.full,loose:p.loose,reason:''},s.cnt[it.id]||{});o[it.id][field]=e.target.value;self.setState({cnt:o});};};
+   return {name:it.name,rec:p.label,u0:it.units[0].u,u1:it.units[it.units.length-1].u,multi:multi,full:full,loose:loose,setFull:setC('full'),setLoose:setC('loose'),hasDiff:df!==0,
+    diff:qtyLabel(it,df),diffC:df<0?'#A32A20':'#0A6B5F',
+    reasons:['خطأ عدّ','تلف','فقد','أخرى'].map(function(r){return {label:r,on:(c.reason||'خطأ عدّ')===r?'on':'',pick:function(){var o=Object.assign({},s.cnt);o[it.id]=Object.assign({full:p.full,loose:p.loose},s.cnt[it.id]||{},{reason:r});self.setState({cnt:o});}};})};});
+
+  // ---- customers
+  var custFilters=[['all','الكل'],['debt','عليهم دين'],['late','متأخرون'],['credit','لهم رصيد'],['temp','ديون مؤقتة']].map(function(o){return {label:o[1],on:s.custF===o[0]?'on':'',pick:function(){self.setState({custF:o[0]});}};});
+  var custList=custB.filter(function(x){var f=s.custF;if(f==='debt'&&x.b<=0)return false;if(f==='late'&&!isLate(x.c,x.b))return false;if(f==='credit'&&x.b>=0)return false;if(f==='temp'&&!x.c.temp)return false;
+    if(q&&x.c.name.indexOf(q)<0&&(x.c.phone||'').replace(/ /g,'').indexOf(q.replace(/ /g,''))<0)return false;return true;})
+   .sort(function(a,b){return b.b-a.b;})
+   .map(function(x){var c=x.c,b=x.b,ls=lastSaleOf(c),lp=lastPayOf(c);return {name:c.name,init:c.temp?'؟':c.name.replace('بقالة ','').replace('محل ','').replace('متجر ','').replace('مطعم ','').replace('دكان ','').replace('سوبرماركت ','').charAt(0),
+    avBg:c.temp?'#FFF1D6':'#EEF1F5',avFg:c.temp?'#8A5A00':'#0D1B2A',late:isLate(c,b),
+    sub:'آخر بيع '+(ls?ds(ls):'—')+' · آخر تحصيل '+(lp?ds(lp):'—'),bal:fmt(Math.abs(b)),balLbl:b>0?'عليه':b<0?'له':'مسدد',balC:b>0?'#A32A20':b<0?'#0A6B5F':'#46566A',go:G('customer',{custId:c.id,tempName:''})};});
+  var cs={recv:fmt(recv),credit:fmt(credit),add:function(){self.setState({sheet:'cust',cpFor:'none',q:''});}};
+
+  var cu=self.cust(s.custId)||s.customers[0],cb=bal(cu),run=0;
+  var cdRows=cu.entries.map(function(e){run+=(e.dr||0)-(e.cr||0);return {t:self.desc(e,'ar'),d:dd(e.d),dr:e.dr?fmt(e.dr):'',cr:e.cr?fmt(e.cr):'',bal:fmtBal(run)};}).reverse();
+  var cd={name:cu.name,phone:cu.phone||'بلا هاتف',hasPhone:!!cu.phone,tel:'tel:'+(cu.phone||'').replace(/ /g,''),temp:!!cu.temp,bal:fmt(Math.abs(cb)),balLbl:cb>0?'مستحق على العميل':cb<0?'رصيد لصالح العميل':'الحساب مسدد',balC:cb>0?'#A32A20':cb<0?'#0A6B5F':'#0D1B2A',
+   lastSale:lastSaleOf(cu)?ds(lastSaleOf(cu)):'—',lastPay:lastPayOf(cu)?ds(lastPayOf(cu)):'—',rows:cdRows,
+   setTempName:function(e){self.setState({tempName:e.target.value});},
+   saveName:function(){var n=(s.tempName||'').trim();if(!n){self.toast('اكتب الاسم أولًا');return;}var old=cu.name;
+    self.setState({customers:s.customers.map(function(c){return c.id===cu.id?Object.assign({},c,{name:n,temp:false}):c;}),invoices:s.invoices.map(function(v){return v.cid===cu.id?Object.assign({},v,{cust:n}):v;}),tempName:'',pending:self.pend()});self.toast('أصبح '+old+' باسم '+n);},
+   sale:function(){self.go('sale',{draft:Object.assign(emptyDraft(),{cust:cu.id,pay:'credit'})});},
+   collect:function(){self.go('collect',{col:Object.assign(emptyCol(),{cust:cu.id})});},
+   ret:function(){self.go('returns',{ret:{tab:'cust',cust:cu.id,item:null,unit:0,qty:1,price:'',cond:'good',settle:'debt'}});},
+   stmt:function(){self.go('reports',{st:Object.assign({},s.st,{acct:cu.id})});}};
+
+  // ---- collect
+  var C=s.col,ccu=C.cust?self.cust(C.cust):null,ccb=ccu?bal(ccu):0;
+  var methods=[['cash','نقدًا في يدي','يزيد النقد لديك','نقد','#DDF3EF','#0A6B5F'],['cbe','حسابي CBE','يزيد أموال العمل في CBE','CBE','#F3E6EE','#6A1B4D'],['ebirr','حسابي Ebirr','يزيد أموال العمل في Ebirr','eB','#E3ECFD','#1E4FB8'],['co','حساب الشركة مباشرة','يُحتسب سدادًا للشركة تلقائيًا','SY','#0D1B2A','#F4A100']];
+  var openInvs=ccu?s.invoices.filter(function(v){return v.cid===ccu.id&&v.total>v.paid;}):[];
+  var co={custName:ccu?ccu.name:'اختر العميل',custBal:ccu?'الرصيد: '+fmtB(ccb):'التحصيل يُخصم من إجمالي رصيده افتراضيًا',pickCust:function(){self.setState({sheet:'cust',cpFor:'col',q:''});},
+   amount:C.amount,setAmount:function(e){self.upd('col',{amount:e.target.value,dup:false,dupOk:false});},
+   quick:(ccb>0?[{label:'كامل الرصيد '+fmt(ccb),pick:function(){self.upd('col',{amount:String(ccb)});}}]:[]).concat([5000,10000,20000].map(function(v){return {label:fmt(v),pick:function(){self.upd('col',{amount:String(v)});}};})),
+   methods:methods.map(function(m){var on=C.method===m[0];return {label:m[1],sub:m[2],tag:m[3],bg:m[4],fg:m[5],on:on?'on':'',dot:on?'#0D1B2A':'transparent',pick:function(){self.upd('col',{method:m[0],dup:false});}};}),
+   isCo:C.method==='co',needRef:C.method!=='cash',banks:Object.keys(BANKS).map(function(b){return {label:BANKS[b],on:C.bank===b?'on':'',pick:function(){self.upd('col',{bank:b,dup:false});}};}),
+   ref:C.ref,setRef:function(e){self.upd('col',{ref:e.target.value,dup:false,dupOk:false});},photoLbl:C.photo?'تم إرفاق صورة الإثبات ✓':'إرفاق صورة الإثبات (اختياري)',togglePhoto:function(){self.upd('col',{photo:!C.photo});},
+   hasInvs:openInvs.length>0,invs:[{label:'من إجمالي الرصيد',on:!C.inv?'on':'',pick:function(){self.upd('col',{inv:''});}}].concat(openInvs.map(function(v){return {label:'#'+v.no+' · متبقي '+fmt(v.total-v.paid),on:C.inv===v.no?'on':'',pick:function(){self.upd('col',{inv:v.no});}};})),
+   dup:C.dup,force:function(){self.setState({col:Object.assign({},C,{dupOk:true,dup:false})},function(){self.saveCollect();});},save:function(){self.saveCollect();}};
+
+  // ---- money
+  var wdef=[['cash','نقد','#DDF3EF','#0A6B5F'],['cbe','CBE','#F3E6EE','#6A1B4D'],['ebirr','eB','#E3ECFD','#1E4FB8']];
+  var wl=wdef.map(function(x){var on=s.wf===x[0];return {name:WAL[x[0]],bal:fmt(W[x[0]]),tag:x[1],tagBg:x[2],tagFg:x[3],share:money?Math.round(W[x[0]]/money*100)+'%':'',bg:'#fff',border:on?'2px solid #0D1B2A':'1px solid #DCE2EA',pick:function(){self.setState({wf:on?'all':x[0]});}};});
+  var wFilters=[['all','الكل'],['cash','النقد'],['cbe','CBE'],['ebirr','Ebirr']].map(function(o){return {label:o[1],on:s.wf===o[0]?'on':'',pick:function(){self.setState({wf:o[0]});}};});
+  var wMoves=s.wmoves.filter(function(m){return s.wf==='all'||m.w===s.wf;}).slice(0,12).map(function(m){return {t:m.t,d:ds(m.d),w:WSHORT[m.w],a:(m.a>0?'+':'−')+fmt(Math.abs(m.a)),c:m.a>0?'#0A6B5F':'#A32A20'};});
+  var nc={new:nNew,hasNew:nNew>0,line:nNew+' لم يُرسل · '+nSent+' بانتظار التأكيد · '+nOk+' مؤكد'};
+
+  // ---- transfer
+  var T=s.trf,tAmt=+T.amount||0;
+  var tro=function(side){return wdef.map(function(x){return {label:WSHORT[x[0]],bal:fmt(W[x[0]]),on:T[side]===x[0]?'on':'',pick:function(){var p={};p[side]=x[0];self.upd('trf',p);}};});};
+  var tr={from:tro('from'),to:tro('to'),amount:T.amount,setAmount:function(e){self.upd('trf',{amount:e.target.value});},swap:function(){self.upd('trf',{from:T.to,to:T.from});},
+   prev:T.from===T.to?'اختر محفظتين مختلفتين':WSHORT[T.from]+' '+fmt(W[T.from])+' ← '+fmt(W[T.from]-tAmt)+'   ·   '+WSHORT[T.to]+' '+fmt(W[T.to])+' ← '+fmt(W[T.to]+tAmt),save:function(){self.saveTransfer();}};
+
+  // ---- company ledger
+  var sorted=s.company.slice().sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0;});var rb=0;
+  var compRows=sorted.map(function(e){rb+=(e.dr||0)-(e.cr||0);return {t:self.desc(e,'ar'),d:dd(e.d),dr:e.dr?fmt(e.dr):'',cr:e.cr?fmt(e.cr):'',bal:fmtBal(rb),pend:e.conf===false};}).reverse();
+  var comp={confBal:fmt(debt+unconf),rows:compRows,hasPend:prs.length>0,pend:prs.map(function(r){return {id:r.id,name:r.name,label:r.label,value:fmt(r.value),accept:function(){self.acceptRet(r.id);}};}),
+   stmt:function(){self.go('reports',{st:Object.assign({},s.st,{acct:'company'})});}};
+
+  // ---- pay
+  var P=s.pay;
+  var py={amount:P.amount,setAmount:function(e){self.upd('pay',{amount:e.target.value,dup:false,dupOk:false});},
+   src:wdef.map(function(x){return {label:WSHORT[x[0]],bal:fmt(W[x[0]]),on:P.src===x[0]?'on':'',pick:function(){self.upd('pay',{src:x[0]});}};}),
+   banks:Object.keys(BANKS).map(function(b){return {label:BANKS[b],on:P.bank===b?'on':'',pick:function(){self.upd('pay',{bank:b,dup:false});}};}),
+   ref:P.ref,setRef:function(e){self.upd('pay',{ref:e.target.value,dup:false,dupOk:false});},photo:P.photo,noPhoto:!P.photo,
+   phTitle:P.photo?'تم إرفاق صورة الإشعار':'إرفاق صورة إشعار التحويل',phSub:P.photo?'اضغط للتغيير — تُحفظ وتُزامن بأمان':'من الكاميرا أو المعرض — لمشاركتها في واتساب لاحقًا',
+   phBorder:P.photo?'#0A7C6E':'#CBD3DD',phBg:P.photo?'#F0FAF8':'#fff',togglePhoto:function(){self.upd('pay',{photo:!P.photo});},
+   dup:P.dup,dupMsg:'وجدنا إشعارًا بنفس الرقم المرجعي، أو بنفس المبلغ ('+fmt(+P.amount||0)+') إلى '+BANKS[P.bank]+' اليوم.',
+   force:function(){self.setState({pay:Object.assign({},P,{dupOk:true,dup:false})},function(){self.savePay();});},save:function(){self.savePay();}};
+  var ln=s.notices.find(function(n){return n.id===s.lastN;})||s.notices[0];
+  var pd={amt:fmt(ln.amt),bank:BANKS[ln.bank]+' – حساب الشركة',ref:'المرجع: '+ln.ref,share:function(){self.setState({sheet:'share',shareId:ln.id});}};
+
+  // ---- notices
+  var inDate=function(d){if(s.ndf==='today')return d===TODAY;if(s.ndf==='week')return d>=addDays(TODAY,-6);if(s.ndf==='month')return d>='2026-10-01';return true;};
+  var nfDef=[['all','الكل',s.notices.length],['new','لم يُرسل',nNew],['sent','بانتظار التأكيد',nSent],['ok','مؤكد',nOk]];
+  var stDef={new:['لم يُرسل','#FFF1D6','#8A5A00'],sent:['أُرسل · بانتظار الشركة','#E3ECFD','#1E4FB8'],ok:['مؤكد','#DDF3EF','#0A6B5F']};
+  var ntList=s.notices.filter(function(n){return (s.nf==='all'||n.status===s.nf)&&inDate(n.d);}).map(function(n){var sd=stDef[n.status];var lvl=n.status==='new'?1:n.status==='sent'?2:3;
+   return {bank:BANKS[n.bank]+' – الشركة',brand:BRAND[n.bank],amt:fmt(n.amt),date:dd(n.d)+' · '+n.t,ref:n.ref,src:n.src==='direct'?'تحويل مباشر من '+(n.who||'عميل'):'من '+WAL[n.src],
+    stLbl:sd[0],stBg:sd[1],stFg:sd[2],isNew:n.status==='new',isSent:n.status==='sent',isOk:n.status==='ok',
+    s1:'#0A7C6E',s2:lvl>=2?'#0A7C6E':'#DCE2EA',s3:lvl>=3?'#0A7C6E':'#DCE2EA',
+    share:function(){self.setState({sheet:'share',shareId:n.id});},markSent:function(){self.setNotice(n.id,'sent');},confirm:function(){self.setNotice(n.id,'ok');},undo:function(){self.setNotice(n.id,'sent');}};});
+  var nt={filters:nfDef.map(function(o){var on=s.nf===o[0];return {label:o[1],n:o[2],bg:on?'#0D1B2A':'#fff',fg:on?'#fff':'#0D1B2A',border:on?'1px solid #0D1B2A':'1px solid #DCE2EA',pick:function(){self.setState({nf:o[0]});}};}),
+   dates:[['all','كل التواريخ'],['today','اليوم'],['week','آخر 7 أيام'],['month','أكتوبر 2026']].map(function(o){return {label:o[1],on:s.ndf===o[0]?'on':'',pick:function(){self.setState({ndf:o[0]});}};}),
+   list:ntList,empty:ntList.length===0};
+  var shn=s.notices.find(function(n){return n.id===s.shareId;});
+  var shr={amt:shn?fmt(shn.amt):'',yes:function(){if(shn)self.setNotice(shn.id,'sent');}};
+
+  // ---- returns
+  var R=s.ret,CR=s.crt,isCustR=R.tab==='cust',curR=isCustR?R:CR,rit=curR.item?self.item(curR.item):null,ru=rit?rit.units[curR.unit]:null;
+  var rcu=R.cust?self.cust(R.cust):null;
+  var rPrice=isCustR?(R.price===''?(ru?ru.price:0):+R.price):(ru?ru.price:0);var rVal=(+curR.qty||0)*rPrice;
+  var setR=function(p){if(isCustR)self.upd('ret',p);else self.upd('crt',p);};
+  var stR={sent:['بانتظار القبول','#FFF1D6','#8A5A00'],ok:['قُبل · خُصم من الدين','#DDF3EF','#0A6B5F'],rej:['رُفض · أُعيد للشاحنة','#FCE8E6','#A32A20']};
+  var rt={isCust:isCustR,isCo:!isCustR,
+   tabs:[['cust','من عميل إليّ'],['co','منّي إلى الشركة']].map(function(o){return {label:o[1],bg:R.tab===o[0]?'#fff':'transparent',pick:function(){self.upd('ret',{tab:o[0]});}};}),
+   custName:rcu?rcu.name+' · '+fmtB(bal(rcu)):'اختر العميل (اختياري عند الرد النقدي)',pickCust:function(){self.setState({sheet:'cust',cpFor:'ret',q:''});},
+   itemName:rit?rit.name+' · في الشاحنة '+parts(rit,rit.stock).label:'اختر الصنف',pickItem:function(){self.setState({sheet:'item',picker:isCustR?'ret':'crt',q:''});},hasItem:!!rit,
+   units:rit?rit.units.map(function(u,ui){return {label:u.u,on:curR.unit===ui?'on':'',pick:function(){setR({unit:ui,price:''});}};}):[],
+   qty:curR.qty,setQty:function(e){setR({qty:e.target.value});},price:isCustR?(R.price===''?(ru?ru.price:''):R.price):(ru?ru.price:''),setPrice:function(e){if(isCustR)self.upd('ret',{price:e.target.value});},
+   conds:[['good','صالح — يعود للشاحنة'],['bad','تالف — لا يعود للمتاح']].map(function(o){return {label:o[1],on:R.cond===o[0]?'on':'',pick:function(){self.upd('ret',{cond:o[0]});}};}),
+   settles:[['debt','خصم من رصيده (أو رصيد له)'],['cash','رد المبلغ نقدًا']].map(function(o){return {label:o[1],on:R.settle===o[0]?'on':'',pick:function(){self.upd('ret',{settle:o[0]});}};}),
+   reasons:['تالف','منتهي الصلاحية','زائد عن الحاجة'].map(function(r){return {label:r,on:CR.reason===r?'on':'',pick:function(){self.upd('crt',{reason:r});}};}),
+   value:fmt(rVal)+' بر',saveLbl:isCustR?'حفظ مرتجع العميل':'إرسال المرتجع للشركة',save:function(){self.saveRet();},
+   list:s.creturns.map(function(r){var sd=stR[r.status];return {id:r.id,name:r.name,label:r.label,value:fmt(r.value),isSent:r.status==='sent',done:r.status!=='sent',stLbl:sd[0],stBg:sd[1],stFg:sd[2],accept:function(){self.acceptRet(r.id);},reject:function(){self.rejectRet(r.id);}};})};
+
+  // ---- reports / statement
+  var ST=s.st,L=I18N[ST.lang],rg=this.stmtRange();
+  var acctObj=ST.acct==='company'?null:self.cust(ST.acct);
+  var ents=acctObj?acctObj.entries:s.company;
+  var srt=ents.slice().sort(function(a,b){return a.d<b.d?-1:a.d>b.d?1:0;});
+  var carried=0,tdr=0,tcr=0,rows=[],hasPend=false;
+  srt.forEach(function(e){if(e.d<rg[0])carried+=(e.dr||0)-(e.cr||0);});var rbal=carried;
+  srt.forEach(function(e){if(e.d>=rg[0]&&e.d<=rg[1]){rbal+=(e.dr||0)-(e.cr||0);tdr+=e.dr||0;tcr+=e.cr||0;if(e.conf===false)hasPend=true;
+   rows.push({date:dd(e.d),desc:self.desc(e,ST.lang)+(e.conf===false?' *':''),dr:e.dr?fmt(e.dr):'',cr:e.cr?fmt(e.cr):'',bal:fmtBal(rbal)});}});
+  var setSt=function(p){self.setState({st:Object.assign({},ST,p)});};
+  var rp={L:L,dir:L.dir,font:L.font,holder:acctObj?acctObj.name:'نبيل عادل — حساب المندوب لدى SYSCO',periodTxt:dd(rg[0])+' — '+dd(rg[1]),carried:fmtBal(carried),rows:rows,noRows:rows.length===0,
+   tdr:fmt(tdr),tcr:fmt(tcr),close:fmtBal(rbal),hasPend:hasPend,isCustom:ST.period==='custom',from:ST.from,to:ST.to,
+   setFrom:function(e){setSt({from:e.target.value});},setTo:function(e){setSt({to:e.target.value});},
+   accts:[{label:'حساب الشركة',on:ST.acct==='company'?'on':'',pick:function(){setSt({acct:'company'});}}].concat(s.customers.map(function(c){return {label:c.name,on:ST.acct===c.id?'on':'',pick:function(){setSt({acct:c.id});}};})),
+   periods:[['today','اليوم'],['week','آخر 7 أيام'],['month','أكتوبر 2026'],['custom','من — إلى']].map(function(o){return {label:o[1],on:ST.period===o[0]?'on':'',pick:function(){setSt({period:o[0]});}};}),
+   langs:LANGS.map(function(o){return {label:o[1],font:I18N[o[0]].font,on:ST.lang===o[0]?'on':'',pick:function(){setSt({lang:o[0]});}};}),
+   download:function(){self.toast('تم تنزيل الكشف PDF بلغة: '+LANGS.find(function(x){return x[0]===ST.lang;})[1]);},share:function(){self.toast('فُتح واتساب مع ملف الكشف');},print:function(){self.toast('أُرسل الكشف للطابعة');},
+   others:[['المبيعات','فواتير الفترة ومجموعها'],['التحصيلات','حسب الطريقة والجهة'],['مخزون الشاحنة','الكميات والقيمة الآن'],['حركة أموال العمل','النقد وCBE وEbirr'],['سدادات الشركة','مع حالة الإشعارات'],['تصدير Excel','كل البيانات للفترة']].map(function(o){return {label:o[0],sub:o[1],go:function(){self.toast('تقرير «'+o[0]+'» جاهز للفترة المختارة');}};})};
+
+  // ---- settings
+  var set={title:s.online?(s.pending?'متصل · جارٍ الرفع':'متصل · كل البيانات متزامنة'):'دون اتصال · الحفظ على الهاتف',sub:'آخر مزامنة اليوم '+s.lastSync+' · الصور والملفات ضمن المزامنة',
+   stBg:s.online?'#DDF3EF':'#FFF1D6',stFg:s.online?'#0A6B5F':'#8A5A00',pending:s.pending,pressed:!s.online,swBg:s.online?'#CBD3DD':'#F4A100',knob:s.online?'0px':'-24px',
+   toggle:function(){self.toggleNet();},syncNow:function(){if(!s.online){self.toast('لا يوجد اتصال — ستتم المزامنة تلقائيًا عند عودته');return;}self.setState({lastSync:nowT()});self.toast('البيانات متزامنة على أجهزتك الثلاثة');},
+   backup:function(){self.toast('تم إنشاء نسخة احتياطية مشفرة');},restore:function(){self.toast('اختر نسخة للاستعادة — لن تُحذف العمليات الحالية');},excel:function(){self.toast('جارٍ تجهيز ملف Excel…');}};
+
+  var moreList=[['الفواتير','كل فواتير البيع وتفاصيلها',nav.invoices],['الإشعارات البنكية','متابعة واتساب وتأكيد الشركة',nav.notices],['المرتجعات','من العملاء وإلى الشركة',nav.returns],['جرد الشاحنة','تصحيح الكميات الفعلية',nav.count],['كشوف الحساب والتقارير','PDF بخمس لغات',nav.reports],['حسابي مع الشركة','الحساب الجاري والسدادات',nav.company],['الإعدادات والمزامنة','النسخ الاحتياطي والأجهزة',nav.settings]].map(function(m){return {label:m[0],sub:m[1],go:m[2]};});
+
+  // ---- sheets
+  var pickItems=s.items.filter(function(it){return !q||it.name.indexOf(q)>=0;}).map(function(it){return {name:it.name,stock:'في الشاحنة: '+parts(it,it.stock).label,price:fmt(it.units[0].price)+' / '+it.units[0].u,pick:function(){self.pickItem(it.id);}};});
+  var cp={allowNone:s.cpFor==='sale',none:function(){self.setState({draft:Object.assign({},s.draft,{cust:null}),sheet:''});},
+   list:custB.filter(function(x){return !q||x.c.name.indexOf(q)>=0;}).map(function(x){return {name:x.c.name,bal:x.b?fmtB(x.b):'',balC:x.b>0?'#A32A20':'#0A6B5F',pick:function(){if(s.cpFor==='none'){self.go('customer',{custId:x.c.id});}else self.pickCust(x.c.id);}};}),
+   newName:s.newCust.name,newPhone:s.newCust.phone,setName:function(e){self.upd('newCust',{name:e.target.value});},setPhone:function(e){self.upd('newCust',{phone:e.target.value});},add:function(){self.addCust();}};
+  var NI=s.newItem;
+  var ni={name:NI.name,setName:function(e){self.upd('newItem',{name:e.target.value});},
+   u1:UNITS.map(function(u){return {label:u,on:NI.u1===u?'on':'',pick:function(){self.upd('newItem',{u1:u,u2:NI.u2===u?'':NI.u2});}};}),
+   u2:[''].concat(UNITS.filter(function(u){return u!==NI.u1;})).map(function(u){return {label:u||'بدون',on:NI.u2===u?'on':'',pick:function(){self.upd('newItem',{u2:u});}};}),
+   hasU2:!!NI.u2,perLbl:'كم '+(NI.u2||'')+' في '+NI.u1+' الواحد؟',per:NI.per,setPer:function(e){self.upd('newItem',{per:e.target.value});},
+   p1Lbl:'سعر '+NI.u1,p2Lbl:'سعر '+(NI.u2||''),p1:NI.p1,p2:NI.p2,setP1:function(e){self.upd('newItem',{p1:e.target.value});},setP2:function(e){self.upd('newItem',{p2:e.target.value});},save:function(){self.saveNewItem();}};
+
+  return {is:is,showNav:forms.indexOf(sc)<0,tb:tb,tw:tw,nav:nav,q:s.q,setQ:setQ,
+   offline:!s.online,syncing:s.syncing,pendingLabel:s.pending+' بانتظار المزامنة',syncDot:!s.online?'#F4A100':(s.pending?'#1E5BD8':'#0A7C6E'),syncText:s.online?'متصل ومتزامن':'دون اتصال',
+   scrollRef:function(el){self.sc=el;},toastOn:!!s.toast,toast:s.toast,
+   sheetOn:!!s.sheet,sh:{item:s.sheet==='item',cust:s.sheet==='cust',newItem:s.sheet==='newItem',share:s.sheet==='share'},closeSheet:function(){self.setState({sheet:'',q:''});},
+   openNewItem:function(){self.setState({sheet:'newItem'});},
+   k:k,bars:bars,alerts:alerts,hasAlerts:alerts.length>0,cov:cov,recentInv:recentInv,
+   lf:lf,lines:lines,quick:quick,sc2:sc2,payOpts:payOpts,destOpts:destOpts,bankOpts:bankOpts,sp:sp,rcvDate:s.rcv.date,setRcvDate:function(e){self.upd('rcv',{date:e.target.value});},
+   done:done,inv:inv,invList:invFiltered.map(invRow),invEmpty:invFiltered.length===0,invFilters:invFilters,invSum:fmt(sum(invFiltered,function(v){return v.total;}))+' بر',
+   tk:tk,tkList:tkList,itemD:itemD,cntList:cntList,cntN:cntN,saveCount:function(){self.saveCount();},
+   cs:cs,custFilters:custFilters,custList:custList,custEmpty:custList.length===0,cd:cd,tempName:s.tempName,
+   co:co,wl:wl,wFilters:wFilters,wMoves:wMoves,nc:nc,tr:tr,comp:comp,py:py,pd:pd,nt:nt,shr:shr,rt:rt,rp:rp,set:set,moreList:moreList,
+   pickItems:pickItems,pickEmpty:pickItems.length===0,cp:cp,ni:ni};
+ }
+}
+</script>
+</body>
+</html>
