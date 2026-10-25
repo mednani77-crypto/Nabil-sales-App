@@ -4,7 +4,7 @@ import { AppDB } from '../db/db';
 import { addCustomer, addItem, saveReceive, saveSale } from '../db/repo';
 import { balanceOf, companySummary, stockByItem } from '../domain/balances';
 import type { Operation } from '../domain/types';
-import { syncOnce, pendingCount, type MasterRow, type MasterTable, type RemoteAttachment, type RemoteMaster, type RemoteOp, type Transport } from './engine';
+import { resetEverywhere, syncOnce, pendingCount, type MasterRow, type MasterTable, type RemoteAttachment, type RemoteMaster, type RemoteOp, type Transport } from './engine';
 
 /** In-memory stand-in for Supabase with the same semantics as the SQL schema. */
 class FakeServer {
@@ -14,6 +14,7 @@ class FakeServer {
   files: RemoteAttachment[] = [];
   blobs = new Map<string, Blob>();
   devices = new Map<string, string>();
+  epoch = 0;
   transport(): Transport {
     const s = this;
     return {
@@ -51,6 +52,16 @@ class FakeServer {
       },
       async downloadAttachment(path) {
         return s.blobs.get(path)!;
+      },
+      async getEpoch() {
+        return s.epoch;
+      },
+      async resetAccount() {
+        s.ops = [];
+        s.master = { items: [], customers: [] };
+        s.files = [];
+        s.blobs.clear();
+        return ++s.epoch;
       },
     };
   }
@@ -132,5 +143,60 @@ describe('sync between two devices', () => {
     await syncOnce(bb, server.transport());
     expect((await a.customers.get(cust.id))?.name).toBe('سوبرماركت النور');
     expect((await bb.customers.get(cust.id))?.name).toBe('سوبرماركت النور');
+  });
+
+  it('start over: a reset clears the server and every device, and old data never comes back', async () => {
+    const server = new FakeServer();
+    const phone = new AppDB(`sync-r-a-${++n}`);
+    const pc = new AppDB(`sync-r-b-${n}`);
+    const rice = await addItem(phone, { name: 'رز', units: [{ name: 'كنتال', factor: 1, lastPrice: b(18800) }] });
+    await saveReceive(phone, [{ itemId: rice.id, unitName: 'كنتال', qty: 3, unitPrice: b(18800) }], '2026-10-25');
+    await syncOnce(phone, server.transport());
+    await syncOnce(pc, server.transport());
+    expect(await pc.operations.count()).toBe(1);
+
+    // The PC records something offline that is not synced yet, then the phone resets.
+    await saveReceive(pc, [{ itemId: rice.id, unitName: 'كنتال', qty: 1, unitPrice: b(18800) }], '2026-10-25');
+    await resetEverywhere(phone, server.transport());
+    expect(await phone.operations.count()).toBe(0);
+    expect(await phone.items.count()).toBe(0);
+    expect(server.ops).toHaveLength(0);
+
+    // Phone syncs again: nothing comes back.
+    await syncOnce(phone, server.transport());
+    expect(await phone.operations.count()).toBe(0);
+
+    // PC syncs: it is wiped instead of pushing its old (pre-reset) data.
+    const r = await syncOnce(pc, server.transport());
+    expect(r.wiped).toBe(true);
+    expect(await pc.operations.count()).toBe(0);
+    expect(await pc.items.count()).toBe(0);
+    expect(server.ops).toHaveLength(0);
+    expect(server.master.items).toHaveLength(0);
+
+    // Real work after the reset syncs normally, and a second sync does not wipe again.
+    const sugar = await addItem(pc, { name: 'سكر', units: [{ name: 'جونية', factor: 1, lastPrice: b(7400) }] });
+    await saveReceive(pc, [{ itemId: sugar.id, unitName: 'جونية', qty: 2, unitPrice: b(7400) }], '2026-10-26');
+    expect((await syncOnce(pc, server.transport())).wiped).toBeUndefined();
+    await syncOnce(phone, server.transport());
+    expect(await phone.operations.count()).toBe(1);
+    expect(stockByItem(await phone.operations.toArray()).get(sugar.id)).toBe(2);
+  });
+
+  it('a new phone that never synced keeps what it recorded offline after an account reset', async () => {
+    const server = new FakeServer();
+    const old = new AppDB(`sync-r-c-${++n}`);
+    await addItem(old, { name: 'قديم', units: [{ name: 'حبة', factor: 1, lastPrice: 100 }] });
+    await syncOnce(old, server.transport());
+    await resetEverywhere(old, server.transport());
+
+    const fresh = new AppDB(`sync-r-d-${n}`);
+    const oil = await addItem(fresh, { name: 'زيت', units: [{ name: 'كرتون', factor: 1, lastPrice: b(6300) }] });
+    await saveReceive(fresh, [{ itemId: oil.id, unitName: 'كرتون', qty: 4, unitPrice: b(6300) }], '2026-10-26');
+    const r = await syncOnce(fresh, server.transport());
+    expect(r.wiped).toBeUndefined();
+    expect(server.ops).toHaveLength(1);
+    await syncOnce(old, server.transport());
+    expect(stockByItem(await old.operations.toArray()).get(oil.id)).toBe(4);
   });
 });

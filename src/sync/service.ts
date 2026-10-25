@@ -2,7 +2,7 @@ import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { db } from '../db/db';
-import { pendingCount, syncOnce } from './engine';
+import { pendingCount, resetEverywhere, syncOnce } from './engine';
 import { supabase, supabaseTransport, syncConfigured } from './supabase';
 
 /* Runs sync in the background: on start, when the network comes back, when the app returns to
@@ -43,6 +43,28 @@ export async function syncNow(): Promise<void> {
       queued = false;
       void syncNow();
     }
+  }
+}
+
+/** "Start over" while signed in: wipe the account on the server and on this device; other
+ *  devices clear themselves on their next sync. Waits for a running sync so it can't re-upload. */
+export async function resetAccountEverywhere(): Promise<void> {
+  const sb = supabase();
+  if (!sb) throw new Error('المزامنة غير مفعّلة');
+  if (!navigator.onLine) throw new Error('لا يوجد اتصال بالإنترنت');
+  const { data } = await sb.auth.getSession();
+  if (!data.session) throw new Error('لم تسجّل الدخول');
+  for (let i = 0; running && i < 150; i++) await new Promise((r) => setTimeout(r, 200));
+  window.clearTimeout(timer);
+  running = true;
+  notify();
+  try {
+    await resetEverywhere(db, supabaseTransport(sb, data.session.user.id));
+    lastResult = null;
+  } finally {
+    running = false;
+    queued = false;
+    notify();
   }
 }
 
