@@ -1,6 +1,7 @@
-import { HashRouter, NavLink, Route, Routes, useLocation } from 'react-router-dom';
+import { HashRouter, NavLink, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { Icon } from './ui/Icon';
-import { ToastProvider } from './ui/kit';
+import { BackExitHint, goBack, ToastProvider } from './ui/kit';
+import { useBackNavigate } from './ui/back';
 import { HomeScreen } from './screens/Home';
 import { ItemScreen, TruckScreen } from './screens/Truck';
 import { ReceiveScreen, SaleScreen } from './screens/LineForms';
@@ -22,6 +23,12 @@ const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay', '/ret
 
 function Shell() {
   const { pathname, search } = useLocation();
+  const nav = useNavigate();
+  useBackNavigate(() => {
+    if (pathname === '/') return false;
+    goBack(nav);
+    return true;
+  });
   const showNav = !FORM_ROUTES.includes(pathname) && !search.includes('done=1');
   const unsent = useLiveQuery(async () => noticeCounts(await db.operations.toArray()).recorded, []) ?? 0;
   return (
@@ -89,6 +96,7 @@ export default function App() {
   useEffect(() => startSyncLoop(), []);
   return (
     <ToastProvider>
+      <BackExitHint />
       <LockGate>
         <HashRouter>
           <Shell />
