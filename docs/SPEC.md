@@ -105,6 +105,12 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 - Retry on app open / `online` event; no reliance on background sync.
 - UI shows: online/offline, pending count, last sync time, errors.
 
+### Enabling sync
+1. Apply `supabase/migrations/0001_init.sql` to the project.
+2. Put the project URL and publishable (anon) key in `.env.production` as `VITE_SUPABASE_URL` and
+   `VITE_SUPABASE_ANON_KEY` (public by design; RLS protects the data). The APK build picks them up.
+3. After Nabil creates his account, turn off public sign-ups in Supabase Auth settings.
+
 ## 8. Statements and reports (phase 6)
 
 - Mandatory columns: full date | description | debit | credit | running balance.
@@ -124,7 +130,7 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 | 2 | Customer detail & ledger, late customers, collections (4 methods, optional invoice link), wallets & transfers, company account & payments, duplicate-transfer warning | **done** |
 | 3 | Bank notices: photo (compressed, stored as attachment), WhatsApp share sheet, recorded → sent → confirmed via append-only `noticeStatus` ops, counts and alerts | **done** |
 | 4 | Customer returns (good/damaged, balance/cash, from invoice), company returns with accept/reject, stock count, opening balances form, safe cancel (`void`) with operation page | **done** |
-| 5 | Supabase auth, sync, multi-device, backup/restore | next |
+| 5 | Email/password account, background sync engine (ops union, master LWW, photos), device codes, PIN app lock, JSON backup/restore. Cloud schema in `supabase/migrations/`. Project `nabil-sales` (ap-south-1) created, schema applied, public settings in `.env.production` | in review |
 | 6 | Statements PDF in 5 languages, reports, Excel export | |
 | 7 | Two-week parallel run with Nabil's paper notebook | |
 

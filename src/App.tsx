@@ -13,6 +13,9 @@ import { CountScreen, OpeningScreen, OperationScreen, ReturnsScreen } from './sc
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from './db/db';
 import { noticeCounts } from './domain/notices';
+import { useEffect } from 'react';
+import { LockGate } from './ui/Lock';
+import { startSyncLoop } from './sync/service';
 
 const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay', '/returns', '/count', '/opening'];
 
@@ -81,11 +84,14 @@ function Shell() {
 }
 
 export default function App() {
+  useEffect(() => startSyncLoop(), []);
   return (
     <ToastProvider>
-      <HashRouter>
-        <Shell />
-      </HashRouter>
+      <LockGate>
+        <HashRouter>
+          <Shell />
+        </HashRouter>
+      </LockGate>
     </ToastProvider>
   );
 }

@@ -13,6 +13,8 @@ export interface Attachment {
   blob: Blob;
   mime: string;
   createdAt: string;
+  /** Set once the photo is stored in the cloud (phase 5 sync). */
+  uploaded?: boolean;
 }
 
 export class AppDB extends Dexie {
