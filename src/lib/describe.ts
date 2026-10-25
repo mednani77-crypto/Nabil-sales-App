@@ -33,5 +33,7 @@ export function describePosting(p: Posting, op: Operation | undefined, customers
     case 'companyPayment':
       if (onWallet) return `سداد للشركة · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
       return `سداد من ${WALLET_LABEL[op.source]} · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
+    case 'noticeStatus':
+      return '';
   }
 }

@@ -1,6 +1,6 @@
 import type { Santim } from './money';
 import { postingsOf, stockMovesOf, linesTotal } from './postings';
-import type { AccountKey, ISODate, Operation, Posting, SaleOp, StockMove } from './types';
+import type { AccountKey, ISODate, NoticeStatus, Operation, Posting, SaleOp, StockMove } from './types';
 
 /** Stable chronological order: business date, then creation time, then id. */
 export function sortOps(ops: Operation[]): Operation[] {
@@ -17,8 +17,23 @@ export function uniqueOps(ops: Operation[]): Operation[] {
   return [...seen.values()];
 }
 
+/** Latest notice status per transfer operation (append-only status ops; the newest wins). */
+export function noticeStatuses(ops: Operation[]): Map<string, NoticeStatus> {
+  const m = new Map<string, { at: string; status: NoticeStatus }>();
+  for (const op of uniqueOps(ops)) {
+    if (op.type !== 'noticeStatus') continue;
+    const cur = m.get(op.targetOpId);
+    const key = op.createdAt + op.id;
+    if (!cur || key > cur.at) m.set(op.targetOpId, { at: key, status: op.status });
+  }
+  return new Map([...m].map(([k, v]) => [k, v.status]));
+}
+
 export function allPostings(ops: Operation[]): Posting[] {
-  return sortOps(uniqueOps(ops)).flatMap(postingsOf);
+  const status = noticeStatuses(ops);
+  return sortOps(uniqueOps(ops))
+    .flatMap(postingsOf)
+    .map((p) => (p.unconfirmed && status.get(p.opId) === 'confirmed' ? { ...p, unconfirmed: false } : p));
 }
 
 export function balances(ops: Operation[]): Map<AccountKey, Santim> {

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { db } from '../db/db';
-import { DomainError, saveCollection, saveCompanyPayment, saveTransfer } from '../db/repo';
+import { addAttachment, DomainError, saveCollection, saveCompanyPayment, saveTransfer } from '../db/repo';
+import { PhotoPicker } from '../ui/PhotoPicker';
+import { useEffect } from 'react';
 import { useData } from '../hooks/useData';
 import { customerActivity, findSimilarTransfers } from '../domain/moneyOps';
 import { fmtMoney, parseBirr, toBirrInput } from '../domain/money';
@@ -14,6 +16,18 @@ import { TopBar, useToast } from '../ui/kit';
 import { CustomerPicker } from '../ui/pickers';
 import { fmtBalance } from './LineForms';
 import { WalletBadge } from './People';
+
+function usePhoto() {
+  const [blob, setBlob] = useState<Blob | null>(null);
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!blob) return setUrl(null);
+    const u = URL.createObjectURL(blob);
+    setUrl(u);
+    return () => URL.revokeObjectURL(u);
+  }, [blob]);
+  return { blob, url, setBlob };
+}
 
 function AmountField({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
   return (
@@ -72,6 +86,7 @@ export function CollectScreen() {
   const [picker, setPicker] = useState(false);
   const [dupOk, setDupOk] = useState(false);
   const [busy, setBusy] = useState(false);
+  const photo = usePhoto();
   const today = todayISO();
 
   const customer = customerId ? data.customersById.get(customerId) : undefined;
@@ -90,9 +105,15 @@ export function CollectScreen() {
     const destination: PayDestination = method === 'company' ? { kind: 'company', bank } : { kind: 'wallet', wallet: method };
     setBusy(true);
     try {
-      await saveCollection(db, { customerId, amount: amt, destination, ref: method === 'cash' ? undefined : ref, invoiceOpId: invoiceOpId || undefined }, today);
-      toast(method === 'company' ? 'تم التحصيل وسُجّل كسداد للشركة مرة واحدة' : `تم التحصيل وأُضيف إلى ${WALLET_LABEL[method]}`);
-      nav(-1);
+      const op = await saveCollection(db, { customerId, amount: amt, destination, ref: method === 'cash' ? undefined : ref, invoiceOpId: invoiceOpId || undefined }, today);
+      if (photo.blob && method !== 'cash') await addAttachment(db, op.id, photo.blob);
+      if (method === 'company') {
+        toast('تم التحصيل وسُجّل كسداد للشركة — شارك الإشعار الآن');
+        nav('/notices?f=recorded', { replace: true });
+      } else {
+        toast(`تم التحصيل وأُضيف إلى ${WALLET_LABEL[method]}`);
+        nav(-1);
+      }
     } catch (e) {
       toast(e instanceof DomainError ? e.errors.join('\n') : 'تعذّر الحفظ', true);
     } finally {
@@ -155,6 +176,8 @@ export function CollectScreen() {
             <input className="inp num" dir="ltr" style={{ textAlign: 'right' }} placeholder="FT26298…" value={ref} onChange={(e) => { setRef(e.target.value); setDupOk(false); }} />
           </label>
         )}
+
+        {method !== 'cash' && <PhotoPicker preview={photo.url} onPick={photo.setBlob} label="إرفاق صورة إثبات التحويل (اختياري)" />}
 
         {openInvoices.length > 0 && (
           <>
@@ -266,6 +289,7 @@ export function PayScreen() {
   const [ref, setRef] = useState('');
   const [dupOk, setDupOk] = useState(false);
   const [busy, setBusy] = useState(false);
+  const photo = usePhoto();
   const today = todayISO();
   const amt = parseBirr(amount) ?? 0;
   const bal = (w: WalletKey) => data.balances.get(walletAccount(w)) ?? 0;
@@ -275,9 +299,10 @@ export function PayScreen() {
     if (dups.length && !force) return toast('راجع تنبيه الحوالة المشابهة أولًا', true);
     setBusy(true);
     try {
-      await saveCompanyPayment(db, { source, bank, amount: amt, ref }, today);
-      toast(`سُجّل السداد · انخفض دينك ${fmtMoney(amt)} بر — بانتظار تأكيد الشركة`);
-      nav('/company', { replace: true });
+      const op = await saveCompanyPayment(db, { source, bank, amount: amt, ref }, today);
+      if (photo.blob) await addAttachment(db, op.id, photo.blob);
+      toast(`سُجّل السداد · انخفض دينك ${fmtMoney(amt)} بر — شارك الإشعار الآن`);
+      nav('/notices?f=recorded', { replace: true });
     } catch (e) {
       toast(e instanceof DomainError ? e.errors.join('\n') : 'تعذّر الحفظ', true);
     } finally {
@@ -311,9 +336,10 @@ export function PayScreen() {
             <input className="inp num" dir="ltr" style={{ textAlign: 'right' }} placeholder="FT26298…" value={ref} onChange={(e) => { setRef(e.target.value); setDupOk(false); }} />
           </label>
         </div>
+        <PhotoPicker preview={photo.url} onPick={photo.setBlob} />
         {dups.length > 0 && <DuplicateWarning items={dups} onForce={() => { setDupOk(true); void save(true); }} />}
         <div className="sub" style={{ padding: '0 4px', fontSize: 12.5 }}>
-          يمكنك سداد عدة تحصيلات بحوالة واحدة — لا يلزم تحديد العملاء. إرفاق صورة الإشعار ومتابعة واتساب في المرحلة 3.
+          يمكنك سداد عدة تحصيلات بحوالة واحدة — لا يلزم تحديد العملاء.
         </div>
       </div>
       <div className="foot">

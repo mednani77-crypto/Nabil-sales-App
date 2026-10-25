@@ -123,7 +123,17 @@ export interface CompanyPaymentOp extends OpBase {
   ref?: string;
 }
 
-export type Operation = ReceiveOp | SaleOp | OpeningOp | CollectionOp | TransferOp | CompanyPaymentOp;
+/** Tracking state of a bank-transfer notice (the transfer itself is another operation).
+ *  recorded → sent to the WhatsApp group → confirmed by the company. Latest status wins. */
+export type NoticeStatus = 'recorded' | 'sent' | 'confirmed';
+
+export interface NoticeStatusOp extends OpBase {
+  type: 'noticeStatus';
+  targetOpId: string;
+  status: NoticeStatus;
+}
+
+export type Operation = ReceiveOp | SaleOp | OpeningOp | CollectionOp | TransferOp | CompanyPaymentOp | NoticeStatusOp;
 export type OperationType = Operation['type'];
 
 export interface Posting {

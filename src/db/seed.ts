@@ -1,5 +1,5 @@
 import type { AppDB } from './db';
-import { addCustomer, addItem, resetAll, saveCollection, saveCompanyPayment, saveOpening, saveReceive, saveSale, saveTransfer } from './repo';
+import { addCustomer, addItem, resetAll, saveCollection, saveCompanyPayment, saveNoticeStatus, saveOpening, saveReceive, saveSale, saveTransfer } from './repo';
 import { addDaysISO, todayISO } from '../lib/dates';
 
 const b = (birr: number) => birr * 100;
@@ -82,8 +82,11 @@ export async function loadDemo(db: AppDB) {
   ] }, today);
 
   // Money movements (phase 2)
-  await saveCollection(db, { customerId: noor.id, amount: b(20000), destination: { kind: 'company', bank: 'cbe' }, ref: 'FT26288L2MPA' }, d(-10));
+  const noorDirect = await saveCollection(db, { customerId: noor.id, amount: b(20000), destination: { kind: 'company', bank: 'cbe' }, ref: 'FT26288L2MPA' }, d(-10));
+  await saveNoticeStatus(db, noorDirect.id, 'sent');
+  await saveNoticeStatus(db, noorDirect.id, 'confirmed');
   await saveCollection(db, { customerId: abubakr.id, amount: b(5000), destination: { kind: 'wallet', wallet: 'cash' } }, d(-1));
   await saveTransfer(db, { from: 'cash', to: 'cbe', amount: b(15000) }, d(-1));
-  await saveCompanyPayment(db, { source: 'cbe', bank: 'cbe', amount: b(20000), ref: 'FT26297R3HTB' }, d(-1));
+  const pay = await saveCompanyPayment(db, { source: 'cbe', bank: 'cbe', amount: b(20000), ref: 'FT26297R3HTB' }, d(-1));
+  await saveNoticeStatus(db, pay.id, 'sent');
 }

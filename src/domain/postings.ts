@@ -67,6 +67,10 @@ export function postingsOf(op: Operation): Posting[] {
       cr(walletAccount(op.source), op.amount);
       cr('company', op.amount, { unconfirmed: true });
       break;
+
+    case 'noticeStatus':
+      // Tracking only — never moves money. Confirmation is applied in balances.allPostings().
+      break;
   }
   return out;
 }
@@ -83,6 +87,7 @@ export function stockMovesOf(op: Operation): StockMove[] {
     case 'collection':
     case 'transfer':
     case 'companyPayment':
+    case 'noticeStatus':
       return [];
   }
 }

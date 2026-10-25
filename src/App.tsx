@@ -8,12 +8,17 @@ import { InvoiceDetailScreen, InvoicesScreen } from './screens/Invoices';
 import { CompanyScreen, CustomerScreen, CustomersScreen, MoneyScreen } from './screens/People';
 import { CollectScreen, PayScreen, TransferScreen } from './screens/MoneyForms';
 import { SettingsScreen } from './screens/Settings';
+import { NoticesScreen } from './screens/Notices';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db } from './db/db';
+import { noticeCounts } from './domain/notices';
 
 const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay'];
 
 function Shell() {
   const { pathname, search } = useLocation();
   const showNav = !FORM_ROUTES.includes(pathname) && !search.includes('done=1');
+  const unsent = useLiveQuery(async () => noticeCounts(await db.operations.toArray()).recorded, []) ?? 0;
   return (
     <div className="app">
       <main className="main">
@@ -32,6 +37,7 @@ function Shell() {
           <Route path="/collect" element={<CollectScreen />} />
           <Route path="/transfer" element={<TransferScreen />} />
           <Route path="/pay" element={<PayScreen />} />
+          <Route path="/notices" element={<NoticesScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<HomeScreen />} />
         </Routes>
@@ -56,9 +62,12 @@ function Shell() {
             <Icon name="users" />
             العملاء
           </NavLink>
-          <NavLink to="/money">
+          <NavLink to="/money" style={{ position: 'relative' }}>
             <Icon name="wallet" />
             المال
+            {unsent > 0 && (
+              <span className="num" aria-label={`${unsent} إشعار لم يُرسل`} style={{ position: 'absolute', top: 2, left: '50%', marginLeft: -24, minWidth: 18, height: 18, borderRadius: 9, background: '#c0362c', color: '#fff', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 4px' }}>{unsent}</span>
+            )}
           </NavLink>
         </nav>
       )}
