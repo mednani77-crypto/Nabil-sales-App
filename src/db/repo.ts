@@ -1,5 +1,6 @@
 import type { AppDB } from './db';
-import { stockByItem } from '../domain/balances';
+import { balances, stockByItem } from '../domain/balances';
+import { buildCollection, buildCompanyPayment, buildTransfer, type CollectionDraft } from '../domain/moneyOps';
 import {
   buildOpening,
   buildReceive,
@@ -10,7 +11,19 @@ import {
   type SaleDraft,
 } from '../domain/operations';
 import { normaliseUnits } from '../domain/units';
-import type { Customer, Item, OpLine, ReceiveOp, SaleOp, Unit } from '../domain/types';
+import type {
+  CollectionOp,
+  CompanyBank,
+  CompanyPaymentOp,
+  Customer,
+  Item,
+  OpLine,
+  ReceiveOp,
+  SaleOp,
+  TransferOp,
+  Unit,
+  WalletKey,
+} from '../domain/types';
 import { newId } from '../lib/dates';
 
 export class DomainError extends Error {
@@ -174,5 +187,36 @@ export async function resetAll(db: AppDB) {
     const device = await db.meta.get('device');
     await db.meta.clear();
     if (device) await db.meta.put(device);
+  });
+}
+
+/* ---------- Phase 2: money ---------- */
+
+export async function saveCollection(db: AppDB, draft: CollectionDraft, date: string): Promise<CollectionOp> {
+  const device = await getDevice(db);
+  const op = unwrap(buildCollection(draft, { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+  await db.operations.add(op);
+  return op;
+}
+
+export async function saveTransfer(db: AppDB, d: { from: WalletKey; to: WalletKey; amount: number }, date: string): Promise<TransferOp> {
+  const device = await getDevice(db);
+  return db.transaction('rw', db.operations, async () => {
+    const op = unwrap(buildTransfer(d, balances(await db.operations.toArray()), { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+    await db.operations.add(op);
+    return op;
+  });
+}
+
+export async function saveCompanyPayment(
+  db: AppDB,
+  d: { source: WalletKey; bank: CompanyBank; amount: number; ref?: string },
+  date: string,
+): Promise<CompanyPaymentOp> {
+  const device = await getDevice(db);
+  return db.transaction('rw', db.operations, async () => {
+    const op = unwrap(buildCompanyPayment(d, balances(await db.operations.toArray()), { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+    await db.operations.add(op);
+    return op;
   });
 }

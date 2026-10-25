@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useData } from '../hooks/useData';
 import { salesOn } from '../domain/balances';
+import { customerActivity } from '../domain/moneyOps';
 import { fmtMoney } from '../domain/money';
 import { linesTotal } from '../domain/postings';
 import { stockValue } from '../domain/units';
@@ -34,7 +35,9 @@ export function HomeScreen() {
   const temps = data.customers.filter((c) => c.temp && (data.balances.get(customerAccount(c.id)) ?? 0) > 0);
   const alerts: { n: number; title: string; sub: string; to: string; tone: string }[] = [];
   if (data.company.unconfirmed > 0)
-    alerts.push({ n: 1, title: 'سدادات بانتظار تأكيد الشركة', sub: `${fmtMoney(data.company.unconfirmed)} بر غير مؤكد بعد`, to: '/money', tone: 'blue' });
+    alerts.push({ n: 1, title: 'سدادات بانتظار تأكيد الشركة', sub: `${fmtMoney(data.company.unconfirmed)} بر غير مؤكد بعد`, to: '/company', tone: 'blue' });
+  const late = data.customers.filter((c) => customerActivity(data.ops, c.id, today).late);
+  if (late.length) alerts.push({ n: late.length, title: 'عملاء متأخرون في السداد', sub: late.map((c) => c.name).join('، '), to: '/customers?f=late', tone: 'red' });
   if (low.length) alerts.push({ n: low.length, title: 'مخزون منخفض في الشاحنة', sub: low.map((i) => i.name).join('، '), to: '/truck', tone: 'grey' });
   if (temps.length) alerts.push({ n: temps.length, title: 'ديون مؤقتة بلا اسم', sub: 'سمِّ أصحابها حتى لا تختلط الديون', to: '/customers?f=temp', tone: 'amber' });
 
@@ -58,7 +61,7 @@ export function HomeScreen() {
         </Link>
       </div>
 
-      <Link to="/money" className="hero">
+      <Link to="/company" className="hero">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span className="muted">مديونيتي لشركة SYSCO</span>
           <span className="pill" style={{ background: 'rgba(244,161,0,.18)', color: '#f7c65c' }}>حساب جارٍ</span>
@@ -132,11 +135,11 @@ export function HomeScreen() {
       <div className="sec">اختصارات</div>
       <div className="grid3">
         <QA to="/receive" icon="truck" label="استلام بضاعة" bg="var(--blue-soft)" fg="var(--blue)" />
-        <QA to="/sale" icon="receipt" label="بيع جديد" bg="var(--amber-soft)" fg="var(--amber-ink)" />
-        <QA to="/customers" icon="users" label="العملاء" bg="var(--teal-soft)" fg="var(--teal-ink)" />
-        <QA icon="down" label="تحصيل" bg="var(--teal-soft)" fg="var(--teal-ink)" soon />
-        <QA icon="up" label="سداد للشركة" bg="var(--amber-soft)" fg="var(--amber-ink)" soon />
-        <QA icon="count" label="جرد الشاحنة" bg="var(--ground)" fg="#33414f" soon />
+        <QA to="/collect" icon="down" label="تحصيل" bg="var(--teal-soft)" fg="var(--teal-ink)" />
+        <QA to="/pay" icon="up" label="سداد للشركة" bg="var(--amber-soft)" fg="var(--amber-ink)" />
+        <QA to="/transfer" icon="swap" label="تحويل" bg="var(--ground)" fg="#33414f" />
+        <QA to="/invoices" icon="receipt" label="الفواتير" bg="var(--amber-soft)" fg="var(--amber-ink)" />
+        <QA icon="count" label="جرد الشاحنة" bg="var(--ground)" fg="#33414f" soon="المرحلة 4" />
       </div>
 
       <div className="card pad" style={{ gap: 12 }}>
@@ -183,12 +186,12 @@ export function HomeScreen() {
   );
 }
 
-function QA({ to, icon, label, bg, fg, soon }: { to?: string; icon: IconName; label: string; bg: string; fg: string; soon?: boolean }) {
+function QA({ to, icon, label, bg, fg, soon }: { to?: string; icon: IconName; label: string; bg: string; fg: string; soon?: string }) {
   const inner = (
     <>
       <span className="b" style={{ background: bg, color: fg }}><Icon name={icon} /></span>
       {label}
-      {soon && <span style={{ fontSize: 10.5, color: 'var(--ink2)', fontWeight: 500 }}>المرحلة 2</span>}
+      {soon && <span style={{ fontSize: 10.5, color: 'var(--ink2)', fontWeight: 500 }}>{soon}</span>}
     </>
   );
   return to ? <Link to={to} className="qa">{inner}</Link> : <div className="qa soon" aria-disabled="true">{inner}</div>;

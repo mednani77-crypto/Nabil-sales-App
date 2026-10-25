@@ -94,7 +94,36 @@ export interface OpeningOp extends OpBase {
   stock: { itemId: string; qty: number }[];
 }
 
-export type Operation = ReceiveOp | SaleOp | OpeningOp;
+/** Money received from a customer. Into a wallet, or straight into a company bank account
+ *  (then it ALSO counts as a payment to the company — one operation, never two). */
+export interface CollectionOp extends OpBase {
+  type: 'collection';
+  customerId: string;
+  amount: Santim;
+  destination: PayDestination;
+  ref?: string;
+  /** Optional link to a specific invoice (operation id). By default it reduces the total balance. */
+  invoiceOpId?: string;
+}
+
+/** Move work money between Nabil's own wallets. Never touches the company account. */
+export interface TransferOp extends OpBase {
+  type: 'transfer';
+  from: WalletKey;
+  to: WalletKey;
+  amount: Santim;
+}
+
+/** Nabil pays the company from one of his work-money wallets. */
+export interface CompanyPaymentOp extends OpBase {
+  type: 'companyPayment';
+  source: WalletKey;
+  bank: CompanyBank;
+  amount: Santim;
+  ref?: string;
+}
+
+export type Operation = ReceiveOp | SaleOp | OpeningOp | CollectionOp | TransferOp | CompanyPaymentOp;
 export type OperationType = Operation['type'];
 
 export interface Posting {

@@ -44,7 +44,7 @@ describe('repository', () => {
     const ops = await db.operations.toArray();
     expect(ops.length).toBeGreaterThan(5);
     const company = companySummary(ops);
-    expect(company.unconfirmed).toBe(b(2900));
+    expect(company.unconfirmed).toBe(b(42900));
     for (const [, qty] of stockByItem(ops)) expect(qty).toBeGreaterThanOrEqual(0);
     expect((await db.customers.toArray()).some((c) => c.temp)).toBe(true);
     // Demo is consistent: what Nabil holds covers the company debt up to small price differences.

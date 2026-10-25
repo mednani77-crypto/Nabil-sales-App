@@ -56,9 +56,9 @@ Stock is tracked separately as `StockMove { itemId, qty (base units, signed) }`.
 |---|---|---|
 | `receive` (goods from company) | + lines | company Dr total |
 | `sale` | − lines | customer Dr total (if customer). Paid part: if destination is a wallet → wallet Dr paid, customer Cr paid. If destination is a company bank → company Cr paid (unconfirmed) and customer Cr paid, plus a notice |
-| `collection` (phase 2) | — | customer Cr amount; wallet Dr amount, OR company Cr amount (unconfirmed) + notice |
-| `transfer` (phase 2) | — | wallet A Cr, wallet B Dr |
-| `companyPayment` (phase 2) | — | wallet Cr amount, company Cr amount (unconfirmed) + notice |
+| `collection` | — | customer Cr amount; wallet Dr amount, OR company Cr amount (unconfirmed) + notice |
+| `transfer` | — | wallet A Cr, wallet B Dr |
+| `companyPayment` | — | wallet Cr amount, company Cr amount (unconfirmed) + notice |
 | `noticeStatus` (phase 3) | — | none; moves notice `recorded → sent → confirmed` |
 | `customerReturn` (phase 4) | + if good, 0 if damaged | customer Cr value; if refunded in cash also customer Dr value + wallet:cash Cr value |
 | `companyReturn` (phase 4) | − lines | none until accepted |
@@ -120,8 +120,8 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 | # | Scope | Status |
 |---|---|---|
 | 1 | App shell, PWA, local DB, items & units, truck stock, receive goods, sale invoice (cash/credit/partial, temp debt, payment destination), invoices list/detail, customers list/create, home dashboard, demo data | **done** |
-| 2 | Customer detail & ledger, collections (4 methods), wallets & transfers, company account & payments | next |
-| 3 | Bank notices: photo, WhatsApp share, sent/confirmed states, duplicate detection | |
+| 2 | Customer detail & ledger, late customers, collections (4 methods, optional invoice link), wallets & transfers, company account & payments, duplicate-transfer warning | **done** |
+| 3 | Bank notices: photo, WhatsApp share, sent/confirmed states | next |
 | 4 | Returns (customer & company), stock count, opening balances wizard, void | |
 | 5 | Supabase auth, sync, multi-device, backup/restore | |
 | 6 | Statements PDF in 5 languages, reports, Excel export | |
