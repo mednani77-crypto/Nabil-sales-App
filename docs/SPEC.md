@@ -87,7 +87,8 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 
 ## 6. Data storage
 
-- **On device:** IndexedDB via Dexie (`src/db/`). Tables: `operations`, `items`, `customers`, `meta`.
+- **On device:** IndexedDB via Dexie (`src/db/`). Tables: `operations`, `items`, `customers`, `meta`, `attachments` (photos linked to an operation; a newer photo replaces the shown one, older ones are kept).
+- Creation timestamps are strictly increasing per device (`stamp()`), so fast successive status changes keep their order.
 - **Cloud (phase 5):** Supabase (Postgres + Auth + Storage for notice images).
 - **Master data** (items, customers) are small mutable records with `updatedAt`; on sync, last write
   wins per record. **Operations** are append-only and merge by union on id — two devices can never
@@ -121,8 +122,8 @@ always includes unconfirmed payments; the UI shows "of which unconfirmed: X".
 |---|---|---|
 | 1 | App shell, PWA, local DB, items & units, truck stock, receive goods, sale invoice (cash/credit/partial, temp debt, payment destination), invoices list/detail, customers list/create, home dashboard, demo data | **done** |
 | 2 | Customer detail & ledger, late customers, collections (4 methods, optional invoice link), wallets & transfers, company account & payments, duplicate-transfer warning | **done** |
-| 3 | Bank notices: photo, WhatsApp share, sent/confirmed states | next |
-| 4 | Returns (customer & company), stock count, opening balances wizard, void | |
+| 3 | Bank notices: photo (compressed, stored as attachment), WhatsApp share sheet, recorded → sent → confirmed via append-only `noticeStatus` ops, counts and alerts | **done** |
+| 4 | Returns (customer & company), stock count, opening balances wizard, void | next |
 | 5 | Supabase auth, sync, multi-device, backup/restore | |
 | 6 | Statements PDF in 5 languages, reports, Excel export | |
 | 7 | Two-week parallel run with Nabil's paper notebook | |

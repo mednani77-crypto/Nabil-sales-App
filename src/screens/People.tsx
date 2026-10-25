@@ -5,6 +5,7 @@ import { DomainError, renameCustomer } from '../db/repo';
 import { useData } from '../hooks/useData';
 import { allPostings, ledger } from '../domain/balances';
 import { customerActivity } from '../domain/moneyOps';
+import { noticeCounts } from '../domain/notices';
 import { fmtMoney } from '../domain/money';
 import { customerAccount, walletAccount, WALLETS, type AccountKey, type WalletKey } from '../domain/types';
 import { fmtDate, fmtDay, todayISO } from '../lib/dates';
@@ -209,6 +210,7 @@ export function MoneyScreen() {
   const data = useData();
   const [wf, setWf] = useState<'all' | WalletKey>('all');
   const total = WALLETS.reduce((t, w) => t + (data.balances.get(walletAccount(w)) ?? 0), 0);
+  const nc = noticeCounts(data.ops);
   const byId = new Map(data.ops.map((o) => [o.id, o]));
   const moves = allPostings(data.ops)
     .filter((p) => p.account.startsWith('wallet:') && (wf === 'all' || p.account === walletAccount(wf)))
@@ -246,6 +248,14 @@ export function MoneyScreen() {
           <span style={{ fontSize: 12, color: '#f7c65c' }}>غير مؤكد <span className="num">{fmtMoney(data.company.unconfirmed)}</span></span>
         </span>
         <Icon name="chevron" />
+      </Link>
+      <Link to="/notices" className="card" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px', color: 'var(--ink)', textDecoration: 'none' }}>
+        <span className="avatar" style={{ background: 'var(--teal-soft)', color: 'var(--teal-ink)' }}><Icon name="chat" /></span>
+        <span style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <span style={{ fontWeight: 600 }}>الإشعارات البنكية وواتساب</span>
+          <span className="sub num" style={{ fontSize: 12.5 }}>{nc.recorded} لم يُرسل · {nc.sent} بانتظار التأكيد · {nc.confirmed} مؤكد</span>
+        </span>
+        {nc.recorded > 0 && <span className="pill num" style={{ background: 'var(--amber)', color: 'var(--ink)', fontSize: 13 }}>{nc.recorded}</span>}
       </Link>
       <div className="sec">حركة المحافظ</div>
       <div className="hs">
@@ -296,7 +306,7 @@ export function CompanyScreen() {
           <Link className="btn btn-p" to="/pay">سداد جديد</Link>
           <Link className="btn btn-g" to="/receive">استلام بضاعة</Link>
         </div>
-        <div className="note blue">تأكيد احتساب الشركة للسدادات ومتابعة إرسال صور الإشعارات إلى واتساب: المرحلة 3.</div>
+        <Link className="btn btn-g" to="/notices"><Icon name="chat" small />الإشعارات: الإرسال إلى واتساب وتأكيد الشركة</Link>
         <div className="sec">الحساب الجاري</div>
         <LedgerTable data={data} account="company" showUnconfirmed />
       </div>

@@ -1,7 +1,7 @@
 import 'fake-indexeddb/auto';
 import { describe, expect, it } from 'vitest';
 import { AppDB } from './db';
-import { addCustomer, addItem, DomainError, saveReceive, saveSale } from './repo';
+import { addCustomer, addItem, DomainError, saveReceive, saveSale, stamp } from './repo';
 import { loadDemo } from './seed';
 import { balanceOf, balances, companySummary, stockByItem } from '../domain/balances';
 import { stockValue } from '../domain/units';
@@ -11,6 +11,11 @@ let n = 0;
 const freshDb = () => new AppDB(`test-${++n}`);
 
 describe('repository', () => {
+  it('creation stamps are strictly increasing even within one millisecond', () => {
+    const xs = Array.from({ length: 50 }, () => stamp());
+    for (let i = 1; i < xs.length; i++) expect(xs[i] > xs[i - 1]).toBe(true);
+  });
+
   it('saves receive and sale atomically and numbers documents', async () => {
     const db = freshDb();
     const oil = await addItem(db, { name: 'زيت', units: [{ name: 'كرتون', factor: 6, lastPrice: b(6300) }, { name: 'حبة', factor: 1, lastPrice: b(1080) }] });
@@ -44,7 +49,7 @@ describe('repository', () => {
     const ops = await db.operations.toArray();
     expect(ops.length).toBeGreaterThan(5);
     const company = companySummary(ops);
-    expect(company.unconfirmed).toBe(b(42900));
+    expect(company.unconfirmed).toBe(b(22900));
     for (const [, qty] of stockByItem(ops)) expect(qty).toBeGreaterThanOrEqual(0);
     expect((await db.customers.toArray()).some((c) => c.temp)).toBe(true);
     // Demo is consistent: what Nabil holds covers the company debt up to small price differences.

@@ -1,4 +1,5 @@
-import type { AppDB } from './db';
+import type { AppDB, Attachment } from './db';
+import { buildNoticeStatus } from '../domain/notices';
 import { balances, stockByItem } from '../domain/balances';
 import { buildCollection, buildCompanyPayment, buildTransfer, type CollectionDraft } from '../domain/moneyOps';
 import {
@@ -17,6 +18,7 @@ import type {
   CompanyPaymentOp,
   Customer,
   Item,
+  NoticeStatus,
   OpLine,
   ReceiveOp,
   SaleOp,
@@ -24,7 +26,18 @@ import type {
   Unit,
   WalletKey,
 } from '../domain/types';
-import { newId } from '../lib/dates';
+import { newId, todayISO } from '../lib/dates';
+
+/**
+ * Strictly increasing creation timestamps on this device, so two operations saved in the same
+ * millisecond (e.g. "sent" then "confirmed") keep their real order.
+ */
+let lastStamp = 0;
+export function stamp(): string {
+  const now = Date.now();
+  lastStamp = now > lastStamp ? now : lastStamp + 1;
+  return new Date(lastStamp).toISOString();
+}
 
 export class DomainError extends Error {
   constructor(public errors: string[]) {
@@ -80,7 +93,7 @@ export async function saveReceive(db: AppDB, lines: DraftLine[], date: string): 
   const device = await getDevice(db);
   return db.transaction('rw', db.operations, db.items, db.meta, async () => {
     const seq = await nextCounter(db, 'grn');
-    const now = new Date().toISOString();
+    const now = stamp();
     const op = unwrap(
       buildReceive(lines, await itemsMap(db), {
         id: newId(),
@@ -103,7 +116,7 @@ export async function saveSale(
 ): Promise<{ op: SaleOp; tempCustomer?: Customer }> {
   const device = await getDevice(db);
   return db.transaction('rw', [db.operations, db.items, db.customers, db.meta], async () => {
-    const now = new Date().toISOString();
+    const now = stamp();
     const items = await itemsMap(db);
     const stock = stockByItem(await db.operations.toArray());
     const seq = await nextCounter(db, 'invoice');
@@ -138,7 +151,7 @@ export async function saveSale(
 
 export async function saveOpening(db: AppDB, draft: OpeningDraft, date: string) {
   const device = await getDevice(db);
-  const op = unwrap(buildOpening(draft, { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+  const op = unwrap(buildOpening(draft, { id: newId(), date, createdAt: stamp(), deviceId: device.id }));
   await db.operations.add(op);
   return op;
 }
@@ -160,7 +173,7 @@ export async function addItem(db: AppDB, input: NewItemInput): Promise<Item> {
   }
   const dup = await db.items.filter((i) => i.name.trim() === name).first();
   if (dup) throw new DomainError([`الصنف «${name}» موجود مسبقًا`]);
-  const now = new Date().toISOString();
+  const now = stamp();
   const item: Item = { id: newId(), name, units, minStock: input.minStock ?? 0, createdAt: now, updatedAt: now };
   await db.items.add(item);
   return item;
@@ -169,7 +182,7 @@ export async function addItem(db: AppDB, input: NewItemInput): Promise<Item> {
 export async function addCustomer(db: AppDB, input: { name: string; phone?: string; area?: string }): Promise<Customer> {
   const name = input.name.trim();
   if (!name) throw new DomainError(['اكتب اسم العميل']);
-  const now = new Date().toISOString();
+  const now = stamp();
   const c: Customer = { id: newId(), name, phone: input.phone?.trim() || undefined, area: input.area?.trim() || undefined, createdAt: now, updatedAt: now };
   await db.customers.add(c);
   return c;
@@ -178,12 +191,12 @@ export async function addCustomer(db: AppDB, input: { name: string; phone?: stri
 export async function renameCustomer(db: AppDB, id: string, name: string) {
   const n = name.trim();
   if (!n) throw new DomainError(['اكتب الاسم']);
-  await db.customers.update(id, { name: n, temp: false, updatedAt: new Date().toISOString() });
+  await db.customers.update(id, { name: n, temp: false, updatedAt: stamp() });
 }
 
 export async function resetAll(db: AppDB) {
-  await db.transaction('rw', [db.operations, db.items, db.customers, db.meta], async () => {
-    await Promise.all([db.operations.clear(), db.items.clear(), db.customers.clear()]);
+  await db.transaction('rw', [db.operations, db.items, db.customers, db.meta, db.attachments], async () => {
+    await Promise.all([db.operations.clear(), db.items.clear(), db.customers.clear(), db.attachments.clear()]);
     const device = await db.meta.get('device');
     await db.meta.clear();
     if (device) await db.meta.put(device);
@@ -194,7 +207,7 @@ export async function resetAll(db: AppDB) {
 
 export async function saveCollection(db: AppDB, draft: CollectionDraft, date: string): Promise<CollectionOp> {
   const device = await getDevice(db);
-  const op = unwrap(buildCollection(draft, { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+  const op = unwrap(buildCollection(draft, { id: newId(), date, createdAt: stamp(), deviceId: device.id }));
   await db.operations.add(op);
   return op;
 }
@@ -202,7 +215,7 @@ export async function saveCollection(db: AppDB, draft: CollectionDraft, date: st
 export async function saveTransfer(db: AppDB, d: { from: WalletKey; to: WalletKey; amount: number }, date: string): Promise<TransferOp> {
   const device = await getDevice(db);
   return db.transaction('rw', db.operations, async () => {
-    const op = unwrap(buildTransfer(d, balances(await db.operations.toArray()), { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+    const op = unwrap(buildTransfer(d, balances(await db.operations.toArray()), { id: newId(), date, createdAt: stamp(), deviceId: device.id }));
     await db.operations.add(op);
     return op;
   });
@@ -215,8 +228,31 @@ export async function saveCompanyPayment(
 ): Promise<CompanyPaymentOp> {
   const device = await getDevice(db);
   return db.transaction('rw', db.operations, async () => {
-    const op = unwrap(buildCompanyPayment(d, balances(await db.operations.toArray()), { id: newId(), date, createdAt: new Date().toISOString(), deviceId: device.id }));
+    const op = unwrap(buildCompanyPayment(d, balances(await db.operations.toArray()), { id: newId(), date, createdAt: stamp(), deviceId: device.id }));
     await db.operations.add(op);
     return op;
   });
+}
+
+/* ---------- Phase 3: notices ---------- */
+
+export async function saveNoticeStatus(db: AppDB, targetOpId: string, status: NoticeStatus) {
+  const device = await getDevice(db);
+  return db.transaction('rw', db.operations, async () => {
+    const ops = await db.operations.toArray();
+    const op = unwrap(buildNoticeStatus(targetOpId, status, ops, { id: newId(), date: todayISO(), createdAt: stamp(), deviceId: device.id }));
+    await db.operations.add(op);
+    return op;
+  });
+}
+
+export async function addAttachment(db: AppDB, opId: string, blob: Blob) {
+  const a: Attachment = { id: newId(), opId, blob, mime: blob.type || 'image/jpeg', createdAt: stamp() };
+  await db.attachments.add(a);
+  return a;
+}
+
+export async function latestAttachment(db: AppDB, opId: string): Promise<Attachment | undefined> {
+  const list = await db.attachments.where('opId').equals(opId).sortBy('createdAt');
+  return list[list.length - 1];
 }

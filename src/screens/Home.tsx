@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useData } from '../hooks/useData';
 import { salesOn } from '../domain/balances';
 import { customerActivity } from '../domain/moneyOps';
+import { noticeCounts } from '../domain/notices';
 import { fmtMoney } from '../domain/money';
 import { linesTotal } from '../domain/postings';
 import { stockValue } from '../domain/units';
@@ -34,8 +35,9 @@ export function HomeScreen() {
   const low = data.items.filter((it) => it.minStock > 0 && (data.stock.get(it.id) ?? 0) < it.minStock);
   const temps = data.customers.filter((c) => c.temp && (data.balances.get(customerAccount(c.id)) ?? 0) > 0);
   const alerts: { n: number; title: string; sub: string; to: string; tone: string }[] = [];
-  if (data.company.unconfirmed > 0)
-    alerts.push({ n: 1, title: 'سدادات بانتظار تأكيد الشركة', sub: `${fmtMoney(data.company.unconfirmed)} بر غير مؤكد بعد`, to: '/company', tone: 'blue' });
+  const nc = noticeCounts(data.ops);
+  if (nc.recorded) alerts.push({ n: nc.recorded, title: 'إشعارات لم تُرسل إلى واتساب', sub: 'شاركها في مجموعة التحصيلات', to: '/notices?f=recorded', tone: 'amber' });
+  if (nc.sent) alerts.push({ n: nc.sent, title: 'سدادات بانتظار تأكيد الشركة', sub: `${fmtMoney(data.company.unconfirmed)} بر غير مؤكد بعد`, to: '/notices?f=sent', tone: 'blue' });
   const late = data.customers.filter((c) => customerActivity(data.ops, c.id, today).late);
   if (late.length) alerts.push({ n: late.length, title: 'عملاء متأخرون في السداد', sub: late.map((c) => c.name).join('، '), to: '/customers?f=late', tone: 'red' });
   if (low.length) alerts.push({ n: low.length, title: 'مخزون منخفض في الشاحنة', sub: low.map((i) => i.name).join('، '), to: '/truck', tone: 'grey' });

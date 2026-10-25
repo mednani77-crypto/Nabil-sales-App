@@ -6,11 +6,21 @@ export interface MetaRow {
   value: unknown;
 }
 
+/** A photo (e.g. bank-transfer notice) linked to an operation. Replacing = adding a newer one. */
+export interface Attachment {
+  id: string;
+  opId: string;
+  blob: Blob;
+  mime: string;
+  createdAt: string;
+}
+
 export class AppDB extends Dexie {
   operations!: Table<Operation, string>;
   items!: Table<Item, string>;
   customers!: Table<Customer, string>;
   meta!: Table<MetaRow, string>;
+  attachments!: Table<Attachment, string>;
 
   constructor(name = 'nabil-sales') {
     super(name);
@@ -20,6 +30,9 @@ export class AppDB extends Dexie {
       items: 'id, name',
       customers: 'id, name',
       meta: 'key',
+    });
+    this.version(2).stores({
+      attachments: 'id, opId, createdAt',
     });
   }
 }
