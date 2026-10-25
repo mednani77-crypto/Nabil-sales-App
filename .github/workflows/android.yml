@@ -1,8 +1,8 @@
 # Builds an installable Android APK (the same web app wrapped with Capacitor, works offline)
 # and publishes it as a GitHub Release that can be downloaded straight to the phone.
 #
-# Signing: if the repo has the secrets ANDROID_KEYSTORE_B64 / ANDROID_KEYSTORE_PASSWORD /
-# ANDROID_KEY_ALIAS / ANDROID_KEY_PASSWORD, a release APK signed with that fixed key is built,
+# Signing: if the repo has the secrets ANDROID_KEYSTORE_B64 (the keystore as base64) and
+# ANDROID_SIGNING_PASSWORD (key alias: nabil), a release APK signed with that fixed key is built,
 # so each new version installs over the old one and keeps the phone's data.
 # Without them, a debug APK is built (fine for testing; updating it may require uninstalling first).
 name: Android APK
@@ -44,9 +44,9 @@ jobs:
       - name: Build APK
         working-directory: android
         env:
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
+          ANDROID_KEY_ALIAS: nabil
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_SIGNING_PASSWORD }}
         run: |
           chmod +x gradlew
           echo "ANDROID_HOME=$ANDROID_HOME  SDK_ROOT=$ANDROID_SDK_ROOT"
