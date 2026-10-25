@@ -106,7 +106,7 @@ export function LedgerTable({ data, account, showUnconfirmed }: { data: AppData;
     <div className="card list">
       <div className="ledger-head"><span>البيان</span><span className="n">مدين</span><span className="n">دائن</span><span className="n">الرصيد</span></div>
       {[...l.rows].reverse().map((r, i) => (
-        <div key={i} className="ledger-row">
+        <Link key={i} to={`/op/${r.posting.opId}`} className="ledger-row" style={{ color: 'var(--ink)', textDecoration: 'none' }}>
           <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
             <span>{describePosting(r.posting, byId.get(r.posting.opId), data.customersById)}</span>
             <span style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
@@ -117,7 +117,7 @@ export function LedgerTable({ data, account, showUnconfirmed }: { data: AppData;
           <span className="num n" style={{ color: 'var(--red)' }}>{r.posting.debit ? fmtMoney(r.posting.debit) : ''}</span>
           <span className="num n" style={{ color: 'var(--teal-ink)' }}>{r.posting.credit ? fmtMoney(r.posting.credit) : ''}</span>
           <b className="num n">{r.balance < 0 ? `(${fmtMoney(-r.balance)})` : fmtMoney(r.balance)}</b>
-        </div>
+        </Link>
       ))}
       {l.rows.length === 0 && <div style={{ padding: 20, textAlign: 'center' }} className="sub">لا توجد حركات بعد</div>}
     </div>
@@ -177,12 +177,15 @@ export function CustomerScreen() {
             <span>آخر تحصيل {a.lastPayment ? fmtDay(a.lastPayment) : '—'}</span>
           </span>
         </div>
-        <div className="grid3" style={{ gap: 8 }}>
+        <div className="grid2" style={{ gridTemplateColumns: 'repeat(4,minmax(0,1fr))', gap: 8 }}>
           <Link className="qa" to={`/sale?customer=${c.id}`} style={{ minHeight: 84 }}>
             <span className="b" style={{ background: 'var(--amber-soft)', color: 'var(--amber-ink)' }}><Icon name="receipt" /></span>بيع
           </Link>
           <Link className="qa" to={`/collect?customer=${c.id}`} style={{ minHeight: 84 }}>
             <span className="b" style={{ background: 'var(--teal-soft)', color: 'var(--teal-ink)' }}><Icon name="down" /></span>تحصيل
+          </Link>
+          <Link className="qa" to={`/returns?customer=${c.id}`} style={{ minHeight: 84 }}>
+            <span className="b" style={{ background: 'var(--red-soft)', color: 'var(--red)' }}><Icon name="ret" /></span>مرتجع
           </Link>
           <div className="qa soon" style={{ minHeight: 84 }} aria-disabled="true">
             <span className="b" style={{ background: 'var(--blue-soft)', color: 'var(--blue)' }}><Icon name="file" /></span>كشف حساب
@@ -267,13 +270,13 @@ export function MoneyScreen() {
         {moves.map((p, i) => {
           const amt = p.debit - p.credit;
           return (
-            <div key={p.opId + i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '1px solid #eef1f5' }}>
+            <Link key={p.opId + i} to={`/op/${p.opId}`} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderBottom: '1px solid #eef1f5', color: 'var(--ink)', textDecoration: 'none' }}>
               <span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontSize: 14 }}>{describePosting(p, byId.get(p.opId), data.customersById)}</span>
                 <span className="num sub" style={{ fontSize: 12 }}>{fmtDay(p.date)} · {WALLET_SHORT[p.account.slice(7) as WalletKey]}</span>
               </span>
               <b className="num" style={{ color: amt > 0 ? 'var(--teal-ink)' : 'var(--red)' }}>{amt > 0 ? '+' : '−'}{fmtMoney(Math.abs(amt))}</b>
-            </div>
+            </Link>
           );
         })}
         {moves.length === 0 && <div style={{ padding: 20, textAlign: 'center' }} className="sub">لا توجد حركات بعد</div>}

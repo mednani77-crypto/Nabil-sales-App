@@ -1,5 +1,5 @@
 import type { AppDB } from './db';
-import { addCustomer, addItem, resetAll, saveCollection, saveCompanyPayment, saveNoticeStatus, saveOpening, saveReceive, saveSale, saveTransfer } from './repo';
+import { addCustomer, addItem, resetAll, saveCollection, saveCompanyPayment, saveCompanyReturn, saveCompanyReturnDecision, saveCustomerReturn, saveNoticeStatus, saveOpening, saveReceive, saveSale, saveTransfer } from './repo';
 import { addDaysISO, todayISO } from '../lib/dates';
 
 const b = (birr: number) => birr * 100;
@@ -89,4 +89,10 @@ export async function loadDemo(db: AppDB) {
   await saveTransfer(db, { from: 'cash', to: 'cbe', amount: b(15000) }, d(-1));
   const pay = await saveCompanyPayment(db, { source: 'cbe', bank: 'cbe', amount: b(20000), ref: 'FT26297R3HTB' }, d(-1));
   await saveNoticeStatus(db, pay.id, 'sent');
+
+  // Returns (phase 4) — dated today by the repository
+  const rc1 = await saveCompanyReturn(db, { lines: [{ itemId: paste.id, unitName: 'كرتون', qty: 2, unitPrice: b(2160) }], reason: 'تالف' });
+  await saveCompanyReturnDecision(db, rc1.id, 'accepted');
+  await saveCompanyReturn(db, { lines: [{ itemId: soap.id, unitName: 'حبة', qty: 4, unitPrice: b(250) }], reason: 'تالف' });
+  await saveCustomerReturn(db, { customerId: abubakr.id, lines: [{ itemId: oil.id, unitName: 'حبة', qty: 1, unitPrice: b(1050) }], condition: 'good', settle: 'balance' });
 }

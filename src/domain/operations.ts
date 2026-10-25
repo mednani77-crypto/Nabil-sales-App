@@ -31,7 +31,7 @@ export interface OpContext {
   deviceId: string;
 }
 
-function snapshotLines(draft: DraftLine[], items: Map<string, Item>): Result<OpLine[]> {
+export function snapshotLines(draft: DraftLine[], items: Map<string, Item>): Result<OpLine[]> {
   const errors: string[] = [];
   if (draft.length === 0) errors.push('أضف صنفًا واحدًا على الأقل');
   const lines: OpLine[] = [];

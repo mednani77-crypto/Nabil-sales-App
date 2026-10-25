@@ -3,13 +3,15 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useData } from '../hooks/useData';
 import { fmtMoney } from '../domain/money';
 import { linesTotal } from '../domain/postings';
+import { voidedIds } from '../domain/balances';
 import type { PayMode, SaleOp } from '../domain/types';
 import { fmtDate, fmtDay, fmtTime } from '../lib/dates';
 import { destinationLabel, PAY_MODE_LABEL } from '../lib/labels';
 import { Icon } from '../ui/Icon';
 import { SearchField, TopBar, useToast } from '../ui/kit';
 
-export function invoiceStatus(s: SaleOp): { label: string; tone: string } {
+export function invoiceStatus(s: SaleOp, voided?: Set<string>): { label: string; tone: string } {
+  if (voided?.has(s.id)) return { label: 'ملغاة', tone: 'grey' };
   const rem = linesTotal(s.lines) - s.paid;
   if (rem <= 0) return { label: 'مدفوعة', tone: 'teal' };
   if (s.paid > 0) return { label: 'جزئي', tone: 'amber' };
@@ -25,7 +27,8 @@ export function InvoicesScreen() {
     .filter((o): o is SaleOp => o.type === 'sale')
     .filter((s) => (f === 'all' || s.payMode === f) && (!q.trim() || s.docNo.includes(q.trim()) || name(s).includes(q.trim())))
     .sort((a, b) => b.date.localeCompare(a.date) || b.createdAt.localeCompare(a.createdAt));
-  const sum = list.reduce((t, s) => t + linesTotal(s.lines), 0);
+  const voided = voidedIds(data.ops);
+  const sum = list.filter((s) => !voided.has(s.id)).reduce((t, s) => t + linesTotal(s.lines), 0);
 
   return (
     <div className="anim">
@@ -41,7 +44,7 @@ export function InvoicesScreen() {
         </div>
         <div className="card list">
           {list.map((s) => {
-            const st = invoiceStatus(s);
+            const st = invoiceStatus(s, voided);
             return (
               <Link key={s.id} to={`/invoices/${s.id}`} className="lrow">
                 <span className="avatar"><Icon name="receipt" small /></span>
@@ -74,7 +77,8 @@ export function InvoiceDetailScreen() {
   if (!s) return data.loading ? null : <div className="page"><TopBar title="فاتورة" /><p className="sub">الفاتورة غير موجودة</p></div>;
 
   const total = linesTotal(s.lines);
-  const st = invoiceStatus(s);
+  const voided = voidedIds(data.ops);
+  const st = invoiceStatus(s, voided);
   const cust = s.customerId ? data.customersById.get(s.customerId) : undefined;
 
   return (
@@ -126,6 +130,12 @@ export function InvoiceDetailScreen() {
             طباعة / PDF
           </button>
         </div>
+        {!done && (
+          <div className="grid2" style={{ gap: 8 }}>
+            <Link className="btn btn-g" to={`/returns?customer=${s.customerId ?? ''}&invoice=${s.id}`}><Icon name="ret" small />مرتجع منها</Link>
+            <Link className="btn btn-g" to={`/op/${s.id}`} style={{ color: voided.has(s.id) ? undefined : 'var(--red)' }}>{voided.has(s.id) ? 'الفاتورة ملغاة' : 'إلغاء الفاتورة'}</Link>
+          </div>
+        )}
         {done && (
           <>
             <button className="btn btn-p" style={{ minHeight: 56 }} onClick={() => nav('/sale', { replace: true })}>

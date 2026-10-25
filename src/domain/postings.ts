@@ -71,6 +71,36 @@ export function postingsOf(op: Operation): Posting[] {
     case 'noticeStatus':
       // Tracking only — never moves money. Confirmation is applied in balances.allPostings().
       break;
+
+    case 'customerReturn': {
+      const value = linesTotal(op.lines);
+      if (op.customerId) cr(customerAccount(op.customerId), value);
+      if (op.settle === 'cash') {
+        // Cash handed back: the customer's credit is used up immediately.
+        if (op.customerId) dr(customerAccount(op.customerId), value);
+        cr(walletAccount('cash'), value);
+      }
+      break;
+    }
+
+    case 'companyReturn':
+      // Nothing yet: the debt drops only when the company accepts the return.
+      break;
+
+    case 'companyReturnDecision':
+      if (op.decision === 'accepted') cr('company', linesTotal(op.lines));
+      break;
+
+    case 'stockCount':
+      // Stock only (spec): a count never creates a payment, a return or a debt change.
+      break;
+
+    case 'void':
+      // Exact mirror of the cancelled operation, dated on the day it was cancelled.
+      for (const p of postingsOf(op.target)) {
+        out.push({ ...base, account: p.account, debit: p.credit, credit: p.debit });
+      }
+      break;
   }
   return out;
 }
@@ -84,6 +114,18 @@ export function stockMovesOf(op: Operation): StockMove[] {
       return op.lines.map((l) => ({ ...base, itemId: l.itemId, qty: -l.qty * l.factor }));
     case 'opening':
       return op.stock.filter((s) => s.qty !== 0).map((s) => ({ ...base, itemId: s.itemId, qty: s.qty }));
+    case 'customerReturn':
+      return op.condition === 'good' ? op.lines.map((l) => ({ ...base, itemId: l.itemId, qty: l.qty * l.factor })) : [];
+    case 'companyReturn':
+      return op.lines.map((l) => ({ ...base, itemId: l.itemId, qty: -l.qty * l.factor }));
+    case 'companyReturnDecision':
+      return op.decision === 'rejected' ? op.lines.map((l) => ({ ...base, itemId: l.itemId, qty: l.qty * l.factor })) : [];
+    case 'stockCount':
+      return op.adjustments
+        .filter((a) => a.actual !== a.recorded)
+        .map((a) => ({ ...base, itemId: a.itemId, qty: a.actual - a.recorded }));
+    case 'void':
+      return stockMovesOf(op.target).map((m) => ({ ...base, itemId: m.itemId, qty: -m.qty }));
     case 'collection':
     case 'transfer':
     case 'companyPayment':

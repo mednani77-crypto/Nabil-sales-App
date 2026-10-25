@@ -5,6 +5,7 @@ import { addCustomer, addItem, DomainError, saveReceive, saveSale, stamp } from 
 import { loadDemo } from './seed';
 import { balanceOf, balances, companySummary, stockByItem } from '../domain/balances';
 import { stockValue } from '../domain/units';
+import { pendingCompanyReturnsValue } from '../domain/stockOps';
 
 const b = (birr: number) => birr * 100;
 let n = 0;
@@ -58,6 +59,7 @@ describe('repository', () => {
     let covered = 0;
     for (const it of items) covered += stockValue(it, stockByItem(ops).get(it.id) ?? 0);
     for (const [k, v] of bal) if (k !== 'company') covered += v;
+    covered += pendingCompanyReturnsValue(ops);
     expect(Math.abs(company.balance - covered)).toBeLessThan(b(1000));
   });
 });

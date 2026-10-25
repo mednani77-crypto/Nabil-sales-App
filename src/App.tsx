@@ -9,11 +9,12 @@ import { CompanyScreen, CustomerScreen, CustomersScreen, MoneyScreen } from './s
 import { CollectScreen, PayScreen, TransferScreen } from './screens/MoneyForms';
 import { SettingsScreen } from './screens/Settings';
 import { NoticesScreen } from './screens/Notices';
+import { CountScreen, OpeningScreen, OperationScreen, ReturnsScreen } from './screens/Stock';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db } from './db/db';
 import { noticeCounts } from './domain/notices';
 
-const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay'];
+const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay', '/returns', '/count', '/opening'];
 
 function Shell() {
   const { pathname, search } = useLocation();
@@ -38,6 +39,10 @@ function Shell() {
           <Route path="/transfer" element={<TransferScreen />} />
           <Route path="/pay" element={<PayScreen />} />
           <Route path="/notices" element={<NoticesScreen />} />
+          <Route path="/returns" element={<ReturnsScreen />} />
+          <Route path="/count" element={<CountScreen />} />
+          <Route path="/opening" element={<OpeningScreen />} />
+          <Route path="/op/:id" element={<OperationScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<HomeScreen />} />
         </Routes>

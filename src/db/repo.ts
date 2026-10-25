@@ -1,5 +1,6 @@
 import type { AppDB, Attachment } from './db';
 import { buildNoticeStatus } from '../domain/notices';
+import { buildCompanyReturn, buildCompanyReturnDecision, buildCustomerReturn, buildStockCount, buildVoid, type CustomerReturnDraft } from '../domain/stockOps';
 import { balances, stockByItem } from '../domain/balances';
 import { buildCollection, buildCompanyPayment, buildTransfer, type CollectionDraft } from '../domain/moneyOps';
 import {
@@ -64,8 +65,8 @@ export async function getDevice(db: AppDB): Promise<Device> {
   return device;
 }
 
-type CounterKind = 'invoice' | 'grn' | 'temp';
-const COUNTER_START: Record<CounterKind, number> = { invoice: 1000, grn: 0, temp: 0 };
+type CounterKind = 'invoice' | 'grn' | 'temp' | 'rc';
+const COUNTER_START: Record<CounterKind, number> = { invoice: 1000, grn: 0, temp: 0, rc: 0 };
 
 async function nextCounter(db: AppDB, kind: CounterKind): Promise<number> {
   const key = `counter:${kind}`;
@@ -255,4 +256,57 @@ export async function addAttachment(db: AppDB, opId: string, blob: Blob) {
 export async function latestAttachment(db: AppDB, opId: string): Promise<Attachment | undefined> {
   const list = await db.attachments.where('opId').equals(opId).sortBy('createdAt');
   return list[list.length - 1];
+}
+
+/* ---------- Phase 4: returns, stock count, void ---------- */
+
+async function ctxFor(db: AppDB) {
+  const device = await getDevice(db);
+  return { device, ctx: { id: newId(), date: todayISO(), createdAt: stamp(), deviceId: device.id } };
+}
+
+export async function saveCustomerReturn(db: AppDB, d: CustomerReturnDraft) {
+  const { ctx } = await ctxFor(db);
+  return db.transaction('rw', [db.operations, db.items], async () => {
+    const op = unwrap(buildCustomerReturn(d, await itemsMap(db), await db.operations.toArray(), ctx));
+    await db.operations.add(op);
+    return op;
+  });
+}
+
+export async function saveCompanyReturn(db: AppDB, d: { lines: DraftLine[]; reason: string }) {
+  const { device, ctx } = await ctxFor(db);
+  return db.transaction('rw', [db.operations, db.items, db.meta], async () => {
+    const seq = await nextCounter(db, 'rc');
+    const op = unwrap(buildCompanyReturn(d, await itemsMap(db), await db.operations.toArray(), { ...ctx, docNo: `RC-${device.code}${String(seq).padStart(4, '0')}` }));
+    await db.operations.add(op);
+    return op;
+  });
+}
+
+export async function saveCompanyReturnDecision(db: AppDB, targetOpId: string, decision: 'accepted' | 'rejected') {
+  const { ctx } = await ctxFor(db);
+  return db.transaction('rw', db.operations, async () => {
+    const op = unwrap(buildCompanyReturnDecision(targetOpId, decision, await db.operations.toArray(), ctx));
+    await db.operations.add(op);
+    return op;
+  });
+}
+
+export async function saveStockCount(db: AppDB, counts: { itemId: string; actual: number; reason?: string }[]) {
+  const { ctx } = await ctxFor(db);
+  return db.transaction('rw', [db.operations, db.items], async () => {
+    const op = unwrap(buildStockCount(counts, await itemsMap(db), await db.operations.toArray(), ctx));
+    await db.operations.add(op);
+    return op;
+  });
+}
+
+export async function saveVoid(db: AppDB, targetOpId: string, reason: string) {
+  const { ctx } = await ctxFor(db);
+  return db.transaction('rw', [db.operations, db.items], async () => {
+    const op = unwrap(buildVoid(targetOpId, reason, await db.operations.toArray(), await itemsMap(db), ctx));
+    await db.operations.add(op);
+    return op;
+  });
 }
