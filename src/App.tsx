@@ -5,10 +5,11 @@ import { HomeScreen } from './screens/Home';
 import { ItemScreen, TruckScreen } from './screens/Truck';
 import { ReceiveScreen, SaleScreen } from './screens/LineForms';
 import { InvoiceDetailScreen, InvoicesScreen } from './screens/Invoices';
-import { CustomerScreen, CustomersScreen, MoneyScreen } from './screens/People';
+import { CompanyScreen, CustomerScreen, CustomersScreen, MoneyScreen } from './screens/People';
+import { CollectScreen, PayScreen, TransferScreen } from './screens/MoneyForms';
 import { SettingsScreen } from './screens/Settings';
 
-const FORM_ROUTES = ['/sale', '/receive'];
+const FORM_ROUTES = ['/sale', '/receive', '/collect', '/transfer', '/pay'];
 
 function Shell() {
   const { pathname, search } = useLocation();
@@ -27,6 +28,10 @@ function Shell() {
           <Route path="/customers" element={<CustomersScreen />} />
           <Route path="/customers/:id" element={<CustomerScreen />} />
           <Route path="/money" element={<MoneyScreen />} />
+          <Route path="/company" element={<CompanyScreen />} />
+          <Route path="/collect" element={<CollectScreen />} />
+          <Route path="/transfer" element={<TransferScreen />} />
+          <Route path="/pay" element={<PayScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<HomeScreen />} />
         </Routes>

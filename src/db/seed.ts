@@ -1,5 +1,5 @@
 import type { AppDB } from './db';
-import { addCustomer, addItem, resetAll, saveOpening, saveReceive, saveSale } from './repo';
+import { addCustomer, addItem, resetAll, saveCollection, saveCompanyPayment, saveOpening, saveReceive, saveSale, saveTransfer } from './repo';
 import { addDaysISO, todayISO } from '../lib/dates';
 
 const b = (birr: number) => birr * 100;
@@ -80,4 +80,10 @@ export async function loadDemo(db: AppDB) {
   await saveSale(db, { customerId: null, payMode: 'credit', paid: 0, destination: null, lines: [
     { itemId: paste.id, unitName: 'كرتون', qty: 1, unitPrice: b(2160) },
   ] }, today);
+
+  // Money movements (phase 2)
+  await saveCollection(db, { customerId: noor.id, amount: b(20000), destination: { kind: 'company', bank: 'cbe' }, ref: 'FT26288L2MPA' }, d(-10));
+  await saveCollection(db, { customerId: abubakr.id, amount: b(5000), destination: { kind: 'wallet', wallet: 'cash' } }, d(-1));
+  await saveTransfer(db, { from: 'cash', to: 'cbe', amount: b(15000) }, d(-1));
+  await saveCompanyPayment(db, { source: 'cbe', bank: 'cbe', amount: b(20000), ref: 'FT26297R3HTB' }, d(-1));
 }

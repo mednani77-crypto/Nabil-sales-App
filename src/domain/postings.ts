@@ -51,6 +51,22 @@ export function postingsOf(op: Operation): Posting[] {
       for (const w of WALLETS) dr(walletAccount(w), op.wallets[w] ?? 0);
       // Opening stock is intentionally NOT posted to the company account (spec rule 8).
       break;
+
+    case 'collection':
+      cr(customerAccount(op.customerId), op.amount);
+      if (op.destination.kind === 'wallet') dr(walletAccount(op.destination.wallet), op.amount);
+      else cr('company', op.amount, { unconfirmed: true });
+      break;
+
+    case 'transfer':
+      cr(walletAccount(op.from), op.amount);
+      dr(walletAccount(op.to), op.amount);
+      break;
+
+    case 'companyPayment':
+      cr(walletAccount(op.source), op.amount);
+      cr('company', op.amount, { unconfirmed: true });
+      break;
   }
   return out;
 }
@@ -64,5 +80,9 @@ export function stockMovesOf(op: Operation): StockMove[] {
       return op.lines.map((l) => ({ ...base, itemId: l.itemId, qty: -l.qty * l.factor }));
     case 'opening':
       return op.stock.filter((s) => s.qty !== 0).map((s) => ({ ...base, itemId: s.itemId, qty: s.qty }));
+    case 'collection':
+    case 'transfer':
+    case 'companyPayment':
+      return [];
   }
 }

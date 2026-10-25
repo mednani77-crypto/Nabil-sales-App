@@ -1,10 +1,9 @@
-# Publishes the app to GitHub Pages on every push to main.
-# One-time setup: repo Settings → Pages → Source: "GitHub Actions".
-name: Deploy
+# Publishes the web version to GitHub Pages (optional — the Android APK is the main channel).
+# Manual for now. To enable: repo Settings → Pages → Source: "GitHub Actions",
+# then add `push: branches: [main]` below.
+name: Deploy web version
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:
