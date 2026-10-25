@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>الدخول والأرصدة الافتتاحية</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#1E5BD8}a:hover{color:#143F99}
+.app{font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;color:#0D1B2A}
+.h,.num{font-family:'Alexandria','IBM Plex Sans Arabic',sans-serif}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.card{background:#fff;border-radius:20px;border:1px solid #DCE2EA}
+.btn{font:inherit;border:0;cursor:pointer;min-height:54px;border-radius:16px;padding:0 18px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;text-decoration:none}
+.btn-p{background:#F4A100;color:#0D1B2A}
+.btn-g{background:#fff;color:#0D1B2A;border:1px solid #CBD3DD}
+.chip{font:inherit;border:1px solid #CBD3DD;background:#fff;color:#0D1B2A;border-radius:999px;min-height:44px;padding:0 15px;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.chip.on{background:#0D1B2A;color:#fff;border-color:#0D1B2A}
+.lbl{font-size:13px;color:#46566A;font-weight:500}
+.inp{font:inherit;font-size:16px;min-height:52px;border:1px solid #CBD3DD;border-radius:14px;padding:0 14px;background:#fff;color:#0D1B2A;width:100%}
+.inp:focus{outline:2px solid #F4A100;outline-offset:1px;border-color:#F4A100}
+.field{display:flex;flex-direction:column;gap:6px}
+.scroll{overflow-y:auto;scrollbar-width:none}
+.scroll::-webkit-scrollbar{display:none}
+@keyframes up{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.anim{animation:up .3s cubic-bezier(.2,.8,.2,1)}
+input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+</style>
+</helmet>
+<div class="app" dir="rtl" style="width:390px;height:844px;background:#EDF0F4;position:relative;overflow:hidden;display:flex;flex-direction:column">
+
+<sc-if value="{{showProgress}}" hint-placeholder-val="{{false}}">
+<div style="padding:16px 16px 8px;display:flex;flex-direction:column;gap:10px;flex:none">
+<div style="display:flex;align-items:center;gap:10px">
+<button aria-label="رجوع" onClick="{{prev}}" style="width:44px;height:44px;border-radius:14px;border:1px solid #DCE2EA;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#0D1B2A"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg></button>
+<span style="flex:1;font-size:13px;color:#46566A">الإعداد الأولي · <span class="num">{{stepNo}}</span> من 5</span>
+<button onClick="{{skip}}" style="font:inherit;border:0;background:transparent;color:#1E5BD8;font-weight:600;cursor:pointer;min-height:44px;padding:0 6px">تخطٍّ</button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="5"><span style="height:5px;border-radius:3px;background:{{b.c}}"></span></sc-for>
+</div>
+</div>
+</sc-if>
+
+<div class="scroll" style="flex:1;min-height:0">
+
+<sc-if value="{{s0}}" hint-placeholder-val="{{true}}">
+<div class="anim" style="padding:40px 20px 24px;display:flex;flex-direction:column;gap:18px;min-height:100%">
+<div style="width:72px;height:72px;border-radius:24px;background:#0D1B2A;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+<svg viewBox="0 0 72 72" aria-hidden="true" style="position:absolute;inset:0"><path d="M0 58 L72 58" stroke="#F4A100" stroke-width="3" stroke-dasharray="9 7" fill="none"></path></svg>
+<span class="h" style="color:#F4A100;font-size:32px;font-weight:800;margin-top:-8px">ن</span>
+</div>
+<div><h1 class="h" style="margin:0;font-size:28px;font-weight:800;line-height:1.3">مساعدك على الطريق</h1><p style="margin:8px 0 0;font-size:15px;color:#46566A;line-height:1.7">سجّل البيع والتحصيل والسداد في ثوانٍ، حتى دون إنترنت. حساب واحد شخصي لك وحدك.</p></div>
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:14px">
+<label class="field"><span class="lbl">رقم الهاتف</span><input class="inp num" dir="ltr" style="text-align:right" value="{{phone}}" onChange="{{setPhone}}" placeholder="+251 9• ••• ••••"></label>
+<div class="field"><span class="lbl">الرمز السري (PIN)</span>
+<div dir="ltr" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px">
+<sc-for list="{{pin}}" as="p" hint-placeholder-count="4"><span class="num" style="height:56px;border-radius:14px;border:{{p.b}};background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700">{{p.v}}</span></sc-for>
+</div>
+</div>
+<div dir="ltr" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px">
+<sc-for list="{{keys}}" as="k" hint-placeholder-count="10"><button class="num" onClick="{{k.press}}" aria-label="{{k.aria}}" style="font:inherit;font-family:'Alexandria',sans-serif;min-height:44px;border-radius:12px;border:1px solid #DCE2EA;background:#F6F8FB;font-size:17px;font-weight:600;cursor:pointer;color:#0D1B2A">{{k.v}}</button></sc-for>
+</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px;font-size:13px;color:#46566A"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="color:#0A7C6E"><path d="M6 11h12v9H6z"></path><path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3"></path></svg><span style="flex:1">بياناتك مشفرة وتُزامن مع السحابة. يمكنك تفعيل البصمة بعد الدخول.</span></div>
+<button class="btn btn-p" style="margin-top:auto" onClick="{{login}}">{{loginLbl}}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{s1}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:12px 20px 24px;display:flex;flex-direction:column;gap:16px">
+<div><h1 class="h" style="margin:0;font-size:23px;font-weight:700">متى تبدأ استخدام التطبيق؟</h1><p style="margin:6px 0 0;font-size:14px;color:#46566A;line-height:1.7">كل ما قبل هذا التاريخ يدخل كأرصدة افتتاحية، وكل ما بعده يُسجّل كحركات.</p></div>
+<label class="field"><span class="lbl">تاريخ بداية النظام</span><input class="inp num" type="date" value="{{startDate}}" onChange="{{setStart}}"></label>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="chip" onClick="{{startToday}}">اليوم</button><button class="chip" onClick="{{startMonth}}">أول الشهر</button></div>
+<div class="card" style="padding:16px;display:flex;flex-direction:column;gap:10px;font-size:14px">
+<b>ستُدخل في الخطوات التالية:</b>
+<span>١. رصيدك مع الشركة</span><span>٢. أموال العمل: نقد · CBE · Ebirr</span><span>٣. أرصدة العملاء</span><span>٤. كميات الشاحنة الفعلية</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{s2}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:12px 20px 24px;display:flex;flex-direction:column;gap:16px">
+<div><h1 class="h" style="margin:0;font-size:23px;font-weight:700">رصيدك مع الشركة</h1><p style="margin:6px 0 0;font-size:14px;color:#46566A;line-height:1.7">كما هو في دفتر الشركة يوم <span class="num">{{startTxt}}</span>.</p></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;background:#DCE2EA;border-radius:14px;padding:4px">
+<sc-for list="{{coDir}}" as="o" hint-placeholder-count="2"><button onClick="{{o.pick}}" style="font:inherit;cursor:pointer;border:0;min-height:46px;border-radius:11px;font-weight:600;background:{{o.bg}};color:#0D1B2A">{{o.label}}</button></sc-for>
+</div>
+<label class="field"><span class="lbl">المبلغ (بر)</span><input class="inp num" type="number" min="0" value="{{coAmt}}" onChange="{{setCoAmt}}" style="font-size:26px;font-weight:700;min-height:64px"></label>
+<div style="font-size:13px;color:#1E4FB8;background:#E3ECFD;border-radius:14px;padding:12px;line-height:1.7">هذا الرقم يشمل عادةً قيمة البضاعة الموجودة في الشاحنة الآن، لذلك لن يُحمّل مخزون الشاحنة الافتتاحي على حسابك مرة ثانية.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{s3}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:12px 20px 24px;display:flex;flex-direction:column;gap:14px">
+<div><h1 class="h" style="margin:0;font-size:23px;font-weight:700">أموال العمل لديك</h1><p style="margin:6px 0 0;font-size:14px;color:#46566A;line-height:1.7">أدخل أموال العمل فقط، لا كامل رصيد حساباتك الشخصية.</p></div>
+<sc-for list="{{wallets}}" as="w" hint-placeholder-count="3">
+<label class="card" style="padding:14px;display:flex;align-items:center;gap:12px">
+<span class="h" style="width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex:none;background:{{w.bg}};color:{{w.fg}}">{{w.tag}}</span>
+<span style="flex:1;font-weight:600">{{w.name}}</span>
+<input class="inp num" type="number" min="0" value="{{w.v}}" onChange="{{w.set}}" style="width:130px;text-align:left;font-weight:700">
+</label>
+</sc-for>
+<div style="display:flex;justify-content:space-between;font-size:14px;padding:0 4px"><span style="color:#46566A">الإجمالي</span><b class="num">{{walletTotal}}</b></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s4}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:12px 20px 24px;display:flex;flex-direction:column;gap:12px">
+<div><h1 class="h" style="margin:0;font-size:23px;font-weight:700">أرصدة العملاء</h1><p style="margin:6px 0 0;font-size:14px;color:#46566A;line-height:1.7">دين على العميل، أو رصيد لصالحه. يمكنك إضافة الباقي لاحقًا.</p></div>
+<sc-for list="{{custs}}" as="c" hint-placeholder-count="3">
+<div class="card" style="padding:12px;display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;gap:8px"><input class="inp" aria-label="اسم العميل" value="{{c.name}}" onChange="{{c.setName}}" style="flex:1;min-height:46px"><input class="inp num" aria-label="المبلغ" type="number" min="0" value="{{c.amt}}" onChange="{{c.setAmt}}" style="width:110px;min-height:46px;text-align:left;font-weight:700"></div>
+<div style="display:flex;gap:6px"><button class="chip {{c.onD}}" style="min-height:38px;font-size:13px" onClick="{{c.debt}}">عليه</button><button class="chip {{c.onC}}" style="min-height:38px;font-size:13px" onClick="{{c.cred}}">له</button></div>
+</div>
+</sc-for>
+<button class="btn btn-g" style="border-style:dashed" onClick="{{addCust}}">+ عميل آخر</button>
+<div style="display:flex;justify-content:space-between;font-size:14px;padding:0 4px"><span style="color:#46566A">صافي المستحق على العملاء</span><b class="num">{{custNet}}</b></div>
+</div>
+</sc-if>
+
+<sc-if value="{{s5}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:12px 20px 24px;display:flex;flex-direction:column;gap:12px">
+<div><h1 class="h" style="margin:0;font-size:23px;font-weight:700">كميات الشاحنة الفعلية</h1><p style="margin:6px 0 0;font-size:14px;color:#46566A;line-height:1.7">عدّ ما في الشاحنة الآن، بما فيها العبوات المفتوحة.</p></div>
+<sc-for list="{{stock}}" as="i" hint-placeholder-count="4">
+<div class="card" style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+<b style="font-size:14.5px">{{i.name}}</b>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+<label class="field"><span class="lbl">{{i.u0}}</span><input class="inp num" type="number" min="0" value="{{i.full}}" onChange="{{i.setFull}}" style="min-height:46px"></label>
+<sc-if value="{{i.multi}}" hint-placeholder-val="{{true}}"><label class="field"><span class="lbl">{{i.u1}} مفتوحة</span><input class="inp num" type="number" min="0" value="{{i.loose}}" onChange="{{i.setLoose}}" style="min-height:46px"></label></sc-if>
+</div>
+</div>
+</sc-for>
+<div style="font-size:13px;color:#46566A;padding:0 4px">قيمة المخزون للعرض فقط: <b class="num" style="color:#0D1B2A">{{stockVal}}</b> بر — لن تُضاف إلى دين الشركة.</div>
+</div>
+</sc-if>
+
+<sc-if value="{{s6}}" hint-placeholder-val="{{false}}">
+<div class="anim" style="padding:32px 20px 24px;display:flex;flex-direction:column;gap:16px">
+<div style="width:76px;height:76px;border-radius:26px;background:#0A7C6E;color:#fff;display:flex;align-items:center;justify-content:center"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:40px;height:40px;stroke-width:2.4"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></div>
+<div><h1 class="h" style="margin:0;font-size:24px;font-weight:700">جاهز للعمل يا نبيل</h1><p style="margin:6px 0 0;font-size:14px;color:#46566A">ملخص البداية بتاريخ <span class="num">{{startTxt}}</span></p></div>
+<div class="card" style="overflow:hidden">
+<sc-for list="{{summary}}" as="r" hint-placeholder-count="4"><div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #EEF1F5"><span style="font-size:14px">{{r.l}}</span><b class="num" style="color:{{r.c}}">{{r.v}}</b></div></sc-for>
+</div>
+<div style="font-size:13px;color:#46566A;line-height:1.7">يمكنك تعديل الأرصدة الافتتاحية لاحقًا من الإعدادات، ويُحفظ أي تعديل في السجل.</div>
+<a class="btn btn-p" href="Main.dc.html">ابدأ — افتح الرئيسية</a>
+</div>
+</sc-if>
+
+</div>
+
+<sc-if value="{{showFoot}}" hint-placeholder-val="{{false}}">
+<div style="padding:12px 20px 18px;flex:none"><button class="btn btn-p" style="width:100%" onClick="{{next}}">{{nextLbl}}</button></div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+function fmt(n){return Math.round(+n||0).toLocaleString('en-US');}
+function dd(iso){var p=(iso||'').split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:'';}
+class Component extends DCLogic {
+ constructor(...a){super(...a);this.state={step:0,phone:'+251 915 000 482',pin:'',startDate:'2026-10-01',coDir:'owe',coAmt:'412000',
+  w:{cash:'18200',cbe:'9500',ebirr:'2300'},
+  custs:[{name:'بقالة أبو بكر',amt:'18500',dir:'d'},{name:'سوبرماركت النور',amt:'42300',dir:'d'},{name:'مطعم الأمل',amt:'9800',dir:'d'},{name:'متجر حسن إبراهيم',amt:'1200',dir:'c'}],
+  stock:[{name:'زيت طبخ 3 لتر',units:['كرتون','حبة'],per:6,price:6300,full:'14',loose:'2'},{name:'أرز بسمتي 25 كغ',units:['كنتال','جونية'],per:4,price:14000,full:'3',loose:'1'},{name:'سكر أبيض 50 كغ',units:['جونية'],per:1,price:7400,full:'9',loose:''},{name:'صلصة طماطم 400غ',units:['كرتون','حبة'],per:24,price:2160,full:'10',loose:'9'}]};}
+ renderVals(){var self=this,s=this.state,st=s.step;
+  var go=function(n){self.setState({step:Math.max(0,Math.min(6,n))});};
+  var bars=[1,2,3,4,5].map(function(i){return {c:i<=st?'#F4A100':'#DCE2EA'};});
+  var pin=[0,1,2,3].map(function(i){return {v:s.pin.length>i?'•':'',b:s.pin.length===i?'2px solid #F4A100':'1px solid #CBD3DD'};});
+  var keys=['1','2','3','4','5','6','7','8','9','0'].map(function(d){return {v:d,aria:'الرقم '+d,press:function(){if(s.pin.length<4)self.setState({pin:s.pin+d});}};});
+  var setW=function(k){return function(e){var w=Object.assign({},s.w);w[k]=e.target.value;self.setState({w:w});};};
+  var wallets=[['cash','النقد في يدي','نقد','#DDF3EF','#0A6B5F'],['cbe','CBE الشخصي','CBE','#F3E6EE','#6A1B4D'],['ebirr','Ebirr الشخصي','eB','#E3ECFD','#1E4FB8']].map(function(x){return {name:x[1],tag:x[2],bg:x[3],fg:x[4],v:s.w[x[0]],set:setW(x[0])};});
+  var walletTotal=(+s.w.cash||0)+(+s.w.cbe||0)+(+s.w.ebirr||0);
+  var updC=function(i,p){var c=s.custs.slice();c[i]=Object.assign({},c[i],p);self.setState({custs:c});};
+  var custs=s.custs.map(function(c,i){return {name:c.name,amt:c.amt,onD:c.dir==='d'?'on':'',onC:c.dir==='c'?'on':'',setName:function(e){updC(i,{name:e.target.value});},setAmt:function(e){updC(i,{amt:e.target.value});},debt:function(){updC(i,{dir:'d'});},cred:function(){updC(i,{dir:'c'});}};});
+  var custNet=s.custs.reduce(function(t,c){return t+(c.dir==='d'?1:-1)*(+c.amt||0);},0);
+  var updS=function(i,p){var a=s.stock.slice();a[i]=Object.assign({},a[i],p);self.setState({stock:a});};
+  var stock=s.stock.map(function(it,i){return {name:it.name,u0:it.units[0],u1:it.units[it.units.length-1],multi:it.units.length>1,full:it.full,loose:it.loose,setFull:function(e){updS(i,{full:e.target.value});},setLoose:function(e){updS(i,{loose:e.target.value});}};});
+  var stockVal=s.stock.reduce(function(t,it){var q=(+it.full||0)*it.per+(it.units.length>1?(+it.loose||0):0);return t+q*it.price/it.per;},0);
+  var coSigned=(s.coDir==='owe'?1:-1)*(+s.coAmt||0);
+  var labels=['','متابعة','متابعة','متابعة','متابعة','حفظ الأرصدة الافتتاحية'];
+  return {s0:st===0,s1:st===1,s2:st===2,s3:st===3,s4:st===4,s5:st===5,s6:st===6,showProgress:st>=1&&st<=5,showFoot:st>=1&&st<=5,stepNo:st,bars:bars,
+   prev:function(){go(st-1);},next:function(){go(st+1);},skip:function(){go(6);},nextLbl:labels[st]||'متابعة',
+   phone:s.phone,setPhone:function(e){self.setState({phone:e.target.value});},pin:pin,keys:keys,loginLbl:s.pin.length<4?'أدخل الرمز ثم ادخل':'دخول آمن',login:function(){if(s.pin.length<4){self.setState({pin:'1234'});return;}go(1);},
+   startDate:s.startDate,setStart:function(e){self.setState({startDate:e.target.value});},startToday:function(){self.setState({startDate:'2026-10-25'});},startMonth:function(){self.setState({startDate:'2026-10-01'});},startTxt:dd(s.startDate),
+   coDir:[['owe','عليّ للشركة'],['cred','لصالحي']].map(function(o){return {label:o[1],bg:s.coDir===o[0]?'#fff':'transparent',pick:function(){self.setState({coDir:o[0]});}};}),
+   coAmt:s.coAmt,setCoAmt:function(e){self.setState({coAmt:e.target.value});},
+   wallets:wallets,walletTotal:fmt(walletTotal),custs:custs,custNet:fmt(custNet),addCust:function(){self.setState({custs:s.custs.concat([{name:'',amt:'',dir:'d'}])});},
+   stock:stock,stockVal:fmt(stockVal),
+   summary:[{l:s.coDir==='owe'?'مديونيتك للشركة':'رصيد لصالحك لدى الشركة',v:fmt(Math.abs(coSigned)),c:'#0D1B2A'},{l:'أموال العمل',v:fmt(walletTotal),c:'#0A6B5F'},{l:'صافي ديون العملاء ('+s.custs.length+')',v:fmt(custNet),c:'#8A5A00'},{l:'أصناف الشاحنة ('+s.stock.length+')',v:fmt(stockVal),c:'#1E4FB8'}]};
+ }
+}
+</script>
+</body>
+</html>

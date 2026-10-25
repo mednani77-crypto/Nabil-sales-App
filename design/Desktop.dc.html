@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<title>نبيل — نسخة الكمبيوتر</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#1E5BD8}a:hover{color:#143F99}
+.app{font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;color:#0D1B2A}
+.h,.num{font-family:'Alexandria','IBM Plex Sans Arabic',sans-serif}
+.num{font-variant-numeric:tabular-nums}
+.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.card{background:#fff;border-radius:20px;border:1px solid #DCE2EA}
+.nav{font:inherit;display:flex;align-items:center;gap:12px;min-height:46px;padding:0 14px;border-radius:12px;border:0;background:transparent;color:#C3CDD9;font-size:14.5px;cursor:pointer;text-align:right;width:100%;text-decoration:none}
+.nav.on{background:rgba(255,255,255,.1);color:#fff;font-weight:600}
+.btn{font:inherit;border:0;cursor:pointer;min-height:44px;border-radius:12px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:14px;white-space:nowrap}
+.btn-p{background:#F4A100;color:#0D1B2A}
+.btn-g{background:#fff;color:#0D1B2A;border:1px solid #CBD3DD}
+.pill{font-size:12px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-weight:600;color:#46566A;font-size:12.5px;text-align:right;padding:10px 14px;background:#F6F8FB;white-space:nowrap}
+td{padding:12px 14px;border-top:1px solid #EEF1F5;white-space:nowrap}
+.inp{font:inherit;font-size:14px;min-height:44px;border:1px solid #CBD3DD;border-radius:12px;padding:0 14px 0 14px;background:#fff;color:#0D1B2A;width:100%}
+</style>
+</helmet>
+<div class="app" dir="rtl" style="min-height:100vh;background:#EDF0F4;display:flex;flex-wrap:wrap;align-items:stretch">
+
+<aside style="flex:1 1 240px;max-width:100%;background:#0D1B2A;color:#fff;padding:24px 16px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;align-items:center;gap:12px;padding:0 6px">
+<div class="h" style="width:42px;height:42px;border-radius:14px;background:#F4A100;color:#0D1B2A;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px">ن</div>
+<div><div class="h" style="font-weight:700">نبيل عادل</div><div style="font-size:12px;color:#9FB0C3">مندوب مبيعات · SYSCO</div></div>
+</div>
+<button class="btn btn-p" style="min-height:52px;font-size:15px;width:100%"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width:2.4"><path d="M12 5v14M5 12h14"></path></svg>بيع جديد <span class="num" style="font-size:11px;opacity:.7;margin-right:4px">N</span></button>
+<nav aria-label="التنقل الرئيسي" style="display:flex;flex-direction:column;gap:4px">
+<a class="nav on" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"></path></svg>الرئيسية</a>
+<a class="nav" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 6h11v10H2z"></path><path d="M13 9h4l4 4v3h-8z"></path><circle cx="6" cy="18" r="2"></circle><circle cx="17" cy="18" r="2"></circle></svg>الشاحنة والأصناف</a>
+<a class="nav" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"></path></svg>العملاء</a>
+<a class="nav" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h13v4"></path><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"></path></svg>المال والشركة</a>
+<a class="nav" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20l1.2-5A8.5 8.5 0 1 1 21 11.5z"></path></svg><span style="flex:1">الإشعارات البنكية</span><span class="pill num" style="background:#F4A100;color:#0D1B2A">1</span></a>
+<a class="nav" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6v18h12V7z"></path><path d="M14 3v4h4"></path><path d="M9 13h6M9 17h6"></path></svg>الكشوف والتقارير</a>
+<a class="nav" href="#"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg>الإعدادات</a>
+</nav>
+<div style="margin-top:auto;background:rgba(255,255,255,.06);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:12.5px">
+<i style="width:10px;height:10px;border-radius:50%;background:#2BB39F;flex:none"></i><span style="flex:1;color:#C3CDD9">متزامن مع الهاتف · <span class="num">05:31</span></span>
+</div>
+</aside>
+
+<main style="flex:999 1 560px;min-width:0;padding:28px clamp(16px,3vw,40px);display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px">
+<div style="flex:1 1 260px"><div style="font-size:13px;color:#46566A">الأحد 25 أكتوبر 2026</div><h1 class="h" style="margin:2px 0 0;font-size:26px;font-weight:700">صباح الخير يا نبيل</h1></div>
+<label style="flex:1 1 280px;max-width:420px;position:relative"><span style="position:absolute;right:14px;top:12px;color:#8593A3"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg></span><input class="inp" aria-label="بحث شامل" placeholder="ابحث عن عميل، صنف، فاتورة أو رقم حوالة" style="padding-right:42px"></label>
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<button class="btn btn-g">استلام بضاعة</button><button class="btn btn-g">تحصيل</button><button class="btn btn-g">سداد للشركة</button>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px">
+<div style="background:#0D1B2A;color:#fff;border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;color:#B9C4D2">مديونيتي للشركة</span>
+<span class="num" style="font-size:30px;font-weight:700">357,780 <span style="font-size:13px;color:#B9C4D2;font-weight:500">بر</span></span>
+<span style="font-size:12.5px;color:#F7C65C">غير مؤكد لدى الشركة <span class="num">100,000</span></span>
+</div>
+<div class="card" style="padding:20px;display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;color:#46566A">ديون العملاء</span>
+<span class="num" style="font-size:28px;font-weight:700">79,560</span>
+<span style="font-size:12.5px;color:#A32A20;font-weight:600">2 متأخرون · رصيد دائن <span class="num">1,200</span></span>
+</div>
+<div class="card" style="padding:20px;display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;color:#46566A">أموال العمل لديّ</span>
+<span class="num" style="font-size:28px;font-weight:700">56,400</span>
+<span class="num" style="font-size:12.5px;color:#46566A">نقد 31,450 · CBE 18,200 · Ebirr 6,750</span>
+</div>
+<div class="card" style="padding:20px;display:flex;flex-direction:column;gap:8px">
+<span style="font-size:13px;color:#46566A">مبيعات اليوم</span>
+<span class="num" style="font-size:28px;font-weight:700">2,160</span>
+<span style="font-size:12.5px;color:#46566A">فاتورة واحدة · آجل بالكامل</span>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:16px;align-items:start">
+<section class="card" style="overflow:hidden">
+<div style="display:flex;align-items:center;gap:10px;padding:16px 18px"><h2 class="h" style="margin:0;font-size:17px;flex:1">الإشعارات البنكية</h2>
+<span style="display:flex;gap:6px;flex-wrap:wrap"><span class="pill" style="background:#FFF1D6;color:#8A5A00">1 لم يُرسل</span><span class="pill" style="background:#E3ECFD;color:#1E4FB8">1 بانتظار التأكيد</span></span></div>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>البنك</th><th>المبلغ</th><th>التاريخ</th><th>المرجع</th><th>الحالة</th><th></th></tr></thead>
+<tbody>
+<tr><td><b>CBE</b></td><td class="num"><b>60,000</b></td><td class="num">24/10 · 18:10</td><td class="num" dir="ltr" style="text-align:right">FT26297R3HTB</td><td><span class="pill" style="background:#FFF1D6;color:#8A5A00">لم يُرسل</span></td><td><button class="btn btn-p" style="min-height:36px;font-size:13px">مشاركة واتساب</button></td></tr>
+<tr><td><b>Ebirr</b></td><td class="num"><b>40,000</b></td><td class="num">23/10 · 16:25</td><td class="num" dir="ltr" style="text-align:right">EB7X44210</td><td><span class="pill" style="background:#E3ECFD;color:#1E4FB8">بانتظار الشركة</span></td><td><button class="btn btn-g" style="min-height:36px;font-size:13px">تأكيد الاحتساب</button></td></tr>
+<tr><td><b>Abyssinia</b></td><td class="num"><b>95,000</b></td><td class="num">19/10 · 09:02</td><td class="num" dir="ltr" style="text-align:right">BOA-1019-33871</td><td><span class="pill" style="background:#DDF3EF;color:#0A6B5F">مؤكد</span></td><td></td></tr>
+<tr><td><b>CBE</b></td><td class="num"><b>20,000</b></td><td class="num">15/10 · 13:40</td><td class="num" dir="ltr" style="text-align:right">FT26288L2MPA</td><td><span class="pill" style="background:#DDF3EF;color:#0A6B5F">مؤكد</span></td><td style="font-size:12px;color:#46566A">مباشر · سوبرماركت النور</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<div style="display:flex;flex-direction:column;gap:16px">
+<section class="card" style="overflow:hidden">
+<div style="display:flex;align-items:center;padding:16px 18px"><h2 class="h" style="margin:0;font-size:17px;flex:1">تحتاج متابعة</h2></div>
+<div style="display:flex;flex-direction:column">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid #EEF1F5"><span class="h" style="width:38px;height:38px;border-radius:50%;background:#FCE8E6;color:#A32A20;display:flex;align-items:center;justify-content:center;font-weight:700">ن</span><span style="flex:1"><b style="font-size:14px">سوبرماركت النور</b><div class="num" style="font-size:12px;color:#46566A">آخر تحصيل 15/10 · منذ 10 أيام</div></span><b class="num" style="color:#A32A20">37,100</b></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid #EEF1F5"><span class="h" style="width:38px;height:38px;border-radius:50%;background:#FCE8E6;color:#A32A20;display:flex;align-items:center;justify-content:center;font-weight:700">أ</span><span style="flex:1"><b style="font-size:14px">مطعم الأمل</b><div class="num" style="font-size:12px;color:#46566A">آخر تحصيل 28/09 · منذ 27 يومًا</div></span><b class="num" style="color:#A32A20">9,800</b></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 18px;border-top:1px solid #EEF1F5"><span class="h" style="width:38px;height:38px;border-radius:50%;background:#FFF1D6;color:#8A5A00;display:flex;align-items:center;justify-content:center;font-weight:700">؟</span><span style="flex:1"><b style="font-size:14px">دين مؤقت D-0007</b><div style="font-size:12px;color:#46566A">بلا اسم — سمِّ صاحبه</div></span><b class="num" style="color:#8A5A00">2,160</b></div>
+</div>
+</section>
+<section class="card" style="overflow:hidden">
+<div style="display:flex;align-items:center;padding:16px 18px"><h2 class="h" style="margin:0;font-size:17px;flex:1">مخزون الشاحنة</h2><span class="num" style="font-size:13px;color:#46566A">223,130 بر</span></div>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>الصنف</th><th>المتوفر</th><th>القيمة</th></tr></thead>
+<tbody>
+<tr><td>زيت طبخ 3 لتر</td><td class="num">10 كرتون + 4 حبة <span class="pill" style="background:#FFF1D6;color:#8A5A00">مفتوح</span></td><td class="num">67,200</td></tr>
+<tr><td>دقيق قمح 50 كغ</td><td class="num">4 كنتال</td><td class="num">38,400</td></tr>
+<tr><td>سكر أبيض 50 كغ</td><td class="num">4 جونية <span class="pill" style="background:#FCE8E6;color:#A32A20">منخفض</span></td><td class="num">29,600</td></tr>
+<tr><td>صلصة طماطم 400غ</td><td class="num">7 كرتون + 9 حبة <span class="pill" style="background:#FFF1D6;color:#8A5A00">مفتوح</span></td><td class="num">15,930</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+
+<section class="card" style="overflow:hidden">
+<div style="display:flex;align-items:center;gap:10px;padding:16px 18px;flex-wrap:wrap"><h2 class="h" style="margin:0;font-size:17px;flex:1">آخر الفواتير</h2><button class="btn btn-g" style="min-height:38px;font-size:13px">تصدير Excel</button><button class="btn btn-g" style="min-height:38px;font-size:13px">كشف PDF</button></div>
+<div style="overflow-x:auto">
+<table>
+<thead><tr><th>رقم</th><th>العميل</th><th>التاريخ</th><th>الأصناف</th><th>الإجمالي</th><th>المدفوع</th><th>المتبقي</th><th>الحالة</th></tr></thead>
+<tbody>
+<tr><td class="num">#1043</td><td>دين مؤقت D-0007</td><td class="num">25/10/2026</td><td>صلصة طماطم · 1 كرتون</td><td class="num"><b>2,160</b></td><td class="num">0</td><td class="num" style="color:#A32A20">2,160</td><td><span class="pill" style="background:#FCE8E6;color:#A32A20">آجل</span></td></tr>
+<tr><td class="num">#1042</td><td>نقدي – بدون عميل</td><td class="num">24/10/2026</td><td>مكرونة · 2 كرتون + 3 حبة</td><td class="num"><b>3,240</b></td><td class="num">3,240</td><td class="num">0</td><td><span class="pill" style="background:#DDF3EF;color:#0A6B5F">مدفوعة</span></td></tr>
+<tr><td class="num">#1041</td><td>بقالة أبو بكر</td><td class="num">24/10/2026</td><td>زيت طبخ · 2 كرتون</td><td class="num"><b>12,600</b></td><td class="num">0</td><td class="num" style="color:#A32A20">12,600</td><td><span class="pill" style="background:#FCE8E6;color:#A32A20">آجل</span></td></tr>
+<tr><td class="num">#1040</td><td>محل فاطمة عبدي</td><td class="num">23/10/2026</td><td>سكر أبيض · 1 جونية</td><td class="num"><b>7,400</b></td><td class="num">3,000</td><td class="num" style="color:#A32A20">4,400</td><td><span class="pill" style="background:#FFF1D6;color:#8A5A00">جزئي</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+ renderVals(){return {};}
+}
+</script>
+</body>
+</html>

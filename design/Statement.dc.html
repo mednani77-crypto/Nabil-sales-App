@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="ar">
+<head>
+<meta charset="utf-8">
+<title>كشف حساب — PDF</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alexandria:wght@500;700&amp;family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=Noto+Sans+Ethiopic:wght@400;500;600;700&amp;display=swap">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+.num{font-family:'IBM Plex Sans','IBM Plex Sans Arabic',sans-serif;font-variant-numeric:tabular-nums}
+.th{font-size:11px;font-weight:700;color:#33414F;padding:9px 10px;background:#EEF1F5}
+.td{font-size:11.5px;padding:9px 10px;border-bottom:1px solid #E3E8EF}
+</style>
+</helmet>
+<div dir="{{L.dir}}" style="width:794px;height:1123px;background:#fff;color:#0D1B2A;padding:56px 56px 44px;display:flex;flex-direction:column;gap:22px;font-family:{{L.font}}">
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:24px">
+<div style="display:flex;gap:14px;align-items:center">
+<div style="width:52px;height:52px;border-radius:14px;background:#0D1B2A;color:#F4A100;display:flex;align-items:center;justify-content:center;font-family:'Alexandria',sans-serif;font-weight:700;font-size:16px">SY</div>
+<div><div style="font-size:15px;font-weight:700">SYSCO ADAWEH</div><div style="font-size:11.5px;color:#46566A">Dire Dawa · Addis Ababa</div></div>
+</div>
+<div style="text-align:end"><div style="font-size:26px;font-weight:700;letter-spacing:-.2px">{{L.title}}</div><div style="font-size:11.5px;color:#46566A;margin-top:4px">{{L.issued}}: <span class="num">25/10/2026</span> · <span class="num">ST-2026-1025-07</span></div></div>
+</div>
+
+<div style="height:3px;background:#0D1B2A;border-radius:2px;position:relative"><div style="position:absolute;inset-inline-start:0;top:0;height:3px;width:120px;background:#F4A100"></div></div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+<div style="border:1px solid #DCE2EA;border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;color:#46566A">{{L.holder}}</div><div style="font-size:14px;font-weight:700;margin-top:3px;font-family:'IBM Plex Sans Arabic',sans-serif">نبيل عادل</div><div style="font-size:10.5px;color:#46566A">SYSCO · Sales rep</div></div>
+<div style="border:1px solid #DCE2EA;border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;color:#46566A">{{L.period}}</div><div class="num" style="font-size:14px;font-weight:700;margin-top:3px">10/10/2026 — 25/10/2026</div></div>
+<div style="border:1px solid #DCE2EA;border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;color:#46566A">{{L.cur}}</div><div style="font-size:14px;font-weight:700;margin-top:3px">{{L.curv}}</div></div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;background:#F6F8FB;border-radius:10px;padding:12px 14px;font-size:12.5px;font-weight:600"><span>{{L.carried}}</span><span class="num" style="font-size:14px">292,000</span></div>
+
+<div style="display:grid;grid-template-columns:86px minmax(0,1fr) 92px 92px 100px;border-radius:10px;overflow:hidden;border:1px solid #DCE2EA">
+<span class="th">{{L.date}}</span><span class="th">{{L.desc}}</span><span class="th" style="text-align:end">{{L.dr}}</span><span class="th" style="text-align:end">{{L.cr}}</span><span class="th" style="text-align:end">{{L.bal}}</span>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<span class="td num">{{r.d}}</span><span class="td">{{r.t}}</span><span class="td num" style="text-align:end">{{r.dr}}</span><span class="td num" style="text-align:end">{{r.cr}}</span><span class="td num" style="text-align:end;font-weight:700">{{r.b}}</span>
+</sc-for>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+<div style="background:#F6F8FB;border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;color:#46566A">{{L.tdr}}</div><div class="num" style="font-size:17px;font-weight:700;margin-top:2px">285,100</div></div>
+<div style="background:#F6F8FB;border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;color:#46566A">{{L.tcr}}</div><div class="num" style="font-size:17px;font-weight:700;margin-top:2px">219,320</div></div>
+<div style="background:#0D1B2A;color:#fff;border-radius:10px;padding:12px 14px"><div style="font-size:10.5px;color:#B9C4D2">{{L.close}}</div><div class="num" style="font-size:17px;font-weight:700;margin-top:2px">357,780</div></div>
+</div>
+
+<div style="font-size:10.5px;color:#46566A;display:flex;flex-direction:column;gap:3px"><span>{{L.pendNote}}</span><span>{{L.credNote}}</span></div>
+
+<div style="margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:24px;font-size:10.5px;color:#46566A">
+<div style="display:flex;flex-direction:column;gap:22px;min-width:200px"><span>{{L.prep}}: <b style="color:#0D1B2A;font-family:'IBM Plex Sans Arabic',sans-serif">نبيل عادل</b></span><span style="border-top:1px solid #8593A3;padding-top:4px;width:200px"></span></div>
+<span class="num">1 / 1</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lang":{"editor":"enum","options":["ar","en","so","am","om"],"default":"ar","section":"اللغة"},"$preview":{"width":794,"height":1123}}'>
+var I18N={
+ ar:{dir:'rtl',font:"'IBM Plex Sans Arabic',sans-serif",title:'كشف حساب',holder:'صاحب الحساب',cur:'العملة',curv:'بر إثيوبي (ETB)',period:'الفترة',carried:'الرصيد المرحّل من قبل الفترة',date:'التاريخ',desc:'البيان',dr:'مدين',cr:'دائن',bal:'الرصيد',tdr:'إجمالي المدين',tcr:'إجمالي الدائن',close:'الرصيد الختامي',pendNote:'* سداد لم يتأكد احتسابه لدى الشركة بعد',credNote:'الأرقام بين قوسين أرصدة دائنة.',issued:'تاريخ الإصدار',prep:'أعدّه',
+  k:{receive:'استلام بضاعة',direct:'تحويل مباشر من عميل',pay:'سداد للشركة',creturn:'مرتجع مقبول من الشركة'},m:{cbeC:'CBE (الشركة)',ebirrC:'Ebirr (الشركة)',boaC:'Abyssinia (الشركة)'}},
+ en:{dir:'ltr',font:"'IBM Plex Sans',sans-serif",title:'Account Statement',holder:'Account holder',cur:'Currency',curv:'Ethiopian Birr (ETB)',period:'Period',carried:'Balance brought forward',date:'Date',desc:'Description',dr:'Debit',cr:'Credit',bal:'Balance',tdr:'Total debit',tcr:'Total credit',close:'Closing balance',pendNote:'* Payment not yet confirmed by the company',credNote:'Figures in brackets are credit balances.',issued:'Issued',prep:'Prepared by',
+  k:{receive:'Goods received',direct:'Direct transfer from customer',pay:'Payment to company',creturn:'Return accepted by company'},m:{cbeC:'CBE (company)',ebirrC:'Ebirr (company)',boaC:'Abyssinia (company)'}},
+ so:{dir:'ltr',font:"'IBM Plex Sans',sans-serif",title:'Bayaanka Xisaabta',holder:'Milkiilaha xisaabta',cur:'Lacagta',curv:'Birta Itoobiya (ETB)',period:'Muddada',carried:'Haraaga hore ee la soo wareejiyay',date:'Taariikhda',desc:'Faahfaahin',dr:'Debit',cr:'Credit',bal:'Haraaga',tdr:'Wadarta debit',tcr:'Wadarta credit',close:'Haraaga ugu dambeeya',pendNote:'* Lacag-bixin aan weli shirkaddu xaqiijin',credNote:'Tirooyinka ku jira ( ) waa haraa credit ah.',issued:'Taariikhda la soo saaray',prep:'Waxaa diyaariyay',
+  k:{receive:'Badeeco la helay',direct:'Xawilaad toos ah oo macmiil',pay:'Lacag-bixin shirkadda',creturn:'Celin ay shirkaddu aqbashay'},m:{cbeC:'CBE (shirkadda)',ebirrC:'Ebirr (shirkadda)',boaC:'Abyssinia (shirkadda)'}},
+ am:{dir:'ltr',font:"'Noto Sans Ethiopic',sans-serif",title:'የሂሳብ መግለጫ',holder:'የሂሳብ ባለቤት',cur:'የገንዘብ ዓይነት',curv:'የኢትዮጵያ ብር (ETB)',period:'የጊዜ ገደብ',carried:'ከቀደመው ጊዜ የተላለፈ ቀሪ ሂሳብ',date:'ቀን',desc:'ዝርዝር',dr:'ዴቢት',cr:'ክሬዲት',bal:'ቀሪ ሂሳብ',tdr:'ጠቅላላ ዴቢት',tcr:'ጠቅላላ ክሬዲት',close:'የመዝጊያ ቀሪ ሂሳብ',pendNote:'* በኩባንያው ገና ያልተረጋገጠ ክፍያ',credNote:'በቅንፍ ውስጥ ያሉት አሃዞች የክሬዲት ቀሪ ሂሳብ ናቸው።',issued:'የወጣበት ቀን',prep:'ያዘጋጀው',
+  k:{receive:'የተረከበ ዕቃ',direct:'ከደንበኛ በቀጥታ የተላለፈ',pay:'ለኩባንያው የተከፈለ',creturn:'በኩባንያው የተቀበለ ተመላሽ'},m:{cbeC:'CBE (ኩባንያ)',ebirrC:'Ebirr (ኩባንያ)',boaC:'Abyssinia (ኩባንያ)'}},
+ om:{dir:'ltr',font:"'IBM Plex Sans',sans-serif",title:'Ibsa Herregaa',holder:'Abbaa herregaa',cur:'Maallaqa',curv:'Birrii Itoophiyaa (ETB)',period:'Yeroo',carried:'Haftee yeroo darbe irraa dabre',date:'Guyyaa',desc:'Ibsa',dr:'Debiitii',cr:'Kireeditii',bal:'Haftee',tdr:'Waliigala debiitii',tcr:'Waliigala kireeditii',close:'Haftee xumuraa',pendNote:'* Kaffaltii dhaabbatichi ammallee hin mirkaneessin',credNote:'Lakkoofsonni ( ) keessa jiran haftee kireeditii ti.',issued:'Guyyaa itti kenname',prep:'Kan qopheesse',
+  k:{receive:'Meeshaa fudhatame',direct:'Dabarsa kallattii maamilaa',pay:'Kaffaltii dhaabbataaf',creturn:'Deebii dhaabbatni fudhate'},m:{cbeC:'CBE (dhaabbata)',ebirrC:'Ebirr (dhaabbata)',boaC:'Abyssinia (dhaabbata)'}}
+};
+var ROWS=[
+ {d:'12/10/2026',k:'receive',ref:'GRN-0031',dr:'186,400',cr:'',b:'478,400'},
+ {d:'15/10/2026',k:'direct',m:'cbeC',ref:'FT26288L2MPA',who:'سوبرماركت النور',dr:'',cr:'20,000',b:'458,400'},
+ {d:'19/10/2026',k:'pay',m:'boaC',ref:'BOA-1019-33871',dr:'',cr:'95,000',b:'363,400'},
+ {d:'22/10/2026',k:'creturn',ref:'RC-0004',dr:'',cr:'4,320',b:'359,080'},
+ {d:'23/10/2026',k:'pay',m:'ebirrC',ref:'EB7X44210',dr:'',cr:'40,000',b:'319,080',p:true},
+ {d:'24/10/2026',k:'receive',ref:'GRN-0034',dr:'98,700',cr:'',b:'417,780'},
+ {d:'24/10/2026',k:'pay',m:'cbeC',ref:'FT26297R3HTB',dr:'',cr:'60,000',b:'357,780',p:true}
+];
+class Component extends DCLogic {
+ renderVals(){var lang=this.props.lang||'ar';var L=I18N[lang]||I18N.ar;
+  var rows=ROWS.map(function(r){var p=[L.k[r.k]];if(r.m)p.push(L.m[r.m]);p.push(r.ref);if(r.who)p.push(r.who);return {d:r.d,t:p.join(' · ')+(r.p?' *':''),dr:r.dr,cr:r.cr,b:r.b};});
+  return {L:L,rows:rows};}
+}
+</script>
+</body>
+</html>
