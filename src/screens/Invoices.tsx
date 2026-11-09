@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useData } from '../hooks/useData';
 import { fmtMoney } from '../domain/money';
@@ -8,7 +8,11 @@ import type { PayMode, SaleOp } from '../domain/types';
 import { fmtDate, fmtDay, fmtTime } from '../lib/dates';
 import { destinationLabel, PAY_MODE_LABEL } from '../lib/labels';
 import { Icon } from '../ui/Icon';
-import { SearchField, TopBar, useToast } from '../ui/kit';
+import { SearchField, Sheet, TopBar, useToast } from '../ui/kit';
+import { InvoicePages } from '../ui/InvoicePages';
+import { invoiceText, lastShareLang, rememberShareLang } from '../lib/invoiceDoc';
+import { openWhatsApp, pagesToPdf, saveOrShare, shareText, waNumber } from '../lib/files';
+import { LANGS, type Lang } from '../lib/statement';
 
 export function invoiceStatus(s: SaleOp, voided?: Set<string>): { label: string; tone: string } {
   if (voided?.has(s.id)) return { label: 'ملغاة', tone: 'grey' };
@@ -72,7 +76,7 @@ export function InvoiceDetailScreen() {
   const done = params.get('done') === '1';
   const data = useData();
   const nav = useNavigate();
-  const toast = useToast();
+  const [sharing, setSharing] = useState(false);
   const s = data.ops.find((o): o is SaleOp => o.type === 'sale' && o.id === id);
   if (!s) return data.loading ? null : <div className="page"><TopBar title="فاتورة" /><p className="sub">الفاتورة غير موجودة</p></div>;
 
@@ -121,15 +125,16 @@ export function InvoiceDetailScreen() {
           <div className="sub" style={{ fontSize: 12 }}>الأسعار محفوظة كما كانت وقت البيع، ولا تتغير بتغيّر الأسعار لاحقًا.</div>
         </div>
         <div className="grid2" style={{ gap: 8 }}>
-          <button className="btn btn-g" onClick={() => shareInvoice(s, cust?.name, toast)}>
+          <button className="btn btn-g" onClick={() => setSharing(true)}>
             <Icon name="chat" small style={{ color: 'var(--teal)' }} />
             مشاركة واتساب
           </button>
-          <button className="btn btn-g" onClick={() => window.print()}>
+          <button className="btn btn-g" onClick={() => setSharing(true)}>
             <Icon name="file" small />
-            طباعة / PDF
+            PDF / طباعة
           </button>
         </div>
+        <ShareSheet open={sharing} onClose={() => setSharing(false)} s={s} customer={cust?.name} phone={cust?.phone} voided={voided.has(s.id)} />
         {!done && (
           <div className="grid2" style={{ gap: 8 }}>
             <Link className="btn btn-g" to={`/returns?customer=${s.customerId ?? ''}&invoice=${s.id}`}><Icon name="ret" small />مرتجع منها</Link>
@@ -169,23 +174,77 @@ function Row({ label, value, color, big }: { label: string; value: string; color
   );
 }
 
-/** Text summary via the phone's share sheet (WhatsApp etc.). PDF attachment comes in phase 6. */
-async function shareInvoice(s: SaleOp, customer: string | undefined, toast: (m: string, e?: boolean) => void) {
-  const total = linesTotal(s.lines);
-  const text = [
-    `فاتورة #${s.docNo} — ${fmtDate(s.date)}`,
-    customer ? `العميل: ${customer}` : '',
-    ...s.lines.map((l) => `• ${l.itemName}: ${l.qty} ${l.unitName} × ${fmtMoney(l.unitPrice)} = ${fmtMoney(l.qty * l.unitPrice)}`),
-    `الإجمالي: ${fmtMoney(total)} بر`,
-    `المدفوع: ${fmtMoney(s.paid)} · المتبقي: ${fmtMoney(total - s.paid)}`,
-  ]
-    .filter(Boolean)
-    .join('\n');
-  try {
-    if (navigator.share) await navigator.share({ text });
-    else window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-  } catch {
-    /* user cancelled the share sheet */
+function ShareSheet({ open, onClose, s, customer, phone, voided }: { open: boolean; onClose: () => void; s: SaleOp; customer?: string; phone?: string; voided: boolean }) {
+  const toast = useToast();
+  const [lang, setLangState] = useState<Lang>(lastShareLang);
+  const [busy, setBusy] = useState(false);
+  const pagesRef = useRef<HTMLDivElement>(null);
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    rememberShareLang(l);
+  };
+  const text = invoiceText(s, customer, lang, voided);
+  const wa = waNumber(phone);
+
+  async function pdf() {
+    if (!pagesRef.current) return;
+    setBusy(true);
+    try {
+      const blob = await pagesToPdf([...pagesRef.current.querySelectorAll<HTMLElement>('[data-page]')]);
+      const r = await saveOrShare(blob, `invoice-${s.docNo}-${lang}.pdf`, `فاتورة ${s.docNo}`);
+      if (r === 'downloaded') toast('نُزّل ملف PDF');
+      if (r !== 'cancelled') onClose();
+    } catch (e) {
+      toast('تعذّر إنشاء PDF: ' + (e as Error).message, true);
+    } finally {
+      setBusy(false);
+    }
   }
-  void toast;
+
+  async function message() {
+    try {
+      if ((await shareText(text, `فاتورة ${s.docNo}`)) === 'shared') onClose();
+    } catch (e) {
+      toast('تعذّرت المشاركة: ' + (e as Error).message, true);
+    }
+  }
+
+  return (
+    <Sheet open={open} onClose={onClose}>
+      <div className="head">
+        <h2>مشاركة الفاتورة <span className="num">{s.docNo}</span></h2>
+        <span className="lbl">اللغة</span>
+        <div className="hs" style={{ margin: '0 -16px', padding: '0 16px' }}>
+          {LANGS.map((l) => (
+            <button key={l.code} className={`chip${lang === l.code ? ' on' : ''}`} onClick={() => setLang(l.code)} style={l.code === 'am' ? { fontFamily: "'Noto Sans Ethiopic', sans-serif" } : undefined}>{l.name}</button>
+          ))}
+        </div>
+      </div>
+      <div className="body" style={{ padding: '0 16px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div dir={lang === 'ar' ? 'rtl' : 'ltr'} style={{ background: '#e7f6ef', border: '1px solid #cfe9dc', borderRadius: 14, padding: '12px 14px', fontSize: 13, whiteSpace: 'pre-wrap', maxHeight: 190, overflowY: 'auto', fontFamily: lang === 'am' ? "'Noto Sans Ethiopic', 'IBM Plex Sans Arabic', sans-serif" : undefined }}>
+          {text.replace(/\*/g, '')}
+        </div>
+        {wa && (
+          <button className="btn btn-p" style={{ minHeight: 52 }} onClick={() => { openWhatsApp(wa, text); onClose(); }}>
+            <Icon name="chat" />
+            رسالة إلى واتساب {customer}
+          </button>
+        )}
+        <button className={`btn ${wa ? 'btn-g' : 'btn-p'}`} style={{ minHeight: 52 }} onClick={message}>
+          <Icon name="chat" />
+          {wa ? 'رسالة — اختر التطبيق أو الشخص' : 'رسالة واتساب'}
+        </button>
+        <button className="btn btn-d" style={{ minHeight: 52 }} disabled={busy} onClick={pdf}>
+          <Icon name="file" />
+          {busy ? 'جارٍ تجهيز PDF…' : 'PDF — مشاركة أو حفظ أو طباعة'}
+        </button>
+        {lang !== 'ar' && lang !== 'en' && <div className="sub" style={{ fontSize: 11.5 }}>الترجمة تحتاج مراجعة متحدث أصلي.</div>}
+      </div>
+      {open && (
+        <div aria-hidden style={{ position: 'fixed', left: -10000, top: 0, pointerEvents: 'none' }}>
+          <InvoicePages ref={pagesRef} s={s} customer={customer} phone={phone} lang={lang} voided={voided} />
+        </div>
+      )}
+    </Sheet>
+  );
 }

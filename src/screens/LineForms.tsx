@@ -156,6 +156,15 @@ export function SaleScreen() {
               <div className="num" style={{ fontWeight: 700, fontSize: 17 }}>{fmtMoney(rem)}</div>
             </div>
           </div>
+          {customer && total > 0 && (
+            <div className={`note ${rem > 0 ? 'red' : 'blue'} num`} style={{ fontSize: 13.5, fontWeight: 600 }}>
+              {rem === total
+                ? `ستُسجَّل كاملة دَينًا على ${customer.name}: ${fmtMoney(rem)} بر`
+                : rem > 0
+                  ? `${customer.name} دفع ${fmtMoney(paid)} الآن، ويبقى عليه ${fmtMoney(rem)} بر`
+                  : `${customer.name} دفع كامل المبلغ الآن — لن يبقى عليه شيء من هذه الفاتورة`}
+            </div>
+          )}
           {!customer && rem > 0 && (
             <div className="note amber">بيع آجل دون اسم: سيُنشأ دين مؤقت مستقل برقم خاص، يمكنك تسمية صاحبه لاحقًا.</div>
           )}
@@ -169,7 +178,7 @@ export function SaleScreen() {
       </div>
 
       <ItemPicker open={picker === 'item'} onClose={() => setPicker(null)} data={data} onPick={(it) => { setLines(addOrIncrement(lines, it)); setPicker(null); }} />
-      <CustomerPicker open={picker === 'customer'} onClose={() => setPicker(null)} data={data} allowNone onPick={(c) => { setCustomerId(c?.id ?? null); setPicker(null); }} />
+      <CustomerPicker open={picker === 'customer'} onClose={() => setPicker(null)} data={data} allowNone onPick={(c) => { setCustomerId(c?.id ?? null); setPayMode(c ? 'credit' : 'cash'); setPicker(null); }} />
     </div>
   );
 }

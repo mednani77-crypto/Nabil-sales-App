@@ -1,5 +1,5 @@
 import type { AppDB } from '../db/db';
-import { getDevice } from '../db/repo';
+import { getDevice, resetAll } from '../db/repo';
 import type { Customer, Item, Operation } from '../domain/types';
 
 /* ------------------------------------------------------------------ *
@@ -41,6 +41,10 @@ export interface Transport {
   pushAttachment(a: { id: string; opId: string; mime: string; createdAt: string; blob: Blob }): Promise<void>;
   pullAttachments(afterSeq: number, limit: number): Promise<RemoteAttachment[]>;
   downloadAttachment(path: string): Promise<Blob>;
+  /** Number of times this account was reset ("start over"); 0 if never. */
+  getEpoch(): Promise<number>;
+  /** Delete all of this account's data on the server. Returns the new epoch. */
+  resetAccount(): Promise<number>;
 }
 
 export interface SyncResult {
@@ -50,6 +54,8 @@ export interface SyncResult {
   pulledMaster: number;
   pushedFiles: number;
   pulledFiles: number;
+  /** Local data was cleared because the account was reset elsewhere. */
+  wiped?: boolean;
 }
 
 const BATCH = 200;
@@ -69,10 +75,30 @@ export async function pendingCount(db: AppDB): Promise<number> {
   return ops + files;
 }
 
+/** "Start over": delete the account's data on the server, then on this device.
+ *  Other devices clear theirs on their next sync (see step 0a). */
+export async function resetEverywhere(db: AppDB, t: Transport): Promise<void> {
+  const epoch = await t.resetAccount();
+  await resetAll(db);
+  await setMeta(db, 'sync:epoch', epoch);
+}
+
 export async function syncOnce(db: AppDB, t: Transport, deviceLabel = 'هاتف'): Promise<SyncResult> {
   const res: SyncResult = { pushedOps: 0, pulledOps: 0, pushedMaster: 0, pulledMaster: 0, pushedFiles: 0, pulledFiles: 0 };
 
-  // 0. Make sure this device has a code no other device of the account uses.
+  // 0a. The account was reset from another device (or before this device last synced):
+  //     clear local data first, so nothing from before the reset is pushed back up.
+  const epoch = await t.getEpoch();
+  //     A device that never synced keeps its data: it cannot hold anything from before the reset.
+  if (epoch > (await getMeta(db, 'sync:epoch', 0))) {
+    if (await getMeta<string | null>(db, 'sync:lastAt', null)) {
+      await resetAll(db);
+      res.wiped = true;
+    }
+    await setMeta(db, 'sync:epoch', epoch);
+  }
+
+  // 0b. Make sure this device has a code no other device of the account uses.
   if (!(await getMeta(db, 'sync:deviceRegistered', false))) {
     const device = await getDevice(db);
     const code = await t.registerDevice(device.id, device.code, deviceLabel);

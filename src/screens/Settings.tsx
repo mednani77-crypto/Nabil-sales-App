@@ -9,7 +9,7 @@ import { buildBackup, restoreBackup } from '../db/backup';
 import { getDevice, resetAll } from '../db/repo';
 import { loadDemo } from '../db/seed';
 import { fmtDate, fmtTime, todayISO } from '../lib/dates';
-import { syncNow, useSyncStatus } from '../sync/service';
+import { resetAccountEverywhere, syncNow, useSyncStatus } from '../sync/service';
 import { supabase } from '../sync/supabase';
 import { Icon } from '../ui/Icon';
 import { TopBar, useToast } from '../ui/kit';
@@ -20,6 +20,7 @@ export function SettingsScreen() {
   const toast = useToast();
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
+  const signedIn = Boolean(useSyncStatus().session);
   const [device, setDevice] = useState<{ code: string } | null>(null);
   useEffect(() => {
     getDevice(db).then(setDevice);
@@ -39,6 +40,21 @@ export function SettingsScreen() {
   }
 
   async function wipe() {
+    if (signedIn) {
+      if (!window.confirm('حذف كل البيانات من هذا الجهاز ومن السحابة ومن كل الأجهزة المرتبطة بالحساب؟')) return;
+      if (!window.confirm('تأكيد أخير: كل العمليات والأصناف والعملاء ستُحذف نهائيًا ولا يمكن التراجع.')) return;
+      setBusy(true);
+      try {
+        await resetAccountEverywhere();
+        toast('حُذفت كل البيانات. الأجهزة الأخرى تُمسح عند مزامنتها التالية.');
+        nav('/');
+      } catch (e) {
+        toast('لم يتم الحذف: ' + (e as Error).message, true);
+      } finally {
+        setBusy(false);
+      }
+      return;
+    }
     if (!window.confirm('حذف كل البيانات من هذا الجهاز؟ لا يمكن التراجع.')) return;
     await resetAll(db);
     toast('حُذفت البيانات من هذا الجهاز');
@@ -60,8 +76,9 @@ export function SettingsScreen() {
         </span>
 
         <div className="sec">للتجربة</div>
-        <button className="btn btn-d" disabled={busy} onClick={demo}>تحميل بيانات تجريبية</button>
-        <button className="btn btn-g" style={{ color: 'var(--red)' }} onClick={wipe}>حذف كل البيانات من هذا الجهاز</button>
+        <button className="btn btn-d" disabled={busy || signedIn} onClick={demo}>تحميل بيانات تجريبية</button>
+        {signedIn && <span className="sub" style={{ padding: '0 4px', fontSize: 12.5 }}>البيانات التجريبية متاحة فقط بدون تسجيل دخول، حتى لا تُرفع إلى حسابك.</span>}
+        <button className="btn btn-g" style={{ color: 'var(--red)' }} disabled={busy} onClick={wipe}>{signedIn ? 'حذف كل البيانات (الجهاز والسحابة)' : 'حذف كل البيانات من هذا الجهاز'}</button>
         <div className="note amber">للتجربة فقط قبل بدء العمل الحقيقي. بعد بدء الاستخدام الفعلي سيُزال هذان الزران.</div>
       </div>
     </div>

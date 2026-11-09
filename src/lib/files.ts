@@ -49,3 +49,33 @@ export async function pagesToPdf(pages: HTMLElement[]): Promise<Blob> {
   }
   return pdf.output('blob');
 }
+
+/** Share plain text (the phone shows WhatsApp, Telegram, SMS…). */
+export async function shareText(text: string, title: string): Promise<'shared' | 'cancelled'> {
+  try {
+    if (Capacitor.isNativePlatform()) await Share.share({ text, dialogTitle: title });
+    else if (navigator.share) await navigator.share({ text });
+    else window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    return 'shared';
+  } catch (e) {
+    if (/cancel|abort/i.test(String((e as Error)?.message ?? e))) return 'cancelled';
+    throw e;
+  }
+}
+
+/** Ethiopian phone → international digits for wa.me (0915… / 915… / +251915… → 251915…). */
+export function waNumber(phone: string | undefined): string | null {
+  const d = (phone ?? '').replace(/\D/g, '');
+  if (/^251[79]\d{8}$/.test(d)) return d;
+  if (/^0[79]\d{8}$/.test(d)) return '251' + d.slice(1);
+  if (/^[79]\d{8}$/.test(d)) return '251' + d;
+  return null;
+}
+
+/** Open WhatsApp directly on this customer's chat with the message typed in. */
+export function openWhatsApp(number: string, text: string) {
+  const url = `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+  // Inside the APK, navigating to an external URL hands it to Android, which opens WhatsApp.
+  if (Capacitor.isNativePlatform()) window.location.href = url;
+  else window.open(url, '_blank');
+}
