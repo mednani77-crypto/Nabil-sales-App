@@ -26,6 +26,7 @@ import type {
   TransferOp,
   Unit,
   WalletKey,
+  GoodsRef,
 } from '../domain/types';
 import { newId, todayISO } from '../lib/dates';
 
@@ -224,7 +225,7 @@ export async function saveTransfer(db: AppDB, d: { from: WalletKey; to: WalletKe
 
 export async function saveCompanyPayment(
   db: AppDB,
-  d: { source: WalletKey; bank: CompanyBank; amount: number; ref?: string },
+  d: { source: WalletKey; bank: CompanyBank; amount: number; ref?: string; goods?: GoodsRef },
   date: string,
 ): Promise<CompanyPaymentOp> {
   const device = await getDevice(db);

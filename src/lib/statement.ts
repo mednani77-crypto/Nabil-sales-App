@@ -1,6 +1,6 @@
 import { ledger } from '../domain/balances';
 import type { Santim } from '../domain/money';
-import type { AccountKey, CompanyBank, Customer, Operation, PayDestination, Posting } from '../domain/types';
+import type { AccountKey, CompanyBank, Customer, GoodsRef, Operation, PayDestination, Posting } from '../domain/types';
 
 /* Account statements in 5 languages. Names, amounts and reference numbers are never translated.
  * Amharic/Somali/Oromo wording should be reviewed by a native speaker before official use. */
@@ -107,6 +107,8 @@ export function describeIn(lang: Lang, p: Posting, op: Operation | undefined, cu
   const L = I18N[lang];
   const name = (id: string | null | undefined) => (id ? customers.get(id)?.name ?? '' : '');
   const j = (...xs: (string | undefined)[]) => xs.filter(Boolean).join(' · ');
+  // Goods-based payment: quantity, unit and item name (names are never translated).
+  const goods = (g?: GoodsRef) => (g ? `${g.qty} ${g.unitName} ${g.itemName}` : undefined);
   const onCustomer = p.account.startsWith('customer:');
   switch (op.type) {
     case 'opening':
@@ -118,10 +120,10 @@ export function describeIn(lang: Lang, p: Posting, op: Operation | undefined, cu
       if (onCustomer) return j(L.k.collect, method(L, op.destination), op.docNo);
       return j(L.k.direct, name(op.customerId), method(L, op.destination), op.docNo);
     case 'collection':
-      if (onCustomer) return j(L.k.collect, method(L, op.destination), op.ref);
-      return j(L.k.direct, name(op.customerId), method(L, op.destination), op.ref);
+      if (onCustomer) return j(L.k.collect, goods(op.goods), method(L, op.destination), op.ref);
+      return j(L.k.direct, name(op.customerId), goods(op.goods), method(L, op.destination), op.ref);
     case 'companyPayment':
-      return j(L.k.pay, `${BANK[op.bank]} (${L.company})`, op.ref);
+      return j(L.k.pay, goods(op.goods), `${BANK[op.bank]} (${L.company})`, op.ref);
     case 'customerReturn':
       return p.debit > 0 ? L.k.refund : j(L.k.ret, op.lines.map((l) => l.itemName).join('، '));
     case 'companyReturnDecision':

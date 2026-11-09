@@ -1,6 +1,7 @@
 import { fmtMoney, type Santim } from './money';
 import type { OpContext, Result } from './operations';
 import { postingsOf } from './postings';
+import { checkGoods } from './goods';
 import {
   customerAccount,
   walletAccount,
@@ -8,6 +9,7 @@ import {
   type CollectionOp,
   type CompanyBank,
   type CompanyPaymentOp,
+  type GoodsRef,
   type ISODate,
   type Operation,
   type PayDestination,
@@ -32,6 +34,7 @@ export interface CollectionDraft {
   destination: PayDestination | null;
   ref?: string;
   invoiceOpId?: string;
+  goods?: GoodsRef;
 }
 
 export function buildCollection(d: CollectionDraft, ctx: OpContext): Result<CollectionOp> {
@@ -39,6 +42,7 @@ export function buildCollection(d: CollectionDraft, ctx: OpContext): Result<Coll
   if (!d.customerId) errors.push('اختر العميل أولًا');
   checkAmount(d.amount, errors);
   if (!d.destination) errors.push('حدد كيف وصل المبلغ');
+  checkGoods(d.goods, d.amount, errors);
   if (errors.length) return { ok: false, errors };
   return {
     ok: true,
@@ -50,6 +54,7 @@ export function buildCollection(d: CollectionDraft, ctx: OpContext): Result<Coll
       destination: d.destination!,
       ref: cleanRef(d.ref),
       invoiceOpId: d.invoiceOpId || undefined,
+      ...(d.goods ? { goods: d.goods } : {}),
       syncState: 'local',
     },
   };
@@ -70,18 +75,19 @@ export function buildTransfer(
 }
 
 export function buildCompanyPayment(
-  d: { source: WalletKey; bank: CompanyBank; amount: Santim; ref?: string },
+  d: { source: WalletKey; bank: CompanyBank; amount: Santim; ref?: string; goods?: GoodsRef },
   balances: Map<AccountKey, Santim>,
   ctx: OpContext,
 ): Result<CompanyPaymentOp> {
   const errors: string[] = [];
   checkAmount(d.amount, errors);
+  checkGoods(d.goods, d.amount, errors);
   const have = balances.get(walletAccount(d.source)) ?? 0;
   if (d.amount > have) errors.push(`المبلغ أكبر من أموال العمل في ${WALLET_NAME[d.source]} (${fmtMoney(have)})`);
   if (errors.length) return { ok: false, errors };
   return {
     ok: true,
-    value: { ...ctx, type: 'companyPayment', source: d.source, bank: d.bank, amount: d.amount, ref: cleanRef(d.ref), syncState: 'local' },
+    value: { ...ctx, type: 'companyPayment', source: d.source, bank: d.bank, amount: d.amount, ref: cleanRef(d.ref), ...(d.goods ? { goods: d.goods } : {}), syncState: 'local' },
   };
 }
 

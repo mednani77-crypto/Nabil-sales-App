@@ -1,3 +1,4 @@
+import { goodsLabel } from '../domain/goods';
 import type { Customer, Operation, Posting } from '../domain/types';
 import { BANK_LABEL, WALLET_LABEL } from './labels';
 
@@ -24,15 +25,18 @@ export function describePosting(p: Posting, op: Operation | undefined, customers
     }
     case 'collection': {
       const d = op.destination;
-      if (onCustomer) return `تحصيل · ${d.kind === 'wallet' ? WALLET_LABEL[d.wallet] : `${BANK_LABEL[d.bank]} (الشركة)`}${ref(op.ref)}`;
-      if (onWallet) return `تحصيل من ${cname(op.customerId)}`;
-      return `تحويل مباشر من ${cname(op.customerId)} · ${d.kind === 'company' ? BANK_LABEL[d.bank] : ''}${ref(op.ref)}`;
+      const g = op.goods ? ` · ${goodsLabel(op.goods)}` : '';
+      if (onCustomer) return `تحصيل${g} · ${d.kind === 'wallet' ? WALLET_LABEL[d.wallet] : `${BANK_LABEL[d.bank]} (الشركة)`}${ref(op.ref)}`;
+      if (onWallet) return `تحصيل من ${cname(op.customerId)}${g}`;
+      return `تحويل مباشر من ${cname(op.customerId)}${g} · ${d.kind === 'company' ? BANK_LABEL[d.bank] : ''}${ref(op.ref)}`;
     }
     case 'transfer':
       return p.credit > 0 ? `تحويل إلى ${WALLET_LABEL[op.to]}` : `تحويل من ${WALLET_LABEL[op.from]}`;
-    case 'companyPayment':
-      if (onWallet) return `سداد للشركة · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
-      return `سداد من ${WALLET_LABEL[op.source]} · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
+    case 'companyPayment': {
+      const g = op.goods ? ` · ${goodsLabel(op.goods)}` : '';
+      if (onWallet) return `سداد للشركة${g} · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
+      return `سداد من ${WALLET_LABEL[op.source]}${g} · ${BANK_LABEL[op.bank]}${ref(op.ref)}`;
+    }
     case 'noticeStatus':
       return '';
     case 'customerReturn':
@@ -60,7 +64,7 @@ export function opLabel(op: Operation): string {
     case 'sale':
       return `بيع – فاتورة ${op.docNo}`;
     case 'collection':
-      return 'تحصيل من عميل';
+      return op.goods ? `تحصيل ${goodsLabel(op.goods)}` : 'تحصيل من عميل';
     case 'transfer':
       return `تحويل من ${WALLET_LABEL[op.from]} إلى ${WALLET_LABEL[op.to]}`;
     case 'companyPayment':

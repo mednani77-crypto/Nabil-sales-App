@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import { GoodsFields, ModeSwitch, useGoodsAmount } from '../ui/GoodsAmount';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { db } from '../db/db';
 import { addAttachment, DomainError, saveCollection, saveCompanyPayment, saveTransfer } from '../db/repo';
@@ -91,7 +92,10 @@ export function CollectScreen() {
 
   const customer = customerId ? data.customersById.get(customerId) : undefined;
   const act = customer ? customerActivity(data.ops, customer.id, today) : null;
-  const amt = parseBirr(amount) ?? 0;
+  const who = useMemo(() => (customerId ? { customerId } : null), [customerId]);
+  const gs = useGoodsAmount(data.items, data.ops, who);
+  const byGoods = gs.mode === 'goods';
+  const amt = byGoods ? gs.amount : (parseBirr(amount) ?? 0);
   const dups = method === 'company' && amt > 0 && !dupOk ? findSimilarTransfers(data.ops, { bank, amount: amt, ref, date: today }) : [];
   const openInvoices = customer
     ? data.ops
@@ -105,7 +109,7 @@ export function CollectScreen() {
     const destination: PayDestination = method === 'company' ? { kind: 'company', bank } : { kind: 'wallet', wallet: method };
     setBusy(true);
     try {
-      const op = await saveCollection(db, { customerId, amount: amt, destination, ref: method === 'cash' ? undefined : ref, invoiceOpId: invoiceOpId || undefined }, today);
+      const op = await saveCollection(db, { customerId, amount: amt, destination, ref: method === 'cash' ? undefined : ref, invoiceOpId: invoiceOpId || undefined, goods: byGoods ? gs.goods : undefined }, today);
       if (photo.blob && method !== 'cash') await addAttachment(db, op.id, photo.blob);
       if (method === 'company') {
         toast('تم التحصيل وسُجّل كسداد للشركة — شارك الإشعار الآن');
@@ -134,7 +138,12 @@ export function CollectScreen() {
           <span style={{ fontSize: 13, color: 'var(--blue)', fontWeight: 600 }}>{customer ? 'تغيير' : 'اختيار'}</span>
         </button>
 
-        <div className="card pad">
+        <div className="card pad" style={{ gap: 12 }}>
+          <ModeSwitch mode={gs.mode} setMode={(m) => { gs.setMode(m); setDupOk(false); }} />
+          {byGoods ? (
+            <GoodsFields s={gs} priceHint={customer ? `السعر الذي بعت به لـ${customer.name} آخر مرة — يمكنك تعديله` : 'اختر العميل ليظهر سعر البيع له'} />
+          ) : (
+          <>
           <AmountField label="المبلغ المستلم (بر)" value={amount} onChange={(v) => { setAmount(v); setDupOk(false); }} />
           <div className="hs">
             {act && act.balance > 0 && (
@@ -144,6 +153,13 @@ export function CollectScreen() {
               <button key={v} className="chip num" style={{ fontSize: 13 }} onClick={() => setAmount(String(v))}>{fmtMoney(v * 100)}</button>
             ))}
           </div>
+          </>
+          )}
+          {act && amt > 0 && (
+            <div className="note blue num" style={{ fontSize: 13 }}>
+              بعد الحفظ: {fmtBalance(act.balance - amt).replace('مسدد بالكامل', 'يصبح مسددًا بالكامل')}
+            </div>
+          )}
         </div>
 
         <span className="lbl" style={{ margin: '0 4px' }}>كيف وصل المبلغ؟</span>
@@ -291,7 +307,9 @@ export function PayScreen() {
   const [busy, setBusy] = useState(false);
   const photo = usePhoto();
   const today = todayISO();
-  const amt = parseBirr(amount) ?? 0;
+  const gs = useGoodsAmount(data.items, data.ops, 'company');
+  const byGoods = gs.mode === 'goods';
+  const amt = byGoods ? gs.amount : (parseBirr(amount) ?? 0);
   const bal = (w: WalletKey) => data.balances.get(walletAccount(w)) ?? 0;
   const dups = amt > 0 && !dupOk ? findSimilarTransfers(data.ops, { bank, amount: amt, ref, date: today }) : [];
 
@@ -299,7 +317,7 @@ export function PayScreen() {
     if (dups.length && !force) return toast('راجع تنبيه الحوالة المشابهة أولًا', true);
     setBusy(true);
     try {
-      const op = await saveCompanyPayment(db, { source, bank, amount: amt, ref }, today);
+      const op = await saveCompanyPayment(db, { source, bank, amount: amt, ref, goods: byGoods ? gs.goods : undefined }, today);
       if (photo.blob) await addAttachment(db, op.id, photo.blob);
       toast(`سُجّل السداد · انخفض دينك ${fmtMoney(amt)} بر — شارك الإشعار الآن`);
       nav('/notices?f=recorded', { replace: true });
@@ -315,7 +333,17 @@ export function PayScreen() {
       <TopBar title="سداد للشركة" />
       <div className="page" style={{ paddingTop: 4 }}>
         <div className="card pad" style={{ gap: 12 }}>
-          <AmountField label="مبلغ الحوالة (بر)" value={amount} onChange={(v) => { setAmount(v); setDupOk(false); }} />
+          <ModeSwitch mode={gs.mode} setMode={(m) => { gs.setMode(m); setDupOk(false); }} />
+          {byGoods ? (
+            <GoodsFields s={gs} priceHint="سعر الشركة لك (آخر استلام) — يمكنك تعديله" />
+          ) : (
+            <AmountField label="مبلغ الحوالة (بر)" value={amount} onChange={(v) => { setAmount(v); setDupOk(false); }} />
+          )}
+          {amt > 0 && (
+            <div className="note blue num" style={{ fontSize: 13 }}>
+              دينك للشركة بعد السداد: {fmtMoney((data.balances.get('company') ?? 0) - amt)} بر
+            </div>
+          )}
           <span className="lbl">مصدر الأموال</span>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             {WALLETS.map((w) => {

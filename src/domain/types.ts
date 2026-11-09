@@ -96,6 +96,17 @@ export interface OpeningOp extends OpBase {
 
 /** Money received from a customer. Into a wallet, or straight into a company bank account
  *  (then it ALSO counts as a payment to the company — one operation, never two). */
+/** "Paid for N units of an item": how Nabil counts payments (e.g. حق 2 كنتال رز).
+ *  Snapshot of the item, unit and price used; amount = qty × unitPrice. */
+export interface GoodsRef {
+  itemId: string;
+  itemName: string;
+  unitName: string;
+  factor: number;
+  qty: number;
+  unitPrice: Santim;
+}
+
 export interface CollectionOp extends OpBase {
   type: 'collection';
   customerId: string;
@@ -104,6 +115,8 @@ export interface CollectionOp extends OpBase {
   ref?: string;
   /** Optional link to a specific invoice (operation id). By default it reduces the total balance. */
   invoiceOpId?: string;
+  /** Entered as a quantity of goods instead of a plain amount. */
+  goods?: GoodsRef;
 }
 
 /** Move work money between Nabil's own wallets. Never touches the company account. */
@@ -121,6 +134,8 @@ export interface CompanyPaymentOp extends OpBase {
   bank: CompanyBank;
   amount: Santim;
   ref?: string;
+  /** Entered as a quantity of goods instead of a plain amount. */
+  goods?: GoodsRef;
 }
 
 /** Tracking state of a bank-transfer notice (the transfer itself is another operation).
